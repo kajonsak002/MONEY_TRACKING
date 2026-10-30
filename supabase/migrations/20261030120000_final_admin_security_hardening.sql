@@ -1,30 +1,24 @@
--- Final hardening for server-only secret management.
--- The browser must never call Vault management RPCs directly.
-create index if not exists admin_audit_logs_actor_id_idx on public.admin_audit_logs(actor_id) where actor_id is not null;
-create index if not exists entries_category_user_idx on public.entries(category_id, user_id) where category_id is not null;
+-- Final hardening for server-only secret management and Admin operations.
+create index if not exists admin_audit_logs_actor_id_idx
+  on public.admin_audit_logs(actor_id) where actor_id is not null;
+create index if not exists entries_category_user_idx
+  on public.entries(category_id, user_id) where category_id is not null;
+
 drop function if exists public.admin_set_deepseek_api_key(text);
 drop function if exists public.admin_remove_deepseek_api_key();
 drop function if exists public.admin_set_deepseek_api_key(text, uuid);
 drop function if exists public.admin_remove_deepseek_api_key(uuid);
 
 create or replace function public.admin_deepseek_key_status()
-returns boolean
-language sql
-stable
-security definer
-set search_path = ''
-as $$
+returns boolean language sql stable security definer set search_path = ''
+as $function$
   select exists (select 1 from vault.secrets where name = 'deepseek_api_key');
-$$;
+$function$;
 
 create or replace function public.admin_set_deepseek_api_key(p_api_key text, p_actor_id uuid)
-returns void
-language plpgsql
-security definer
-set search_path = ''
-as $$
-declare
-  secret_id uuid;
+returns void language plpgsql security definer set search_path = ''
+as $function$
+declare secret_id uuid;
 begin
   if coalesce(current_setting('request.jwt.claim.role', true), '') <> 'service_role' then
     raise exception 'service role required' using errcode = '42501';
@@ -41,14 +35,11 @@ begin
   insert into public.admin_audit_logs(actor_id, action, details)
   values (p_actor_id, 'settings.deepseek_key.updated', jsonb_build_object('secret_name', 'deepseek_api_key'));
 end;
-$$;
+$function$;
 
 create or replace function public.admin_remove_deepseek_api_key(p_actor_id uuid)
-returns void
-language plpgsql
-security definer
-set search_path = ''
-as $$
+returns void language plpgsql security definer set search_path = ''
+as $function$
 begin
   if coalesce(current_setting('request.jwt.claim.role', true), '') <> 'service_role' then
     raise exception 'service role required' using errcode = '42501';
@@ -58,37 +49,21 @@ begin
   insert into public.admin_audit_logs(actor_id, action, details)
   values (p_actor_id, 'settings.deepseek_key.removed', jsonb_build_object('secret_name', 'deepseek_api_key'));
 end;
-$$;
+$function$;
 
 create or replace function public.admin_get_deepseek_api_key()
-returns text
-language plpgsql
-stable
-security definer
-set search_path = ''
-as $$
+returns text language plpgsql stable security definer set search_path = ''
+as $function$
 begin
   if coalesce(current_setting('request.jwt.claim.role', true), '') <> 'service_role' then
     raise exception 'service role required' using errcode = '42501';
   end if;
   return (select decrypted_secret from vault.decrypted_secrets where name = 'deepseek_api_key' order by updated_at desc limit 1);
 end;
-$$;
-
-revoke all on function public.admin_deepseek_key_status() from public, anon, authenticated;
-revoke all on function public.admin_set_deepseek_api_key(text, uuid) from public, anon, authenticated;
-revoke all on function public.admin_remove_deepseek_api_key(uuid) from public, anon, authenticated;
-revoke all on function public.admin_get_deepseek_api_key() from public, anon, authenticated;
-grant execute on function public.admin_deepseek_key_status() to service_role;
-grant execute on function public.admin_set_deepseek_api_key(text, uuid) to service_role;
-grant execute on function public.admin_remove_deepseek_api_key(uuid) to service_role;
-grant execute on function public.admin_get_deepseek_api_key() to service_role;
+$function$;
 
 create or replace function public.admin_update_user_role(p_target_id uuid, p_new_role public.app_role, p_actor_id uuid)
-returns void
-language plpgsql
-security definer
-set search_path = ''
+returns void language plpgsql security definer set search_path = ''
 as $function$
 declare
   target_email text;
@@ -101,17 +76,13 @@ begin
   if p_target_id is null or p_actor_id is null or p_target_id = p_actor_id then
     raise exception 'invalid target or self role change' using errcode = '22023';
   end if;
-
   perform pg_advisory_xact_lock(hashtext('money_tracking_admin_role_change')::bigint);
-  select email, role into target_email, old_role
-  from public.profiles where id = p_target_id for update;
+  select email, role into target_email, old_role from public.profiles where id = p_target_id for update;
   if target_email is null then raise exception 'member not found' using errcode = 'P0002'; end if;
-
   if old_role = 'admin' and p_new_role = 'partner' then
     select count(*) into admin_count from public.profiles where role = 'admin';
     if admin_count <= 1 then raise exception 'at least one administrator must remain' using errcode = '23514'; end if;
   end if;
-
   update public.profiles set role = p_new_role where id = p_target_id;
   insert into public.app_allowlist(email, role) values (lower(target_email), p_new_role)
   on conflict (email) do update set role = excluded.role;
@@ -121,35 +92,37 @@ begin
 end;
 $function$;
 
-
 create or replace function public.admin_upsert_allowlist(p_email text, p_new_role public.app_role, p_actor_id uuid)
-returns void
-language plpgsql
-security definer
-set search_path = ''
+returns void language plpgsql security definer set search_path = ''
 as $function$
+declare normalized_email text := lower(trim(p_email));
 begin
   if coalesce(current_setting('request.jwt.claim.role', true), '') <> 'service_role' then
     raise exception 'service role required' using errcode = '42501';
   end if;
-  if p_actor_id is null or p_email is null or lower(trim(p_email)) !~ '^[^@[:space:]]+@[^@[:space:]]+\.[^@[:space:]]+(uuid, public.app_role, uuid) from public, anon, authenticated;
-grant execute on function public.admin_update_user_role(uuid, public.app_role, uuid) to service_role;
-
- then
+  if p_actor_id is null or normalized_email is null
+    or position('@' in normalized_email) < 2
+    or position('.' in split_part(normalized_email, '@', 2)) < 2
+    or position(' ' in normalized_email) > 0 then
     raise exception 'invalid email or actor' using errcode = '22023';
   end if;
-  insert into public.app_allowlist(email, role)
-  values (lower(trim(p_email)), p_new_role)
+  insert into public.app_allowlist(email, role) values (normalized_email, p_new_role)
   on conflict (email) do update set role = excluded.role;
   insert into public.admin_audit_logs(actor_id, action, details)
   values (p_actor_id, 'users.allowlist.updated',
-    jsonb_build_object('email', lower(trim(p_email)), 'role', p_new_role::text));
+    jsonb_build_object('email', normalized_email, 'role', p_new_role::text));
 end;
 $function$;
 
-revoke all on function public.admin_upsert_allowlist(text, public.app_role, uuid) from public, anon, authenticated;
-grant execute on function public.admin_upsert_allowlist(text, public.app_role, uuid) to service_role;
-
+revoke all on function public.admin_deepseek_key_status() from public, anon, authenticated;
+revoke all on function public.admin_set_deepseek_api_key(text, uuid) from public, anon, authenticated;
+revoke all on function public.admin_remove_deepseek_api_key(uuid) from public, anon, authenticated;
+revoke all on function public.admin_get_deepseek_api_key() from public, anon, authenticated;
 revoke all on function public.admin_update_user_role(uuid, public.app_role, uuid) from public, anon, authenticated;
+revoke all on function public.admin_upsert_allowlist(text, public.app_role, uuid) from public, anon, authenticated;
+grant execute on function public.admin_deepseek_key_status() to service_role;
+grant execute on function public.admin_set_deepseek_api_key(text, uuid) to service_role;
+grant execute on function public.admin_remove_deepseek_api_key(uuid) to service_role;
+grant execute on function public.admin_get_deepseek_api_key() to service_role;
 grant execute on function public.admin_update_user_role(uuid, public.app_role, uuid) to service_role;
-
+grant execute on function public.admin_upsert_allowlist(text, public.app_role, uuid) to service_role;
