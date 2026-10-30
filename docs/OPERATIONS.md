@@ -19,9 +19,8 @@ Create a private R2 bucket dedicated to this application. Configure a lifecycle 
 Restore only into a separate disposable Supabase project/database, never over production during a drill:
 
 1. Download the encrypted dump and checksum file from R2.
-2. Verify with `sha256sum -c money-tracking.dump.enc.sha256`.
-3. Decrypt with the separately stored passphrase:
-   `openssl enc -d -aes-256-cbc -pbkdf2 -iter 200000 -in money-tracking.dump.enc -out money-tracking.dump -pass env:BACKUP_PASSPHRASE`.
+2. Verify with `sha256sum -c money-tracking.dump.gpg.sha256`.
+3. Decrypt with the separately stored passphrase: `gpg --batch --yes --pinentry-mode loopback --passphrase "$BACKUP_PASSPHRASE" --output money-tracking.dump --decrypt money-tracking.dump.gpg`.
 4. Restore into an isolated database using `pg_restore --no-owner --no-acl --clean --if-exists --dbname="$RESTORE_DATABASE_URL" money-tracking.dump`.
 5. Verify tables, row counts, RLS policies, functions, triggers, and a test login. Record the drill date and duration.
 
