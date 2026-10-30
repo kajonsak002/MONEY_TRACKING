@@ -45,6 +45,10 @@ supabase functions deploy admin-users
 
 The Admin enters the DeepSeek API Key at `/admin/settings`. It is stored in Supabase Vault and accessed only by service-role RPCs from the Edge Functions. Do not set a `VITE_` DeepSeek key or add it to GitHub. Supabase injects the service-role key into Edge Functions; never expose it to the browser.
 
+## Cloudflare Workers Builds
+- Production trigger: branch `main`, build command `pnpm install --no-frozen-lockfile && pnpm --filter @money-tracking/web build`, deploy command `npx wrangler deploy`.
+- Preview trigger: non-production branches, same build command, preview command `npx wrangler preview`. Keep the preview trigger separate from the production trigger.
+
 ## Vercel
 After local integration tests pass:
 - Import the repository and select the web app root directory (`apps/web`) if required by the project configuration.
