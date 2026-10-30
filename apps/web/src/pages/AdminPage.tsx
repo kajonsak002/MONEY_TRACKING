@@ -22,7 +22,7 @@ export function AdminPage() {
   const entries = useQuery({
     queryKey: ["admin", "entries", currentDate()],
     enabled: profile?.role === "admin",
-    queryFn: () => getEntriesInRange("2000-01-01", currentDate()),
+    queryFn: () => getEntriesInRange("2000-01-01", currentDate(), true),
   });
   if (profile?.role !== "admin") return <div className="settings-card"><h1>ไม่มีสิทธิ์เข้าถึง</h1><p className="muted">หน้านี้สำหรับผู้ดูแลระบบเท่านั้น</p></div>;
   return <div className="settings-page"><header className="page-title-row"><div><p className="eyebrow">ADMIN CONSOLE</p><h1>จัดการระบบ</h1><p className="muted">ภาพรวมสมาชิกและรายการทั้งหมดที่คุณมีสิทธิ์ดู</p></div></header>
