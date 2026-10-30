@@ -12,9 +12,8 @@ create table public.app_allowlist (
   constraint app_allowlist_email_normalized check (email = lower(trim(email)))
 );
 
-insert into public.app_allowlist (email, role) values
-  ('kajonsak.dev@gmail.com', 'admin'),
-  ('kajonsak6210035@gmail.com', 'partner');
+-- Add approved emails privately in the Supabase SQL editor after applying this migration.
+-- Do not commit real email addresses to this public repository.
 
 create table public.profiles (
   id uuid primary key references auth.users(id) on delete cascade,
