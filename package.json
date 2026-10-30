@@ -1,0 +1,14 @@
+{
+  "name": "money-tracking",
+  "private": true,
+  "version": "0.1.0",
+  "packageManager": "pnpm@9.15.0",
+  "scripts": {
+    "dev": "pnpm --filter @money-tracking/web dev",
+    "build": "pnpm --filter @money-tracking/web build",
+    "typecheck": "pnpm --filter @money-tracking/web typecheck",
+    "lint": "pnpm --filter @money-tracking/web lint",
+    "test": "pnpm --filter @money-tracking/web test"
+  },
+  "devDependencies": { "typescript": "^5.7.3" }
+}
