@@ -15,7 +15,7 @@ export interface EntryRecord {
   note: string | null;
   occurred_on: string;
   category_id: string | null;
-  categories: EntryCategory[];
+  categories: EntryCategory | EntryCategory[] | null;
 }
 export interface CreateEntryInput {
   type: EntryType;
