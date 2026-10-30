@@ -12,10 +12,10 @@ Last reviewed: 2026-10-30
 - [x] Supabase schema, allowlist, profiles and RLS policies
 - [x] Google OAuth and protected application routes
 - [x] Income/expense CRUD and soft delete
-- [x] DeepSeek parse-entry Edge Function code
+- [x] DeepSeek parse-entry Edge Function implemented and deployed with JWT validation (API Key must still be entered by Admin)
 - [x] Reports, categories, monthly budgets, theme and exports
 - [x] Initial AdminPage and PWA shell
-- [ ] Production integration and end-to-end verification
+- [ ] Production integration and end-to-end verification (AI request still needs a live API Key test)
 
 ## M9: Separate Admin experience (in progress)
 - [x] Dedicated AdminShell with desktop sidebar and mobile navigation
@@ -24,8 +24,8 @@ Last reviewed: 2026-10-30
 - [x] Admin overview with member count, entry count, income and expense aggregates
 - [x] Member list with role and signup date
 - [ ] User lifecycle management through secured server-side operations
-- [ ] Activity/audit log backed by a defined audit schema
-- [ ] Admin settings and operational health panels
+- [x] Audit log schema and server-side recording for DeepSeek key changes\n- [ ] Activity/audit log UI and broader event coverage
+- [x] Admin system settings page for DeepSeek API Key (Vault-backed, Edge Function protected)\n- [ ] Operational health panels
 - [ ] Dedicated all-transactions page with privacy-aware filters
 
 ## M10: Security and integration verification
@@ -33,12 +33,12 @@ Last reviewed: 2026-10-30
 - [ ] Verify Partner cannot read another Partner's records
 - [ ] Verify Admin cross-user visibility is read-only; owner-only writes remain enforced
 - [ ] Review every route, query and mutation against RLS
-- [ ] Deploy and verify parse-entry Edge Function and server-side DeepSeek secret
+- [x] Deploy parse-entry and admin-settings Edge Functions with JWT validation\n- [x] DeepSeek key storage path uses Vault and service-role-only RPC\n- [ ] Admin enters key and verify a live AI request
 - [ ] Run typecheck, lint, unit tests and production build
 - [ ] Verify PWA update/cache behavior and production callback
 
 ## M11: Operations and release
-- [ ] Confirm automated backup/PITR availability and retention for the selected Supabase plan
+- [x] Confirm plan is Free; automatic daily backups and PITR are not included\n- [ ] Implement scheduled off-site logical backups and verify retention
 - [ ] Perform and document a restore test
 - [ ] Add monitoring and error reporting
 - [ ] Production acceptance checklist and release notes
