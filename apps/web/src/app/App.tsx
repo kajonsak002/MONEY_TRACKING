@@ -21,7 +21,7 @@ const queryClient = new QueryClient({
 
 function RoleHome() {
   const { profile } = useAuth();
-  return <Navigate to={profile?.role === "admin" ? "/admin" : "/"} replace />;
+  return <Navigate to={profile?.role === "admin" ? "/admin" : "/app"} replace />;
 }
 
 export function App() {
