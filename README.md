@@ -11,7 +11,7 @@
 - [x] M5 AI quick add through authenticated Supabase Edge Function (DeepSeek)
 - [x] M6 Daily/monthly/yearly/custom-range reports and charts
 - [x] M7 Owner-scoped categories and monthly expense budgets
-- [x] M8 Theme preferences, manual JSON/CSV export and admin overview
+- [x] M8 Theme preferences, manual JSON/CSV export, admin overview and installable PWA shell
 - [ ] Production integration, OAuth credentials, secrets, deployment and end-to-end verification
 
 ## Stack
