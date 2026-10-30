@@ -80,4 +80,44 @@ revoke all on function public.admin_get_deepseek_api_key() from public, anon, au
 grant execute on function public.admin_deepseek_key_status() to service_role;
 grant execute on function public.admin_set_deepseek_api_key(text, uuid) to service_role;
 grant execute on function public.admin_remove_deepseek_api_key(uuid) to service_role;
-grant execute on function public.admin_get_deepseek_api_key() to service_role;
+grant execute on function public.admin_get_deepseek_api_key() to service_role;\n
+create or replace function public.admin_update_user_role(p_target_id uuid, p_new_role public.app_role, p_actor_id uuid)
+returns void
+language plpgsql
+security definer
+set search_path = ''
+as $
+declare
+  target_email text;
+  old_role public.app_role;
+  admin_count integer;
+begin
+  if coalesce(current_setting('request.jwt.claim.role', true), '') <> 'service_role' then
+    raise exception 'service role required' using errcode = '42501';
+  end if;
+  if p_target_id is null or p_actor_id is null or p_target_id = p_actor_id then
+    raise exception 'invalid target or self role change' using errcode = '22023';
+  end if;
+
+  perform pg_advisory_xact_lock(hashtext('money_tracking_admin_role_change'));
+  select email, role into target_email, old_role
+  from public.profiles where id = p_target_id for update;
+  if target_email is null then raise exception 'member not found' using errcode = 'P0002'; end if;
+
+  if old_role = 'admin' and p_new_role = 'partner' then
+    select count(*) into admin_count from public.profiles where role = 'admin';
+    if admin_count <= 1 then raise exception 'at least one administrator must remain' using errcode = '23514'; end if;
+  end if;
+
+  update public.profiles set role = p_new_role where id = p_target_id;
+  insert into public.app_allowlist(email, role) values (lower(target_email), p_new_role)
+  on conflict (email) do update set role = excluded.role;
+  insert into public.admin_audit_logs(actor_id, action, target_id, details)
+  values (p_actor_id, 'users.role.updated', p_target_id,
+    jsonb_build_object('from', old_role::text, 'to', p_new_role::text));
+end;
+$;
+
+revoke all on function public.admin_update_user_role(uuid, public.app_role, uuid) from public, anon, authenticated;
+grant execute on function public.admin_update_user_role(uuid, public.app_role, uuid) to service_role;
+
