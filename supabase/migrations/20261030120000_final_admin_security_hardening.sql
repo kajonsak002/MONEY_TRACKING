@@ -80,13 +80,14 @@ revoke all on function public.admin_get_deepseek_api_key() from public, anon, au
 grant execute on function public.admin_deepseek_key_status() to service_role;
 grant execute on function public.admin_set_deepseek_api_key(text, uuid) to service_role;
 grant execute on function public.admin_remove_deepseek_api_key(uuid) to service_role;
-grant execute on function public.admin_get_deepseek_api_key() to service_role;\n
+grant execute on function public.admin_get_deepseek_api_key() to service_role;
+
 create or replace function public.admin_update_user_role(p_target_id uuid, p_new_role public.app_role, p_actor_id uuid)
 returns void
 language plpgsql
 security definer
 set search_path = ''
-as $
+as $function$
 declare
   target_email text;
   old_role public.app_role;
@@ -116,7 +117,7 @@ begin
   values (p_actor_id, 'users.role.updated', p_target_id,
     jsonb_build_object('from', old_role::text, 'to', p_new_role::text));
 end;
-$;
+$function$;
 
 revoke all on function public.admin_update_user_role(uuid, public.app_role, uuid) from public, anon, authenticated;
 grant execute on function public.admin_update_user_role(uuid, public.app_role, uuid) to service_role;
