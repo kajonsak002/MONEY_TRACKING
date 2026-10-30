@@ -102,7 +102,7 @@ begin
     raise exception 'invalid target or self role change' using errcode = '22023';
   end if;
 
-  perform pg_advisory_xact_lock(hashtext('money_tracking_admin_role_change'));
+  perform pg_advisory_xact_lock(hashtext('money_tracking_admin_role_change')::bigint);
   select email, role into target_email, old_role
   from public.profiles where id = p_target_id for update;
   if target_email is null then raise exception 'member not found' using errcode = 'P0002'; end if;
