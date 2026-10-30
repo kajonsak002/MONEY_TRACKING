@@ -1,69 +1,80 @@
-# Setup
+# Setup and release checklist
 
 ## Prerequisites
 - Node.js 20+
 - pnpm 9+
-- A Supabase project with migration `supabase/migrations/0001_initial_schema.sql` applied
+- Supabase project
 
 ## Local development
-
-1. Install dependencies:
-   ```bash
-   pnpm install
-   ```
+1. Run `pnpm install`.
 2. Copy `apps/web/.env.example` to `apps/web/.env.local`.
-3. Fill in the Supabase project URL and publishable key:
-   ```dotenv
-   VITE_SUPABASE_URL=https://YOUR_PROJECT_REF.supabase.co
-   VITE_SUPABASE_PUBLISHABLE_KEY=YOUR_SUPABASE_PUBLISHABLE_KEY
-   ```
-4. Start the app:
-   ```bash
-   pnpm dev
-   ```
+3. Set `VITE_SUPABASE_URL` and `VITE_SUPABASE_PUBLISHABLE_KEY` in the local env file.
+4. Run `pnpm dev`.
 
-## Supabase Auth configuration
+## Database
+Apply migrations in order using Supabase CLI or SQL Editor:
+1. `supabase/migrations/0001_initial_schema.sql`
+2. `supabase/migrations/0002_monthly_budgets.sql`
 
-1. In Supabase Dashboard, open Authentication → Providers → Google and enable Google.
-2. Configure the Google OAuth Client ID and Client Secret in the Supabase provider settings.
-3. In Authentication → URL Configuration, set the Site URL to the deployed app URL (for local development use `http://localhost:5173`).
-4. Add the local and production callback URLs to the Google OAuth client's authorized redirect URIs. The Supabase callback is shown in the Google provider settings and normally has the form `https://YOUR_PROJECT_REF.supabase.co/auth/v1/callback`.
-5. Add the app callback route (`/auth/callback`) to the allowed redirect URLs in Supabase.
-6. Insert the approved email/role pairs into `public.app_allowlist` using the Supabase SQL Editor. Keep these addresses out of Git. Use roles `admin` and `partner`.
+The schema stores all money as integer satang. RLS is the authorization boundary:
+- Admin can read all profiles and active financial records.
+- Partner can read only their own profile and financial records.
+- Writes remain owner-scoped.
+- Entries are soft-deleted; physical delete is not granted.
+- Categories and monthly budgets are scoped to the signed-in owner.
 
-The database trigger rejects users not present in the allowlist. A successful Google OAuth flow is not sufficient by itself: the profile must be created by the allowlist trigger.
+Add approved account/role pairs to `public.app_allowlist` privately in Supabase SQL Editor. Do not put real addresses in this public repository.
 
-## Current authentication behavior
+## Google OAuth
+1. Enable Google in Supabase Authentication → Providers.
+2. Add Google OAuth Client ID and Client Secret in Supabase.
+3. Set Supabase Site URL to the local or production app URL.
+4. Add `http://localhost:5173/auth/callback` and the production `/auth/callback` URL to Supabase allowed redirect URLs.
+5. In Google Cloud, add the Supabase callback URL shown in the provider settings (normally `https://YOUR_PROJECT_REF.supabase.co/auth/v1/callback`) to authorized redirect URIs.
 
-- Unauthenticated visitors are redirected to `/login`.
-- Google OAuth uses Supabase Auth and returns to `/auth/callback`.
-- The app loads the user's profile and role from `public.profiles`.
-- Admin/partner read visibility is enforced by PostgreSQL RLS, not by client-side filtering.
-- Sign out clears the Supabase session.
-- If Supabase environment variables are missing, the login page shows setup guidance instead of crashing.
+## DeepSeek AI quick add
+The browser calls the authenticated `parse-entry` Edge Function. The function validates the user's Supabase session and returns a draft only; the user must review and confirm before an entry is written.
 
-## Environment and secret policy
+Deploy:
+```bash
+supabase functions deploy parse-entry
+supabase secrets set DEEPSEEK_API_KEY=YOUR_DEEPSEEK_KEY
+```
 
-- `VITE_SUPABASE_URL` and `VITE_SUPABASE_PUBLISHABLE_KEY` are safe for the browser.
-- Never expose a Supabase service-role key or DeepSeek API key through a `VITE_` variable.
-- Store DeepSeek credentials only in server-side secrets (for example, Supabase Edge Function secrets).
-- Do not commit `.env.local`, provider credentials, allowlist emails, or backup files.
+Supabase provides `SUPABASE_URL` and `SUPABASE_ANON_KEY` to Edge Functions. Optionally set `APP_ALLOWED_ORIGIN` to the exact production origin to restrict browser CORS. Never use a `VITE_` prefix for DeepSeek or service-role secrets. Never commit real keys.
 
-## Backups
+## Vercel
+After local integration tests pass:
+- Import the repository and select the web app root directory (`apps/web`) if required by the project configuration.
+- Set `VITE_SUPABASE_URL` and `VITE_SUPABASE_PUBLISHABLE_KEY` in Preview and Production environments.
+- Set the production URL in Supabase Auth Site URL and allowed redirects.
+- Redeploy after changing environment variables.
 
-The selected policy is manual plus automated. Export a manual copy periodically and configure scheduled backups/PITR only if supported by the Supabase plan. Test restores periodically; do not treat an untested export as a verified backup.
+## Domain and Cloudflare
+A custom domain can be attached in Vercel without changing React routes or API paths. Configure DNS records exactly as Vercel instructs. Cloudflare is optional; use it for DNS/proxy/security only after the Vercel domain is verified. Do not proxy or rewrite Supabase API paths unless deliberately configured.
 
-## Not configured in source control
+## Reports, categories and budgets
+- Reports support current month, current year and custom date ranges.
+- Monthly expense budgets require migration 0002.
+- Category operations are owner-scoped.
+- Admin reports can aggregate active entries visible under the admin RLS policy.
 
-Google OAuth provider credentials, production redirect URLs, Vercel environment variables, Cloudflare settings, and DeepSeek server secrets must be configured in their respective dashboards by the project owner.
+## Backup policy
+- Manual: Settings → สำรอง JSON / ส่งออก CSV. Keep downloaded backups in a private location.
+- Automated: use Supabase managed database backups/PITR when supported by the selected plan. Configure retention in Supabase Dashboard and periodically test a restore. A client-side export is not an automated backup and should not be described as one.
+- Do not store service-role credentials or backup files in GitHub.
 
-## Transaction journal (M4)
+## Final production verification
+- Test Google OAuth with both approved Admin and Partner accounts.
+- Confirm unapproved Google accounts are rejected.
+- Verify Partner A cannot read or mutate Partner B's records.
+- Verify Admin can read all profiles and active entries but cannot write another user's entries.
+- Test create, soft delete, category changes, report filters, budget, AI parse and export.
+- Confirm AI results are drafts and nothing is saved before explicit confirmation.
+- Verify secrets are absent from browser bundles and Git history.
+- Run `pnpm typecheck`, `pnpm lint`, `pnpm test`, and `pnpm build`.
 
-The authenticated `/entries` page supports:
-- Create income or expense records with amount, optional category, date, and note.
-- Store money as integer satang (for example, 125.50 THB is stored as 12550).
-- Show the latest 100 active records for the signed-in user.
-- Soft-delete a record by setting `deleted_at`; records are not physically deleted.
-- Use RLS as the final authorization boundary. The browser never supplies another user's `user_id`; the database derives ownership from the authenticated session.
-
-Categories are loaded from the signed-in user's category rows. Default categories are created by the signup trigger. Category management and richer filtering are planned for later milestones.
+## Secret policy
+- Browser-safe: Supabase project URL and publishable key.
+- Server-only: DeepSeek API key, Supabase service-role key and OAuth client secret.
+- Never commit `.env.local`, allowlist email addresses, credentials or backup exports.
