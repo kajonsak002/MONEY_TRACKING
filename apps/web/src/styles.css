@@ -152,3 +152,40 @@ button:disabled, input:disabled { cursor: not-allowed; opacity: .55; }
 .account-copy small { color: var(--color-muted); font-size: 9px; }
 .signout-button { width: 34px; height: 34px; display: grid; place-items: center; border: 1px solid var(--color-border); border-radius: 11px; color: var(--color-muted); background: var(--color-surface); cursor: pointer; }
 .signout-button:hover { color: var(--color-expense); }
+
+/* Entries */
+.entries-page { display: grid; gap: 20px; }
+.page-title-row h1 { margin: 0 0 4px; font-size: 22px; }
+.page-title-row .muted { margin: 0; }
+.entry-form-card, .entry-list-section { padding: 19px; border: 1px solid var(--color-border); border-radius: var(--radius-card); background: var(--color-surface); box-shadow: var(--shadow-card); }
+.entry-form-icon { width: 34px; height: 34px; display: grid; place-items: center; border-radius: 12px; color: var(--color-brand); background: var(--color-brand-soft); }
+.entry-form { display: grid; gap: 14px; margin-top: 16px; }
+.entry-type-switch { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; padding: 4px; border-radius: 14px; background: var(--color-canvas); }
+.entry-type-switch button { min-height: 42px; display: flex; justify-content: center; align-items: center; gap: 7px; border: 0; border-radius: 11px; color: var(--color-muted); background: transparent; font-size: 13px; cursor: pointer; }
+.entry-type-switch button.selected { font-weight: 600; background: var(--color-surface); box-shadow: 0 2px 8px rgb(30 35 70 / 7%); }
+.entry-type-switch button.expense-selected { color: var(--color-expense); }
+.entry-type-switch button.income-selected { color: var(--color-income); }
+.entry-field { display: grid; gap: 7px; color: var(--color-ink); font-size: 12px; font-weight: 500; }
+.entry-field input, .entry-field select { width: 100%; min-width: 0; height: 46px; padding: 0 12px; border: 1px solid var(--color-border); border-radius: var(--radius-control); outline: none; color: var(--color-ink); background: var(--color-canvas); font: inherit; font-size: 13px; }
+.entry-field input:focus, .entry-field select:focus { border-color: var(--color-brand); }
+.entry-form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.entry-submit { width: 100%; }
+.entry-error { margin: 0; padding: 10px 12px; border-radius: 11px; color: var(--color-expense); background: var(--color-expense-soft); font-size: 12px; }
+.entry-count { color: var(--color-muted); font-size: 10px; }
+.entry-list { display: grid; margin-top: 12px; }
+.entry-row { min-width: 0; display: flex; align-items: center; gap: 10px; padding: 13px 0; border-bottom: 1px solid var(--color-border); }
+.entry-row:last-child { border-bottom: 0; }
+.entry-type-icon { width: 38px; height: 38px; flex: 0 0 auto; display: grid; place-items: center; border-radius: 13px; }
+.entry-type-icon.income-bg { color: var(--color-income); background: var(--color-income-soft); }
+.entry-type-icon.expense-bg { color: var(--color-expense); background: var(--color-expense-soft); }
+.entry-main { min-width: 0; flex: 1; display: grid; gap: 3px; }
+.entry-main strong { overflow: hidden; color: var(--color-ink); font-size: 12px; text-overflow: ellipsis; white-space: nowrap; }
+.entry-main small { color: var(--color-muted); font-size: 10px; }
+.entry-amount { flex: 0 0 auto; font-size: 11px; font-variant-numeric: tabular-nums; }
+.entry-delete { width: 30px; height: 30px; flex: 0 0 auto; display: grid; place-items: center; border: 0; border-radius: 9px; color: var(--color-muted); background: transparent; cursor: pointer; }
+.entry-delete:hover { color: var(--color-expense); background: var(--color-expense-soft); }
+.entry-delete:disabled { opacity: .4; cursor: wait; }
+.entry-loading { display: flex; justify-content: center; align-items: center; gap: 8px; padding: 28px 0; color: var(--color-muted); font-size: 12px; }
+.spin { animation: spin .9s linear infinite; }
+@keyframes spin { to { transform: rotate(360deg); } }
+@media (max-width: 390px) { .entry-form-grid { grid-template-columns: 1fr; } .entry-row { gap: 7px; } .entry-amount { font-size: 10px; } }
