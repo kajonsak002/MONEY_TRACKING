@@ -20,7 +20,7 @@ Deno.serve(async(req:Request)=>{
  try{body=await req.json();}catch{return reply({error:"Invalid JSON"},400,origin);}
  if(body.action==="health")return reply({ready:true},200,origin);
  if(body.action==="allowlist"){
-   if(typeof body.email!=="string"||body.email.trim().length>254||! /^[^@\\s]+@[^@\\s]+\\.[^@\\s]+$/.test(body.email.trim())||!["admin","partner"].includes(String(body.role)))return reply({error:"Invalid email or role"},400,origin);
+   if(typeof body.email!=="string"||body.email.trim().length>254||! /^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(body.email.trim())||!["admin","partner"].includes(String(body.role)))return reply({error:"Invalid email or role"},400,origin);
    const serviceClient=createClient(url,service,{auth:{persistSession:false,autoRefreshToken:false}});
    const {error}=await serviceClient.rpc("admin_upsert_allowlist",{p_email:body.email.trim().toLowerCase(),p_new_role:body.role,p_actor_id:auth.user.id});
    if(error){console.error("Allowlist update failed",error.code??"unknown");return reply({error:"Could not update allowlist"},500,origin);}
