@@ -60,7 +60,6 @@ Deno.serve(async (req: Request) => {
     return json({ error: "รูปแบบคำขอไม่ถูกต้อง" }, 400);
   }
   const text = typeof payload.text === "string" ? payload.text.trim() : "";
-  if (!text || text.length > 200) return json({ error: "กรุณากรอกข้อความ 1–200 ตัวอักษร" }, 400);
 
   const serviceClient = createClient(supabaseUrl, serviceKey, {
     auth: { persistSession: false, autoRefreshToken: false },
@@ -70,6 +69,7 @@ Deno.serve(async (req: Request) => {
     return json({ error: "ผู้ดูแลระบบยังไม่ได้ตั้งค่า DeepSeek API Key" }, 503);
   }
   if (payload.action === "health") return json({ ready: true, deepseekConfigured: true });
+  if (!text || text.length > 200) return json({ error: "กรุณากรอกข้อความ 1–200 ตัวอักษร" }, 400);
 
   const { data: categories } = await userClient
     .from("categories")
