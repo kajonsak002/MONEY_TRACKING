@@ -1,5 +1,7 @@
 -- Final hardening for server-only secret management.
 -- The browser must never call Vault management RPCs directly.
+create index if not exists admin_audit_logs_actor_id_idx on public.admin_audit_logs(actor_id) where actor_id is not null;
+create index if not exists entries_category_user_idx on public.entries(category_id, user_id) where category_id is not null;
 drop function if exists public.admin_set_deepseek_api_key(text);
 drop function if exists public.admin_remove_deepseek_api_key();
 drop function if exists public.admin_set_deepseek_api_key(text, uuid);
