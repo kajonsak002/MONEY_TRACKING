@@ -150,3 +150,5 @@
 .admin-audit-row small{color:#98a2b1;font-size:10px}
 .admin-amount-cell{font-weight:700;white-space:nowrap}
 @media(max-width:700px){.admin-list-page{gap:14px}.admin-filter-row{align-items:stretch;flex-direction:column}.admin-filter-row select{width:100%}.admin-user-stats{gap:8px}.admin-user-stats article{padding:12px}.admin-member-table{min-width:620px}.admin-list-count{font-size:10px;padding:7px 8px}}
+
+.admin-health-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}.admin-health-grid article{display:grid;gap:8px;padding:13px;border:1px solid #e9edf3;border-radius:11px;background:#fbfcfe}.admin-health-grid article span{color:#77859a;font-size:10px}.admin-health-grid article strong{font-size:12px}.admin-health-grid .is-online{color:#21865a}.admin-health-grid .is-offline{color:#c05b60}@media(max-width:700px){.admin-health-grid{grid-template-columns:1fr}.admin-health-grid article{display:flex;align-items:center;justify-content:space-between}}
