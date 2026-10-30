@@ -1,4 +1,4 @@
-import { NavLink, Outlet, useNavigate } from "react-router-dom";
+import { NavLink, Navigate, Outlet, useNavigate } from "react-router-dom";
 import { Activity, LayoutDashboard, LogOut, Settings, ShieldCheck, Users, Wallet } from "lucide-react";
 import { useAuth } from "../auth/AuthProvider";
 
@@ -13,7 +13,7 @@ const items = [
 export function AdminShell() {
   const { profile, user, signOut } = useAuth();
   const navigate = useNavigate();
-  if (profile?.role !== "admin") return <main className="admin-denied"><ShieldCheck size={32}/><h1>ไม่มีสิทธิ์เข้าถึง</h1><p>ส่วนนี้สำหรับผู้ดูแลระบบเท่านั้น</p><button onClick={() => navigate("/", { replace: true })}>กลับหน้าผู้ใช้งาน</button></main>;
+  if (profile?.role !== "admin") return <Navigate to="/app" replace />;
   return <div className="admin-frame">
     <aside className="admin-sidebar">
       <a className="admin-brand" href="/admin"><span className="admin-brand-icon"><Wallet size={19}/></span><span>MONEY<span>TRACKING</span></span></a>
