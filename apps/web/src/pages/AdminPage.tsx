@@ -29,7 +29,7 @@ export function AdminPage() {
   });
   const refresh = () => { void users.refetch(); void entries.refetch(); };
   const totalIncome = (entries.data ?? []).filter((e) => e.type === "income").reduce((sum, e) => sum + Number(e.amount_satang), 0) / 100;
-  const totalExpense = (entries.data ?? []).filter((e) => e.type === "expense").reduce((sum, e) => sum + Number(e.amount), 0) / 100;
+  const totalExpense = (entries.data ?? []).filter((e) => e.type === "expense").reduce((sum, e) => sum + Number(e.amount_satang), 0) / 100;
   const isLoading = users.isLoading || entries.isLoading;
   const isError = users.isError || entries.isError;
   const error = users.error?.message ?? entries.error?.message;
