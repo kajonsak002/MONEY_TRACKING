@@ -118,3 +118,39 @@
 @media(max-width:700px){.admin-settings-page{gap:15px}.admin-setting-card{padding:14px}.admin-setting-security{font-size:10px}.admin-secret-actions>*{flex:1}}
 
 @media(max-width:700px){.admin-mobile-nav{grid-template-columns:repeat(5,minmax(0,1fr))}.admin-mobile-nav a{font-size:clamp(7px,1.9vw,9px)}}
+
+/* Admin management pages */
+.admin-list-page{display:grid;gap:18px;min-width:0}
+.admin-list-count{display:inline-flex;align-items:center;gap:7px;padding:8px 11px;border:1px solid #e5eaf1;border-radius:10px;color:#526176;font-size:11px;font-weight:700;white-space:nowrap}
+.admin-filter-row{display:flex;align-items:center;gap:10px;margin-bottom:14px}
+.admin-filter-row select,.admin-member-table select{min-height:40px;padding:0 11px;border:1px solid #e1e7ef;border-radius:9px;background:#fff;color:#263449;font:inherit;font-size:11px}
+.admin-search{display:flex;align-items:center;gap:9px;flex:1;min-width:0;min-height:40px;padding:0 12px;border:1px solid #e1e7ef;border-radius:9px;color:#8290a3}
+.admin-search input{width:100%;min-width:0;border:0;outline:0;background:transparent;color:#263449;font:inherit;font-size:12px}
+.admin-table-scroll{width:100%;overflow:auto}
+.admin-member-table{width:100%;border-collapse:collapse;min-width:580px}
+.admin-member-table th,.admin-member-table td{padding:12px 13px;border-bottom:1px solid #edf0f5;text-align:left;vertical-align:middle;font-size:11px}
+.admin-member-table th{color:#7b8798;font-weight:700;white-space:nowrap}
+.admin-member-table td{color:#445268}
+.admin-member-table td strong{color:#1d293b;font-size:12px}
+.admin-member-table td span:not(.admin-role){color:#8591a1;font-size:10px}
+.admin-member-table select{min-height:32px;font-size:10px}
+.admin-user-stats{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.admin-user-stats article{display:grid;gap:5px;padding:14px 16px;border:1px solid #e9edf3;border-radius:13px;background:#fff}
+.admin-user-stats small{color:#7a8799;font-size:11px}
+.admin-user-stats strong{color:#1c2b40;font-size:24px}
+.admin-self-label{font-size:10px;color:#8995a5}
+.admin-page-footnote{display:flex;align-items:flex-start;gap:8px;color:#7c899b;font-size:10px;line-height:1.7}
+.admin-page-footnote svg{flex:0 0 auto;margin-top:2px}
+.admin-audit-list{display:grid}
+.admin-audit-row{display:flex;gap:12px;padding:14px 0;border-bottom:1px solid #edf0f5}
+.admin-audit-icon{display:grid;place-items:center;flex:0 0 34px;width:34px;height:34px;border-radius:10px;background:#f0f5fb;color:#4975a9}
+.admin-audit-row>div{min-width:0}
+.admin-audit-row strong{color:#243248;font-size:12px;overflow-wrap:anywhere}
+.admin-audit-row p{margin:4px 0;color:#758297;font-size:10px;overflow-wrap:anywhere}
+.admin-audit-row small{color:#98a2b1;font-size:10px}
+.admin-amount-cell{font-weight:700;white-space:nowrap}
+@media(max-width:700px){.admin-list-page{gap:14px}.admin-filter-row{align-items:stretch;flex-direction:column}.admin-filter-row select{width:100%}.admin-user-stats{gap:8px}.admin-user-stats article{padding:12px}.admin-member-table{min-width:620px}.admin-list-count{font-size:10px;padding:7px 8px}}
+
+.admin-health-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}.admin-health-grid article{display:grid;gap:8px;padding:13px;border:1px solid #e9edf3;border-radius:11px;background:#fbfcfe}.admin-health-grid article span{color:#77859a;font-size:10px}.admin-health-grid article strong{font-size:12px}.admin-health-grid .is-online{color:#21865a}.admin-health-grid .is-offline{color:#c05b60}@media(max-width:700px){.admin-health-grid{grid-template-columns:1fr}.admin-health-grid article{display:flex;align-items:center;justify-content:space-between}}
+
+.admin-allowlist-form{display:grid;grid-template-columns:minmax(0,1fr) 130px auto;gap:9px;margin-top:12px}.admin-allowlist-form input,.admin-allowlist-form select{min-width:0;min-height:40px;padding:0 11px;border:1px solid #e1e7ef;border-radius:9px;background:#fff;color:#263449;font:inherit;font-size:11px}.admin-allowlist-form button{min-height:40px}@media(max-width:700px){.admin-allowlist-form{grid-template-columns:1fr 1fr}.admin-allowlist-form input{grid-column:1/-1}.admin-allowlist-form button{grid-column:1/-1}}

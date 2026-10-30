@@ -1,0 +1,8 @@
+import { useQuery } from "@tanstack/react-query";
+import { Activity } from "lucide-react";
+import { supabase } from "../lib/supabase";
+type Audit={id:number;actor_id:string|null;action:string;target_id:string|null;details:Record<string,unknown>;created_at:string};
+export function AdminActivityPage(){
+ const query=useQuery({queryKey:["admin","audit-logs"],enabled:!!supabase,queryFn:async()=>{if(!supabase)throw new Error("ยังไม่ได้ตั้งค่า Supabase");const {data,error}=await supabase.from("admin_audit_logs").select("id,actor_id,action,target_id,details,created_at").order("created_at",{ascending:false}).limit(300);if(error)throw error;return (data??[]) as Audit[]}});
+ return <div className="admin-list-page"><header className="admin-heading"><div><span className="admin-eyebrow">SYSTEM / AUDIT TRAIL</span><h1>กิจกรรมระบบ</h1><p>ประวัติการดำเนินการสำคัญที่ Backend บันทึกไว้</p></div><span className="admin-list-count"><Activity size={15}/>{query.data?.length??0} เหตุการณ์</span></header><section className="admin-panel">{query.isLoading?<div className="admin-empty">กำลังโหลดประวัติ...</div>:query.isError?<div className="admin-empty">{query.error.message}</div>:!query.data?.length?<div className="admin-empty">ยังไม่มีเหตุการณ์ในระบบ</div>:<div className="admin-audit-list">{query.data.map(row=><article className="admin-audit-row" key={row.id}><span className="admin-audit-icon"><Activity size={16}/></span><div><strong>{row.action}</strong><p>ผู้ดำเนินการ: {row.actor_id??"ระบบ"}{row.target_id?" · เป้าหมาย "+row.target_id:""}</p><small>{new Intl.DateTimeFormat("th-TH",{dateStyle:"medium",timeStyle:"short"}).format(new Date(row.created_at))}</small></div></article>)}</div>}</section></div>;
+}

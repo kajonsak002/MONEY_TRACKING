@@ -19,8 +19,8 @@ export function AdminSettingsPage() {
     setLoading(true);
     setError("");
     const { data, error: rpcError } = await supabase.functions.invoke("admin-settings", { body: { action: "status" } });
-    if (rpcError) setError(rpcError.message);
-    else setConfigured(Boolean(data));
+    if (rpcError || data?.error) setError(data?.error ?? rpcError?.message ?? "คำขอไม่สำเร็จ");
+    else setConfigured(Boolean(data?.configured));
     setLoading(false);
   }
 
@@ -32,10 +32,10 @@ export function AdminSettingsPage() {
     setSaving(true);
     setError("");
     setNotice("");
-    const { error: rpcError } = await supabase.functions.invoke("admin-settings", { body: { action: "set", apiKey: apiKey.trim() } });
+    const { data, error: rpcError } = await supabase.functions.invoke("admin-settings", { body: { action: "set", apiKey: apiKey.trim() } });
     setSaving(false);
-    if (rpcError) {
-      setError(rpcError.message);
+    if (rpcError || data?.error) {
+      setError(data?.error ?? rpcError?.message ?? "คำขอไม่สำเร็จ");
       return;
     }
     setApiKey("");
@@ -48,9 +48,9 @@ export function AdminSettingsPage() {
     setSaving(true);
     setError("");
     setNotice("");
-    const { error: rpcError } = await supabase.functions.invoke("admin-settings", { body: { action: "remove" } });
+    const { data, error: rpcError } = await supabase.functions.invoke("admin-settings", { body: { action: "remove" } });
     setSaving(false);
-    if (rpcError) setError(rpcError.message);
+    if (rpcError || data?.error) setError(data?.error ?? rpcError?.message ?? "คำขอไม่สำเร็จ");
     else {
       setNotice("ลบ API Key แล้ว");
       await refreshStatus();
