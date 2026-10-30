@@ -6,7 +6,7 @@ The GitHub Actions workflow `.github/workflows/backup.yml` runs daily at 00:15 A
 
 Before enabling it, create a private R2 bucket and configure these GitHub Actions repository secrets. Then set the repository Actions variable `BACKUP_ENABLED` to `true` to activate the daily schedule:
 
-- `SUPABASE_DB_URL`: direct PostgreSQL connection string for the MONEY_TRACKING Supabase project. Use the database password/connection string from Supabase Connect settings; never commit it.
+- `SUPABASE_DB_URL`: PostgreSQL connection string for the MONEY_TRACKING Supabase project. Prefer the Session Pooler connection (port 5432) if the direct database host is IPv6-only; do not use Transaction Pooler for `pg_dump`. Use the database password from Supabase Connect settings; never commit it.
 - `BACKUP_PASSPHRASE`: a long random passphrase stored separately from the backup bucket.
 - `R2_ACCOUNT_ID`: Cloudflare account ID.
 - `R2_ACCESS_KEY_ID` and `R2_SECRET_ACCESS_KEY`: R2 API token credentials with Object Read & Write for the backup bucket only.
