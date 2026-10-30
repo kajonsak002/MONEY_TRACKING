@@ -11,7 +11,8 @@ export async function getCategories() {
  if(error) throw error; return (data??[]) as EntryCategory[];
 }
 export async function getEntries() {
- const {data,error}=await getClient().from("entries").select("id,type,amount_satang,note,occurred_on,category_id,categories(id,name,type,icon,color)").is("deleted_at",null).order("occurred_on",{ascending:false}).order("created_at",{ascending:false}).limit(100);
+ const userId=await ownerId();
+ const {data,error}=await getClient().from("entries").select("id,type,amount_satang,note,occurred_on,category_id,categories(id,name,type,icon,color)").eq("user_id",userId).is("deleted_at",null).order("occurred_on",{ascending:false}).order("created_at",{ascending:false}).limit(100);
  if(error) throw error; return (data??[]) as unknown as EntryRecord[];
 }
 export async function createEntry(input: CreateEntryInput) {
