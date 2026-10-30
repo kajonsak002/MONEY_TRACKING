@@ -121,6 +121,35 @@ begin
 end;
 $function$;
 
+
+create or replace function public.admin_upsert_allowlist(p_email text, p_new_role public.app_role, p_actor_id uuid)
+returns void
+language plpgsql
+security definer
+set search_path = ''
+as $function$
+begin
+  if coalesce(current_setting('request.jwt.claim.role', true), '') <> 'service_role' then
+    raise exception 'service role required' using errcode = '42501';
+  end if;
+  if p_actor_id is null or p_email is null or lower(trim(p_email)) !~ '^[^@[:space:]]+@[^@[:space:]]+\.[^@[:space:]]+(uuid, public.app_role, uuid) from public, anon, authenticated;
+grant execute on function public.admin_update_user_role(uuid, public.app_role, uuid) to service_role;
+
+ then
+    raise exception 'invalid email or actor' using errcode = '22023';
+  end if;
+  insert into public.app_allowlist(email, role)
+  values (lower(trim(p_email)), p_new_role)
+  on conflict (email) do update set role = excluded.role;
+  insert into public.admin_audit_logs(actor_id, action, details)
+  values (p_actor_id, 'users.allowlist.updated',
+    jsonb_build_object('email', lower(trim(p_email)), 'role', p_new_role::text));
+end;
+$function$;
+
+revoke all on function public.admin_upsert_allowlist(text, public.app_role, uuid) from public, anon, authenticated;
+grant execute on function public.admin_upsert_allowlist(text, public.app_role, uuid) to service_role;
+
 revoke all on function public.admin_update_user_role(uuid, public.app_role, uuid) from public, anon, authenticated;
 grant execute on function public.admin_update_user_role(uuid, public.app_role, uuid) to service_role;
 
