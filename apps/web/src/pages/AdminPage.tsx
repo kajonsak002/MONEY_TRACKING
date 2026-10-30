@@ -25,7 +25,7 @@ export function AdminPage() {
   const entries = useQuery({
     queryKey: ["admin", "entries", currentDate()],
     enabled: profile?.role === "admin",
-    queryFn: () => getEntriesInRange("2000-01-01", currentDate()),
+    queryFn: () => getEntriesInRange("2000-01-01", currentDate(), true),
   });
   const refresh = () => { void users.refetch(); void entries.refetch(); };
   const totalIncome = (entries.data ?? []).filter((e) => e.type === "income").reduce((sum, e) => sum + Number(e.amount_satang), 0) / 100;
