@@ -15,7 +15,7 @@ export interface EntryRecord {
   note: string | null;
   occurred_on: string;
   category_id: string | null;
-  categories: EntryCategory | null;
+  categories: EntryCategory[];
 }
 export interface CreateEntryInput {
   type: EntryType;
@@ -48,7 +48,7 @@ export async function getEntries() {
     .order("created_at", { ascending: false })
     .limit(100);
   if (error) throw error;
-  return (data ?? []) as EntryRecord[];
+  return (data ?? []) as unknown as EntryRecord[];
 }
 
 export async function createEntry(input: CreateEntryInput) {
