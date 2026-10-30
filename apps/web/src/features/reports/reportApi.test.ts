@@ -31,8 +31,8 @@ describe("summarizeEntries", () => {
       { date: "2026-10-03", income: 50000, expense: 0 },
     ]);
     expect(result.byCategory).toEqual([
-      { name: "อาหาร", amount: 30000, type: "expense" },
       { name: "เงินเดือน", amount: 50000, type: "income" },
+      { name: "อาหาร", amount: 30000, type: "expense" },
     ]);
   });
 
