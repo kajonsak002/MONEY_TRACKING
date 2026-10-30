@@ -14,26 +14,20 @@ Deno.serve(async(req:Request)=>{
  const userClient=createClient(url,anon,{global:{headers:{Authorization:`Bearer ${token}`}},auth:{persistSession:false,autoRefreshToken:false}});
  const {data:auth,error:authErr}=await userClient.auth.getUser(token);
  if(authErr||!auth.user)return reply({error:"Invalid session"},401,origin);
- const {data:profile,error:profileErr}=await userClient.from("profiles").select("role,email").eq("id",auth.user.id).maybeSingle();
+ const {data:profile,error:profileErr}=await userClient.from("profiles").select("role").eq("id",auth.user.id).maybeSingle();
  if(profileErr||profile?.role!=="admin")return reply({error:"Admin access required"},403,origin);
  let body:{action?:unknown;userId?:unknown;role?:unknown};
  try{body=await req.json();}catch{return reply({error:"Invalid JSON"},400,origin);}
  if(body.action!=="set-role"||typeof body.userId!=="string"||!["admin","partner"].includes(String(body.role)))return reply({error:"Invalid request"},400,origin);
  if(body.userId===auth.user.id)return reply({error:"You cannot change your own role"},400,origin);
- const admin=createClient(url,service,{auth:{persistSession:false,autoRefreshToken:false}});
- const {data:target,error:targetErr}=await admin.from("profiles").select("id,email,role").eq("id",body.userId).maybeSingle();
- if(targetErr||!target)return reply({error:"Member not found"},404,origin);
- if(target.role==="admin"&&body.role==="partner"){
-   const {count,error:countErr}=await admin.from("profiles").select("id",{count:"exact",head:true}).eq("role","admin");
-   if(countErr)return reply({error:"Could not verify administrator count"},500,origin);
-   if((count??0)<=1)return reply({error:"At least one administrator must remain"},409,origin);
+ const serviceClient=createClient(url,service,{auth:{persistSession:false,autoRefreshToken:false}});
+ const {error}=await serviceClient.rpc("admin_update_user_role",{p_target_id:body.userId,p_new_role:body.role,p_actor_id:auth.user.id});
+ if(error){
+   if(error.code==="P0002")return reply({error:"Member not found"},404,origin);
+   if(error.code==="23514")return reply({error:"At least one administrator must remain"},409,origin);
+   if(error.code==="22023")return reply({error:"Invalid role change"},400,origin);
+   console.error("Role update failed",error.code??"unknown");
+   return reply({error:"Could not update member role"},500,origin);
  }
- const nextRole=body.role as "admin"|"partner";
- const {error:updateErr}=await admin.from("profiles").update({role:nextRole}).eq("id",body.userId);
- if(updateErr)return reply({error:"Could not update member role"},500,origin);
- const {error:allowErr}=await admin.from("app_allowlist").upsert({email:target.email.toLowerCase(),role:nextRole},{onConflict:"email"});
- if(allowErr){await admin.from("profiles").update({role:target.role}).eq("id",body.userId);return reply({error:"Could not synchronize allowlist; role change rolled back"},500,origin);}
- const {error:auditErr}=await admin.from("admin_audit_logs").insert({actor_id:auth.user.id,action:"users.role.updated",target_id:body.userId,details:{from:target.role,to:nextRole}});
- if(auditErr)console.error("Audit insert failed",auditErr.code??"unknown");
  return reply({ok:true},200,origin);
 });
