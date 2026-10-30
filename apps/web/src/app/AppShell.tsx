@@ -1,4 +1,4 @@
-import { NavLink, Outlet } from "react-router-dom";
+import { NavLink, Navigate, Outlet } from "react-router-dom";
 import { ChartNoAxesCombined, House, LogOut, Settings, Wallet } from "lucide-react";
 import { useAuth } from "../auth/AuthProvider";
 
@@ -10,8 +10,9 @@ const navigation = [
 ];
 export function AppShell() {
   const { profile, user, signOut } = useAuth();
+  if (profile?.role === "admin") return <Navigate to="/admin" replace />;
   const displayName = profile?.display_name || user?.email?.split("@")[0] || "สมาชิก";
-  const roleLabel = profile?.role === "admin" ? "ผู้ดูแลระบบ" : "สมาชิก";
+  const roleLabel = "สมาชิก";
   return <div className="app-frame"><header className="topbar">
     <a className="brand-mark" href="/app" aria-label="Money Tracking หน้าแรก"><span className="brand-icon"><Wallet size={19}/></span><span>money<span className="brand-accent">mate</span></span></a>
     <div className="account-menu"><div className="account-copy"><strong>{displayName}</strong><small>{roleLabel}</small></div><button className="signout-button" type="button" onClick={() => void signOut()} aria-label="ออกจากระบบ" title="ออกจากระบบ"><LogOut size={17}/></button></div>
