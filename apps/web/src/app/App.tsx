@@ -11,11 +11,11 @@ import { SummaryPage } from "../pages/SummaryPage";
 import { CategoriesPage } from "../pages/CategoriesPage";
 import { SettingsPage } from "../pages/SettingsPage";
 import { AdminPage } from "../pages/AdminPage";
+import { BudgetPage } from "../pages/BudgetPage";
 
 const queryClient = new QueryClient({
   defaultOptions: { queries: { staleTime: 30_000, retry: 1, refetchOnWindowFocus: false } },
 });
-
 export function App() {
   return <QueryClientProvider client={queryClient}><AuthProvider><BrowserRouter>
     <Routes>
@@ -25,6 +25,7 @@ export function App() {
         <Route index element={<HomePage/>}/>
         <Route path="entries" element={<EntriesPage/>}/>
         <Route path="summary" element={<SummaryPage/>}/>
+        <Route path="budget" element={<BudgetPage/>}/>
         <Route path="categories" element={<CategoriesPage/>}/>
         <Route path="settings" element={<SettingsPage/>}/>
         <Route path="admin" element={<AdminPage/>}/>
