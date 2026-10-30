@@ -47,7 +47,7 @@ The Admin enters the DeepSeek API Key at `/admin/settings`. It is stored in Supa
 
 ## Cloudflare Workers Builds
 - Production trigger: branch `main`, build command `pnpm install --no-frozen-lockfile && pnpm --filter @money-tracking/web build`, deploy command `npx wrangler deploy`.
-- Preview trigger: non-production branches, same build command, preview command `npx wrangler preview`. Keep the preview trigger separate from the production trigger.
+- Preview trigger: non-production branches, same build command, deploy command `echo Preview-build-only`. This validates the bundle without creating a preview deployment; keep it separate from the production trigger.
 
 ## Vercel
 After local integration tests pass:
