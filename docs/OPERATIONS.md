@@ -4,7 +4,7 @@
 
 The GitHub Actions workflow `.github/workflows/backup.yml` runs daily at 00:15 Asia/Bangkok and can also be started manually. It creates a PostgreSQL custom-format dump, encrypts it with AES-256-CBC + PBKDF2, uploads it to Cloudflare R2, and verifies the uploaded object.
 
-Before enabling it, configure these GitHub Actions repository secrets:
+Before enabling it, create a private R2 bucket and configure these GitHub Actions repository secrets. Then set the repository Actions variable `BACKUP_ENABLED` to `true` to activate the daily schedule:
 
 - `SUPABASE_DB_URL`: direct PostgreSQL connection string for the MONEY_TRACKING Supabase project. Use the database password/connection string from Supabase Connect settings; never commit it.
 - `BACKUP_PASSPHRASE`: a long random passphrase stored separately from the backup bucket.
