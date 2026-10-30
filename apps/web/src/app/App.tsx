@@ -30,18 +30,24 @@ export function App() {
       <Route path="/login" element={<LoginPage/>}/>
       <Route path="/auth/callback" element={<AuthCallbackPage/>}/>
       <Route element={<RequireAuth/>}>
+        <Route path="/" element={<RoleHome/>}/>
         <Route path="/admin" element={<AdminShell/>}>
           <Route index element={<AdminPage/>}/>
           <Route path="*" element={<Navigate to="/admin" replace/>}/>
         </Route>
         <Route element={<AppShell/>}>
-          <Route path="/" element={<HomePage/>}/>
-          <Route path="/entries" element={<EntriesPage/>}/>
-          <Route path="/summary" element={<SummaryPage/>}/>
-          <Route path="/budget" element={<BudgetPage/>}/>
-          <Route path="/categories" element={<CategoriesPage/>}/>
-          <Route path="/settings" element={<SettingsPage/>}/>
-          <Route path="/app/*" element={<RoleHome/>}/>
+          <Route path="/app" element={<HomePage/>}/>
+          <Route path="/app/entries" element={<EntriesPage/>}/>
+          <Route path="/app/summary" element={<SummaryPage/>}/>
+          <Route path="/app/budget" element={<BudgetPage/>}/>
+          <Route path="/app/categories" element={<CategoriesPage/>}/>
+          <Route path="/app/settings" element={<SettingsPage/>}/>
+          <Route path="/app/*" element={<Navigate to="/app" replace/>}/>
+          <Route path="/entries" element={<Navigate to="/app/entries" replace/>}/>
+          <Route path="/summary" element={<Navigate to="/app/summary" replace/>}/>
+          <Route path="/budget" element={<Navigate to="/app/budget" replace/>}/>
+          <Route path="/categories" element={<Navigate to="/app/categories" replace/>}/>
+          <Route path="/settings" element={<Navigate to="/app/settings" replace/>}/>
           <Route path="*" element={<RoleHome/>}/>
         </Route>
       </Route>
