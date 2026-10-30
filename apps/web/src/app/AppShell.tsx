@@ -1,5 +1,6 @@
 import { NavLink, Outlet } from "react-router-dom";
-import { ChartNoAxesCombined, House, Settings, Wallet } from "lucide-react";
+import { ChartNoAxesCombined, House, LogOut, Settings, Wallet } from "lucide-react";
+import { useAuth } from "../auth/AuthProvider";
 
 const navigation = [
   { to: "/", label: "ภาพรวม", icon: House },
@@ -9,6 +10,10 @@ const navigation = [
 ];
 
 export function AppShell() {
+  const { profile, user, signOut } = useAuth();
+  const displayName = profile?.display_name || user?.email?.split("@")[0] || "สมาชิก";
+  const roleLabel = profile?.role === "admin" ? "ผู้ดูแลระบบ" : "สมาชิก";
+
   return (
     <div className="app-frame">
       <header className="topbar">
@@ -16,7 +21,10 @@ export function AppShell() {
           <span className="brand-icon"><Wallet size={19} /></span>
           <span>money<span className="brand-accent">mate</span></span>
         </a>
-        <span className="topbar-caption">จัดการเงินให้ง่ายขึ้น</span>
+        <div className="account-menu">
+          <div className="account-copy"><strong>{displayName}</strong><small>{roleLabel}</small></div>
+          <button className="signout-button" type="button" onClick={() => void signOut()} aria-label="ออกจากระบบ" title="ออกจากระบบ"><LogOut size={17} /></button>
+        </div>
       </header>
       <main className="page-content"><Outlet /></main>
       <nav className="bottom-nav" aria-label="เมนูหลัก">
