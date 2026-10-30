@@ -21,6 +21,6 @@ export function AdminShell() {
       <div className="admin-sidebar-bottom"><span className="admin-secure"><ShieldCheck size={15}/> Admin access</span><div className="admin-user"><span className="admin-avatar">{(profile.display_name || user?.email || "A").slice(0,1).toUpperCase()}</span><span><strong>{profile.display_name || "ผู้ดูแลระบบ"}</strong><small>{user?.email}</small></span></div><button className="admin-logout" onClick={() => void signOut()}><LogOut size={16}/> ออกจากระบบ</button></div>
     </aside>
     <div className="admin-main"><header className="admin-topbar"><div><span className="admin-topbar-kicker">MONEY TRACKING / ADMIN</span><strong>ศูนย์จัดการระบบ</strong></div><span className="admin-status"><i/> ระบบจัดการ</span></header><main className="admin-content"><Outlet/></main></div>
-    <nav className="admin-mobile-nav" aria-label="เมนูผู้ดูแล">{items.slice(0,4).map(({to,label,icon:Icon,end})=><NavLink key={to} to={to} end={Boolean(end)} className={({isActive})=>isActive?"active":""}><Icon size={18}/><span>{label}</span></NavLink>)}</nav>
+    <nav className="admin-mobile-nav" aria-label="เมนูผู้ดูแล">{items.map(({to,label,icon:Icon,end})=><NavLink key={to} to={to} end={Boolean(end)} className={({isActive})=>isActive?"active":""}><Icon size={18}/><span>{label}</span></NavLink>)}</nav>
   </div>;
 }
