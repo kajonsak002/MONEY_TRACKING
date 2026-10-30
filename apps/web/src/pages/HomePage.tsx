@@ -1,10 +1,19 @@
 import { ArrowDownLeft, ArrowUpRight, Plus } from "lucide-react";
 
+const thaiDateFormatter = new Intl.DateTimeFormat("th-TH", {
+  weekday: "long",
+  day: "numeric",
+  month: "long",
+  year: "numeric",
+  timeZone: "Asia/Bangkok",
+});
+
 export function HomePage() {
+  const today = thaiDateFormatter.format(new Date());
   return (
     <div className="home-page">
       <section className="welcome-row">
-        <div><p className="eyebrow">วันศุกร์ที่ 30 ตุลาคม 2569</p><h1>สวัสดีครับ</h1><p className="muted">วันนี้การเงินของคุณเป็นอย่างไรบ้าง?</p></div>
+        <div><p className="eyebrow">{today}</p><h1>สวัสดีครับ</h1><p className="muted">วันนี้การเงินของคุณเป็นอย่างไรบ้าง?</p></div>
         <div className="avatar" aria-hidden="true">M</div>
       </section>
       <section className="balance-card" aria-label="ยอดคงเหลือ">

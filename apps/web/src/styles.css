@@ -73,3 +73,59 @@ button:disabled, input:disabled { cursor: not-allowed; opacity: .55; }
 .nav-item.active { color: var(--color-brand); background: var(--color-brand-soft); }
 @media (min-width: 681px) { .app-frame { border-inline: 1px solid var(--color-border); } }
 @media (prefers-reduced-motion: no-preference) { .balance-card, .quick-add-card { animation: rise-in .35s ease-out both; } @keyframes rise-in { from { opacity: 0; transform: translateY(7px); } to { opacity: 1; transform: translateY(0); } } }
+
+/* Design-system primitives */
+.ui-button { min-height: 44px; display: inline-flex; align-items: center; justify-content: center; gap: 8px; padding: 0 16px; border: 1px solid transparent; border-radius: var(--radius-control); font-weight: 600; cursor: pointer; transition: background .15s ease, transform .15s ease; }
+.ui-button:active:not(:disabled) { transform: translateY(1px); }
+.ui-button--primary { color: white; background: var(--color-brand); }
+.ui-button--secondary { color: var(--color-brand); background: var(--color-brand-soft); }
+.ui-button--ghost { color: var(--color-ink); background: transparent; }
+.ui-button--danger { color: white; background: var(--color-expense); }
+.ui-button--sm { min-height: 36px; padding-inline: 12px; font-size: 12px; }
+.ui-button--md { min-height: 44px; font-size: 14px; }
+.ui-button--lg { min-height: 52px; padding-inline: 20px; font-size: 15px; }
+.ui-field { display: grid; gap: 7px; }
+.ui-label { color: var(--color-ink); font-size: 13px; font-weight: 500; }
+.ui-input { width: 100%; min-height: 46px; padding: 0 13px; border: 1px solid var(--color-border); border-radius: var(--radius-control); background: var(--color-surface); color: var(--color-ink); }
+.ui-input--error { border-color: var(--color-expense); }
+.ui-field-error { margin: 0; color: var(--color-expense); font-size: 12px; }
+.ui-card { padding: 18px; border: 1px solid var(--color-border); border-radius: var(--radius-card); background: var(--color-surface); box-shadow: var(--shadow-card); }
+.ui-badge { display: inline-flex; align-items: center; min-height: 24px; padding: 2px 9px; border-radius: 999px; font-size: 11px; font-weight: 600; }
+.ui-badge--neutral { color: var(--color-muted); background: var(--color-canvas); }
+.ui-badge--brand { color: var(--color-brand); background: var(--color-brand-soft); }
+.ui-badge--income { color: var(--color-income); background: var(--color-income-soft); }
+.ui-badge--expense { color: var(--color-expense); background: var(--color-expense-soft); }
+.ui-badge--warning { color: #9b6a12; background: #fff5dd; }
+.ui-empty-state { display: grid; justify-items: center; gap: 7px; padding: 26px 12px; text-align: center; }
+.ui-empty-state > strong { font-size: 14px; }
+.ui-empty-state > p { margin: 0; color: var(--color-muted); font-size: 12px; }
+.ui-empty-state__icon { color: var(--color-brand); }
+.ui-skeleton { display: block; max-width: 100%; border-radius: 8px; background: linear-gradient(90deg, var(--color-border), var(--color-canvas), var(--color-border)); background-size: 200% 100%; animation: skeleton-shimmer 1.4s ease-in-out infinite; }
+.ui-toast { padding: 12px 14px; border: 1px solid var(--color-border); border-radius: var(--radius-control); background: var(--color-surface); font-size: 13px; }
+.ui-toast--success { border-color: var(--color-income); }
+.ui-toast--error { border-color: var(--color-expense); }
+.ui-toast--info { border-color: var(--color-brand); }
+.amount-text { font-variant-numeric: tabular-nums; font-weight: 600; }
+.amount-text--income { color: var(--color-income); }
+.amount-text--expense { color: var(--color-expense); }
+.amount-text--neutral { color: var(--color-ink); }
+@keyframes skeleton-shimmer { to { background-position: -200% 0; } }
+
+[data-theme="dark"] {
+  color-scheme: dark;
+  --color-canvas: #151722;
+  --color-surface: #202333;
+  --color-ink: #f2f3fa;
+  --color-muted: #a2a7ba;
+  --color-brand: #a49bff;
+  --color-brand-soft: #302d50;
+  --color-income: #55d6a7;
+  --color-income-soft: #203c35;
+  --color-expense: #ff929b;
+  --color-expense-soft: #442b35;
+  --color-border: #34384c;
+  --shadow-card: 0 12px 34px rgb(0 0 0 / 18%);
+}
+@media (prefers-reduced-motion: reduce) {
+  .ui-button, .ui-skeleton { animation: none; transition: none; }
+}
