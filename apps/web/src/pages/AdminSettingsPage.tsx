@@ -34,8 +34,8 @@ export function AdminSettingsPage() {
     setNotice("");
     const { data, error: rpcError } = await supabase.functions.invoke("admin-settings", { body: { action: "set", apiKey: apiKey.trim() } });
     setSaving(false);
-    if (rpcError) {
-      setError(rpcError.message);
+    if (rpcError || data?.error) {
+      setError(data?.error ?? rpcError.message);
       return;
     }
     setApiKey("");
