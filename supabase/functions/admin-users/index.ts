@@ -18,6 +18,7 @@ Deno.serve(async(req:Request)=>{
  if(profileErr||profile?.role!=="admin")return reply({error:"Admin access required"},403,origin);
  let body:{action?:unknown;userId?:unknown;role?:unknown};
  try{body=await req.json();}catch{return reply({error:"Invalid JSON"},400,origin);}
+ if(body.action==="health")return reply({ready:true},200,origin);
  if(body.action!=="set-role"||typeof body.userId!=="string"||!["admin","partner"].includes(String(body.role)))return reply({error:"Invalid request"},400,origin);
  if(body.userId===auth.user.id)return reply({error:"You cannot change your own role"},400,origin);
  const serviceClient=createClient(url,service,{auth:{persistSession:false,autoRefreshToken:false}});
