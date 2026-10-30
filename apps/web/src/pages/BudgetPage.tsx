@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, type FormEvent } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Target, LoaderCircle } from "lucide-react";
 import { getMonthlyBudget, saveMonthlyBudget } from "../features/budget/budgetApi";
@@ -27,7 +27,7 @@ export function BudgetPage() {
     onSuccess: async () => { setAmount(""); setError(""); await qc.invalidateQueries({ queryKey: ["budget", month.start] }); },
     onError: (e: Error) => setError(e.message),
   });
-  function submit(event: React.FormEvent) {
+  function submit(event: FormEvent) {
     event.preventDefault();
     const value = Number(amount);
     if (!Number.isFinite(value) || value <= 0 || !/^\d+(\.\d{1,2})?$/.test(amount.trim())) { setError("กรุณากรอกงบประมาณที่มากกว่า 0 และไม่เกิน 2 ตำแหน่งทศนิยม"); return; }
