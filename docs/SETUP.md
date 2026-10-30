@@ -56,3 +56,14 @@ The selected policy is manual plus automated. Export a manual copy periodically 
 ## Not configured in source control
 
 Google OAuth provider credentials, production redirect URLs, Vercel environment variables, Cloudflare settings, and DeepSeek server secrets must be configured in their respective dashboards by the project owner.
+
+## Transaction journal (M4)
+
+The authenticated `/entries` page supports:
+- Create income or expense records with amount, optional category, date, and note.
+- Store money as integer satang (for example, 125.50 THB is stored as 12550).
+- Show the latest 100 active records for the signed-in user.
+- Soft-delete a record by setting `deleted_at`; records are not physically deleted.
+- Use RLS as the final authorization boundary. The browser never supplies another user's `user_id`; the database derives ownership from the authenticated session.
+
+Categories are loaded from the signed-in user's category rows. Default categories are created by the signup trigger. Category management and richer filtering are planned for later milestones.
