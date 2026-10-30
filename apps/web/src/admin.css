@@ -116,3 +116,5 @@
 .admin-notice{margin:0;padding:11px 12px;border-radius:10px;background:#eef8f2;color:#278052;font-size:11px}
 .admin-security-list{display:grid;gap:9px;margin:0;padding-left:20px;color:#718096;font-size:11px;line-height:1.7}
 @media(max-width:700px){.admin-settings-page{gap:15px}.admin-setting-card{padding:14px}.admin-setting-security{font-size:10px}.admin-secret-actions>*{flex:1}}
+
+@media(max-width:700px){.admin-mobile-nav{grid-template-columns:repeat(5,minmax(0,1fr))}.admin-mobile-nav a{font-size:clamp(7px,1.9vw,9px)}}
