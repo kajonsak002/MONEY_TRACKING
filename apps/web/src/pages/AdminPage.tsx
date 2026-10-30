@@ -27,6 +27,24 @@ export function AdminPage() {
     enabled: profile?.role === "admin",
     queryFn: () => getEntriesInRange("2000-01-01", currentDate(), true),
   });
+  const health = useQuery({
+    queryKey: ["admin", "system-health"],
+    enabled: profile?.role === "admin" && !!supabase,
+    queryFn: async () => {
+      if (!supabase) throw new Error("ยังไม่ได้ตั้งค่า Supabase");
+      const [database, ai, adminApi] = await Promise.all([
+        supabase.from("profiles").select("id").limit(1),
+        supabase.functions.invoke("parse-entry", { body: { action: "health" } }),
+        supabase.functions.invoke("admin-users", { body: { action: "health" } }),
+      ]);
+      return {
+        database: !database.error,
+        ai: !ai.error && ai.data?.ready === true && ai.data?.deepseekConfigured === true,
+        adminApi: !adminApi.error && adminApi.data?.ready === true,
+      };
+    },
+    refetchInterval: 60_000,
+  });
   const refresh = () => { void users.refetch(); void entries.refetch(); };
   const totalIncome = (entries.data ?? []).filter((e) => e.type === "income").reduce((sum, e) => sum + Number(e.amount_satang), 0) / 100;
   const totalExpense = (entries.data ?? []).filter((e) => e.type === "expense").reduce((sum, e) => sum + Number(e.amount_satang), 0) / 100;
@@ -45,6 +63,14 @@ export function AdminPage() {
     <section className="admin-panel"><div className="admin-panel-head"><h2>สมาชิกในระบบ</h2><small>{users.data?.length ?? 0} บัญชี</small></div>
       {isLoading ? <div className="admin-empty">กำลังโหลดข้อมูล...</div> : isError ? <div className="admin-empty">ไม่สามารถโหลดสมาชิกได้</div> : !users.data?.length ? <div className="admin-empty">ยังไม่มีสมาชิก</div> :
       <table className="admin-member-table"><thead><tr><th>ชื่อ / อีเมล</th><th>สิทธิ์</th><th>วันที่สมัคร</th></tr></thead><tbody>{users.data.map((member) => <tr key={member.id}><td><strong>{member.display_name || "ไม่ระบุชื่อ"}</strong><br/><span>{member.email}</span></td><td><span className={member.role === "admin" ? "admin-role admin" : "admin-role partner"}>{member.role === "admin" ? "Admin" : "Partner"}</span></td><td>{member.created_at ? new Intl.DateTimeFormat("th-TH",{dateStyle:"medium"}).format(new Date(member.created_at)) : "—"}</td></tr>)}</tbody></table>}
+    </section>
+    <section className="admin-panel">
+      <div className="admin-panel-head"><h2>สถานะบริการ</h2><small>ตรวจสอบอัตโนมัติทุก 60 วินาที</small></div>
+      {health.isLoading ? <div className="admin-empty">กำลังตรวจสอบบริการ...</div> : health.isError ? <p className="entry-error">ตรวจสอบสถานะไม่สำเร็จ: {health.error.message}</p> : <div className="admin-health-grid">
+        <article><span>ฐานข้อมูล Supabase</span><strong className={health.data.database ? "is-online" : "is-offline"}>{health.data.database ? "เชื่อมต่อได้" : "ขัดข้อง"}</strong></article>
+        <article><span>AI / DeepSeek Parser</span><strong className={health.data.ai ? "is-online" : "is-offline"}>{health.data.ai ? "พร้อมใช้งาน" : "ยังไม่พร้อม"}</strong></article>
+        <article><span>Admin API</span><strong className={health.data.adminApi ? "is-online" : "is-offline"}>{health.data.adminApi ? "พร้อมใช้งาน" : "ขัดข้อง"}</strong></article>
+      </div>}
     </section>
     <section className="admin-panel"><div className="admin-panel-head"><h2>ความปลอดภัยและสิทธิ์</h2><ShieldCheck size={17}/></div><p style={{margin:0,color:"#718096",fontSize:11,lineHeight:1.8}}>การแยกหน้าจอ Admin/Partner เป็นเพียงประสบการณ์ใช้งาน ส่วนการอนุญาตอ่านและเขียนข้อมูลยังบังคับด้วย Supabase Row Level Security (RLS) ทุกคำขอ</p></section>
   </div>;
