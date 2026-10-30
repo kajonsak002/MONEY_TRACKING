@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Moon, Sun, FileJson, FileSpreadsheet, Tags, ShieldCheck } from "lucide-react";
+import { Moon, Sun, FileJson, FileSpreadsheet, Tags, ShieldCheck, Target } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useAuth } from "../auth/AuthProvider";
 import { getEntriesInRange } from "../features/reports/reportApi";
@@ -45,6 +45,7 @@ export function SettingsPage() {
     <section className="settings-card"><h2>บัญชีผู้ใช้</h2><div className="settings-account"><strong>{profile?.display_name || "สมาชิก"}</strong><span>{user?.email}</span><small>{profile?.role === "admin" ? "ผู้ดูแลระบบ" : "สมาชิก"}</small></div><button className="settings-danger" type="button" onClick={() => void signOut()}>ออกจากระบบ</button></section>
     <section className="settings-card"><h2>ปรับแต่งแอป</h2><div className="theme-options"><button type="button" className={theme === "light" ? "chosen" : ""} onClick={() => changeTheme("light")}><Sun size={18}/> สว่าง</button><button type="button" className={theme === "dark" ? "chosen" : ""} onClick={() => changeTheme("dark")}><Moon size={18}/> มืด</button></div>
       <Link className="settings-link" to="/categories"><Tags size={17}/> จัดการหมวดหมู่</Link>
+      <Link className="settings-link" to="/budget"><Target size={17}/> ตั้งงบประมาณรายเดือน</Link>
       {profile?.role === "admin" && <Link className="settings-link" to="/admin"><ShieldCheck size={17}/> จัดการระบบ (Admin)</Link>}
     </section>
     <section className="settings-card"><h2>สำรองและส่งออกข้อมูล</h2><p className="muted">ดาวน์โหลดข้อมูลรายการของคุณเก็บไว้ในอุปกรณ์ ควรเก็บไฟล์สำรองในที่ปลอดภัย</p><div className="export-actions"><button type="button" disabled={busy} onClick={() => void exportData("json")}><FileJson size={17}/> สำรอง JSON</button><button type="button" disabled={busy} onClick={() => void exportData("csv")}><FileSpreadsheet size={17}/> ส่งออก CSV</button></div>{busy && <p className="muted">กำลังเตรียมไฟล์...</p>}{error && <p className="entry-error">{error}</p>}</section>
