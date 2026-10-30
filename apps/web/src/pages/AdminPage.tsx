@@ -66,7 +66,7 @@ export function AdminPage() {
     </section>
     <section className="admin-panel">
       <div className="admin-panel-head"><h2>สถานะบริการ</h2><small>ตรวจสอบอัตโนมัติทุก 60 วินาที</small></div>
-      {health.isLoading ? <div className="admin-empty">กำลังตรวจสอบบริการ...</div> : health.isError ? <p className="entry-error">ตรวจสอบสถานะไม่สำเร็จ: {health.error.message}</p> : <div className="admin-health-grid">
+      {health.isLoading ? <div className="admin-empty">กำลังตรวจสอบบริการ...</div> : health.isError || !health.data ? <p className="entry-error">ตรวจสอบสถานะไม่สำเร็จ: {health.error?.message ?? "ไม่มีข้อมูลสถานะ"}</p> : <div className="admin-health-grid">
         <article><span>ฐานข้อมูล Supabase</span><strong className={health.data.database ? "is-online" : "is-offline"}>{health.data.database ? "เชื่อมต่อได้" : "ขัดข้อง"}</strong></article>
         <article><span>AI / DeepSeek Parser</span><strong className={health.data.ai ? "is-online" : "is-offline"}>{health.data.ai ? "พร้อมใช้งาน" : "ยังไม่พร้อม"}</strong></article>
         <article><span>Admin API</span><strong className={health.data.adminApi ? "is-online" : "is-offline"}>{health.data.adminApi ? "พร้อมใช้งาน" : "ขัดข้อง"}</strong></article>
