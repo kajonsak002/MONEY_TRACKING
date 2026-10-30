@@ -23,10 +23,10 @@ Last reviewed: 2026-10-30
 - [x] Role-based landing route after authentication
 - [x] Admin overview with member count, entry count, income and expense aggregates
 - [x] Member list with role and signup date
-- [ ] User lifecycle management through secured server-side operations
-- [x] Audit log schema and server-side recording for DeepSeek key changes\n- [ ] Activity/audit log UI and broader event coverage
-- [x] Admin system settings page for DeepSeek API Key (Vault-backed, Edge Function protected)\n- [ ] Operational health panels
-- [ ] Dedicated all-transactions page with privacy-aware filters
+- [x] Admin role changes through server-side Edge Function with last-admin and self-change guards
+- [x] Audit log schema and server-side recording for DeepSeek key changes\n- [x] Activity/audit log viewer for recorded administrative events\n- [ ] Broader event coverage beyond security-sensitive admin actions
+- [x] Admin system settings page for DeepSeek API Key (Vault-backed, Edge Function protected)\n- [ ] Operational health panels and live provider status
+- [x] Dedicated all-transactions read-only page with member/type filters
 
 ## M10: Security and integration verification
 - [ ] Test Admin and Partner OAuth accounts end-to-end
@@ -34,12 +34,12 @@ Last reviewed: 2026-10-30
 - [ ] Verify Admin cross-user visibility is read-only; owner-only writes remain enforced
 - [ ] Review every route, query and mutation against RLS
 - [x] Deploy parse-entry and admin-settings Edge Functions with JWT validation\n- [x] DeepSeek key storage path uses Vault and service-role-only RPC\n- [ ] Admin enters key and verify a live AI request
-- [ ] Run typecheck, lint, unit tests and production build
+- [ ] Run typecheck, lint, unit tests and production build on final branch head
 - [ ] Verify PWA update/cache behavior and production callback
 
 ## M11: Operations and release
-- [x] Confirm plan is Free; automatic daily backups and PITR are not included\n- [ ] Implement scheduled off-site logical backups and verify retention
-- [ ] Perform and document a restore test
+- [x] Confirm plan is Free; automatic daily backups and PITR are not included\n- [x] Add encrypted daily PostgreSQL backup workflow to private R2 (requires repository secrets and bucket lifecycle configuration)
+- [ ] Perform and document a restore test after first successful backup
 - [ ] Add monitoring and error reporting
 - [ ] Production acceptance checklist and release notes
 
