@@ -163,10 +163,7 @@ on public.entries for update to authenticated
 using (user_id = (select auth.uid()) and deleted_at is null)
 with check (user_id = (select auth.uid()));
 
--- Soft delete only: clients set deleted_at; rows remain available for audit/recovery.
-create policy "Users can soft delete their own entries"
-on public.entries for delete to authenticated
-using (user_id = (select auth.uid()));
+-- Soft delete is performed through UPDATE (set deleted_at); physical DELETE is not granted.
 
 -- The allowlist is intentionally inaccessible to browser roles.
 revoke all on public.app_allowlist from anon, authenticated;
@@ -176,4 +173,4 @@ revoke all on public.entries from anon;
 
 grant select on public.profiles to authenticated;
 grant select, insert, update, delete on public.categories to authenticated;
-grant select, insert, update, delete on public.entries to authenticated;
+grant select, insert, update on public.entries to authenticated;
