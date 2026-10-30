@@ -25,7 +25,7 @@ Last reviewed: 2026-10-30
 - [x] Member list with role and signup date
 - [x] Admin role changes through server-side Edge Function with last-admin and self-change guards
 - [x] Audit log schema and server-side recording for DeepSeek key changes\n- [x] Activity/audit log viewer for recorded administrative events\n- [ ] Broader event coverage beyond security-sensitive admin actions
-- [x] Admin system settings page for DeepSeek API Key (Vault-backed, Edge Function protected)\n- [ ] Operational health panels and live provider status
+- [x] Admin system settings page for DeepSeek API Key (Vault-backed, Edge Function protected)\n- [x] Operational health panel for database, AI parser and Admin API and live provider status
 - [x] Dedicated all-transactions read-only page with member/type filters
 
 ## M10: Security and integration verification
