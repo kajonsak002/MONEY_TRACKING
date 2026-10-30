@@ -114,7 +114,7 @@ export function EntriesPage() {
           <div className="entry-list">{entries.map((entry) => (
             <article className="entry-row" key={entry.id}>
               <span className={entry.type === "income" ? "entry-type-icon income-bg" : "entry-type-icon expense-bg"}>{entry.type === "income" ? <ArrowDownLeft size={18} /> : <ArrowUpRight size={18} />}</span>
-              <div className="entry-main"><strong>{entry.note || entry.categories?.name || (entry.type === "income" ? "รายรับ" : "รายจ่าย")}</strong><small>{entry.categories?.name ? `${entry.categories.name} · ` : ""}{formatDate(entry.occurred_on)}</small></div>
+              <div className="entry-main"><strong>{entry.note || entry.categories?.[0]?.name || (entry.type === "income" ? "รายรับ" : "รายจ่าย")}</strong><small>{entry.categories?.[0]?.name ? `${entry.categories[0].name} · ` : ""}{formatDate(entry.occurred_on)}</small></div>
               <strong className={entry.type === "income" ? "entry-amount income-text" : "entry-amount expense-text"}>{entry.type === "income" ? "+" : "−"}{formatMoney(entry.amount_satang)}</strong>
               <button className="entry-delete" type="button" aria-label="ลบรายการ" title="ลบรายการ" disabled={deleteMutation.isPending} onClick={() => { if (window.confirm("ต้องการลบรายการนี้ใช่หรือไม่?")) deleteMutation.mutate(entry.id); }}><Trash2 size={16} /></button>
             </article>
