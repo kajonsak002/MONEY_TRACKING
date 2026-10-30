@@ -7,7 +7,7 @@
 - [x] M1 Project scaffold and design system
 - [x] M2 Database schema, RLS and access-control migration
 - [x] M3 Google OAuth integration, profile loading and protected routes
-- [ ] M4 Categories and entries
+- [x] M4 Income/expense entry creation, history and soft delete
 - [ ] M5 AI parsing and quick add (DeepSeek server-side)
 - [ ] M6 Summary and charts
 - [ ] M7 Admin tools
