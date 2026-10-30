@@ -5,7 +5,6 @@ import { useAuth } from "../auth/AuthProvider";
 import { parseEntryText, type AiEntryDraft } from "../features/entries/aiEntryApi";
 import { createEntry, getCategories, getEntries, type EntryType } from "../features/entries/entriesApi";
 import { getEntriesInRange, summarizeEntries } from "../features/reports/reportApi";
-import { Button } from "../design-system/primitives/Button";
 import { useNavigate } from "react-router-dom";
 
 function todayBangkok() {
