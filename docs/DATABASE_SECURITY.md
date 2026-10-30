@@ -4,12 +4,7 @@ The first migration is `supabase/migrations/0001_initial_schema.sql`.
 
 ## Account allowlist
 
-The migration seeds these initial roles:
-
-- `kajonsak.dev@gmail.com` — `admin`
-- `kajonsak6210035@gmail.com` — `partner`
-
-The allowlist is stored in `public.app_allowlist`, with no browser-role grants. A database trigger checks the normalized Google account email before creating a profile. Accounts not on the allowlist are rejected.
+The allowlist is stored in `public.app_allowlist`, with no browser-role grants. Approved email/role pairs must be inserted privately in the Supabase SQL editor after migration; do not commit real email addresses to this public repository. A database trigger checks the normalized Google account email before creating a profile. Accounts not on the allowlist are rejected.
 
 ## Data model
 
