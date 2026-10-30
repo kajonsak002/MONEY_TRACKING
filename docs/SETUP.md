@@ -15,6 +15,7 @@
 Apply migrations in order using Supabase CLI or SQL Editor:
 1. `supabase/migrations/0001_initial_schema.sql`
 2. `supabase/migrations/0002_monthly_budgets.sql`
+3. Apply all timestamped migrations in ascending version order.
 
 The schema stores all money as integer satang. RLS is the authorization boundary:
 - Admin can read all profiles and active financial records.
@@ -35,13 +36,14 @@ Add approved account/role pairs to `public.app_allowlist` privately in Supabase 
 ## DeepSeek AI quick add
 The browser calls the authenticated `parse-entry` Edge Function. The function validates the user's Supabase session and returns a draft only; the user must review and confirm before an entry is written.
 
-Deploy:
+Deploy the Edge Functions after database migrations:
 ```bash
 supabase functions deploy parse-entry
-supabase secrets set DEEPSEEK_API_KEY=YOUR_DEEPSEEK_KEY
+supabase functions deploy admin-settings
+supabase functions deploy admin-users
 ```
 
-Supabase provides `SUPABASE_URL` and `SUPABASE_ANON_KEY` to Edge Functions. Optionally set `APP_ALLOWED_ORIGIN` to the exact production origin to restrict browser CORS. Never use a `VITE_` prefix for DeepSeek or service-role secrets. Never commit real keys.
+The Admin enters the DeepSeek API Key at `/admin/settings`. It is stored in Supabase Vault and accessed only by service-role RPCs from the Edge Functions. Do not set a `VITE_` DeepSeek key or add it to GitHub. Supabase injects the service-role key into Edge Functions; never expose it to the browser.
 
 ## Vercel
 After local integration tests pass:
@@ -61,8 +63,9 @@ A custom domain can be attached in Vercel without changing React routes or API p
 
 ## Backup policy
 - Manual: Settings → สำรอง JSON / ส่งออก CSV. Keep downloaded backups in a private location.
-- Automated: use Supabase managed database backups/PITR when supported by the selected plan. Configure retention in Supabase Dashboard and periodically test a restore. A client-side export is not an automated backup and should not be described as one.
-- Do not store service-role credentials or backup files in GitHub.
+- Automated: `.github/workflows/backup.yml` creates an encrypted PostgreSQL dump and uploads it to a private Cloudflare R2 bucket daily. Configure the required GitHub Actions secrets and R2 lifecycle retention in `docs/OPERATIONS.md` before enabling it.
+- Run a restore drill into an isolated database before claiming recovery is verified.
+- Never store database passwords, service-role credentials, encryption passphrases, or backup files in source control.
 
 ## Final production verification
 - Test Google OAuth with both approved Admin and Partner accounts.
