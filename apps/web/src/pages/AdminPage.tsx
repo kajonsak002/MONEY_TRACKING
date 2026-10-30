@@ -28,7 +28,7 @@ export function AdminPage() {
     queryFn: () => getEntriesInRange("2000-01-01", currentDate()),
   });
   const refresh = () => { void users.refetch(); void entries.refetch(); };
-  const totalIncome = (entries.data ?? []).filter((e) => e.type === "income").reduce((sum, e) => sum + Number(e.amount), 0) / 100;
+  const totalIncome = (entries.data ?? []).filter((e) => e.type === "income").reduce((sum, e) => sum + Number(e.amount_satang), 0) / 100;
   const totalExpense = (entries.data ?? []).filter((e) => e.type === "expense").reduce((sum, e) => sum + Number(e.amount), 0) / 100;
   const isLoading = users.isLoading || entries.isLoading;
   const isError = users.isError || entries.isError;
