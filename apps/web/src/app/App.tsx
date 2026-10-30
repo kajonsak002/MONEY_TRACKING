@@ -4,6 +4,7 @@ import { AuthProvider } from "../auth/AuthProvider";
 import { RequireAuth } from "../auth/RequireAuth";
 import { AppShell } from "./AppShell";
 import { HomePage } from "../pages/HomePage";
+import { EntriesPage } from "../pages/EntriesPage";
 import { LoginPage } from "../pages/LoginPage";
 import { AuthCallbackPage } from "../pages/AuthCallbackPage";
 
@@ -22,6 +23,7 @@ export function App() {
             <Route element={<RequireAuth />}>
               <Route element={<AppShell />}>
                 <Route index element={<HomePage />} />
+                <Route path="entries" element={<EntriesPage />} />
                 <Route path="*" element={<Navigate to="/" replace />} />
               </Route>
             </Route>
