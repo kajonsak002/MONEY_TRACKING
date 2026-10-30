@@ -80,6 +80,22 @@ create trigger entries_set_updated_at
 before update on public.entries
 for each row execute function public.set_updated_at();
 
+-- SECURITY DEFINER avoids recursive RLS evaluation when policies inspect the admin role.
+create function public.current_user_is_admin()
+returns boolean
+language sql
+stable
+security definer
+set search_path = ''
+as $$
+  select exists (
+    select 1 from public.profiles p
+    where p.id = (select auth.uid()) and p.role = 'admin'
+  );
+$$;
+revoke all on function public.current_user_is_admin() from public;
+grant execute on function public.current_user_is_admin() to authenticated;
+
 create function public.handle_new_user()
 returns trigger
 language plpgsql
@@ -128,13 +144,15 @@ alter table public.categories enable row level security;
 alter table public.entries enable row level security;
 alter table public.app_allowlist enable row level security;
 
-create policy "Users can read their own profile"
+-- Admin can inspect all profiles; partners can inspect only their own profile.
+create policy "Profiles visible to owner and admin"
 on public.profiles for select to authenticated
-using (id = (select auth.uid()));
+using (id = (select auth.uid()) or (select public.current_user_is_admin()));
 
-create policy "Users can read their own categories"
+-- Admin has global read visibility. Writes remain owner-scoped.
+create policy "Categories visible to owner and admin"
 on public.categories for select to authenticated
-using (user_id = (select auth.uid()));
+using (user_id = (select auth.uid()) or (select public.current_user_is_admin()));
 
 create policy "Users can create their own categories"
 on public.categories for insert to authenticated
@@ -149,9 +167,11 @@ create policy "Users can delete their own non-default categories"
 on public.categories for delete to authenticated
 using (user_id = (select auth.uid()) and is_default = false);
 
-create policy "Users can read their own active entries"
+create policy "Active entries visible to owner and admin"
 on public.entries for select to authenticated
-using (user_id = (select auth.uid()) and deleted_at is null);
+using (deleted_at is null and (
+  user_id = (select auth.uid()) or (select public.current_user_is_admin())
+));
 
 create policy "Users can create their own entries"
 on public.entries for insert to authenticated
@@ -163,7 +183,6 @@ using (user_id = (select auth.uid()) and deleted_at is null)
 with check (user_id = (select auth.uid()));
 
 -- Soft delete is performed through UPDATE (set deleted_at); physical DELETE is not granted.
-
 -- The allowlist is intentionally inaccessible to browser roles.
 revoke all on public.app_allowlist from anon, authenticated;
 revoke all on public.profiles from anon;
