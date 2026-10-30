@@ -18,7 +18,7 @@ export function AdminSettingsPage() {
     }
     setLoading(true);
     setError("");
-    const { data, error: rpcError } = await supabase.rpc("admin_deepseek_key_status");
+    const { data, error: rpcError } = await supabase.functions.invoke("admin-settings", { body: { action: "status" } });
     if (rpcError) setError(rpcError.message);
     else setConfigured(Boolean(data));
     setLoading(false);
@@ -32,7 +32,7 @@ export function AdminSettingsPage() {
     setSaving(true);
     setError("");
     setNotice("");
-    const { error: rpcError } = await supabase.rpc("admin_set_deepseek_api_key", { p_api_key: apiKey.trim() });
+    const { error: rpcError } = await supabase.functions.invoke("admin-settings", { body: { action: "set", apiKey: apiKey.trim() } });
     setSaving(false);
     if (rpcError) {
       setError(rpcError.message);
@@ -48,7 +48,7 @@ export function AdminSettingsPage() {
     setSaving(true);
     setError("");
     setNotice("");
-    const { error: rpcError } = await supabase.rpc("admin_remove_deepseek_api_key");
+    const { error: rpcError } = await supabase.functions.invoke("admin-settings", { body: { action: "remove" } });
     setSaving(false);
     if (rpcError) setError(rpcError.message);
     else {
