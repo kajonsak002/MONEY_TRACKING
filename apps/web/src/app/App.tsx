@@ -12,6 +12,7 @@ import { SummaryPage } from "../pages/SummaryPage";
 import { CategoriesPage } from "../pages/CategoriesPage";
 import { SettingsPage } from "../pages/SettingsPage";
 import { AdminPage } from "../pages/AdminPage";
+import { AdminSettingsPage } from "../pages/AdminSettingsPage";
 import { BudgetPage } from "../pages/BudgetPage";
 import "./../admin.css";
 
@@ -33,6 +34,7 @@ export function App() {
         <Route path="/" element={<RoleHome/>}/>
         <Route path="/admin" element={<AdminShell/>}>
           <Route index element={<AdminPage/>}/>
+          <Route path="settings" element={<AdminSettingsPage/>}/>
           <Route path="*" element={<Navigate to="/admin" replace/>}/>
         </Route>
         <Route element={<AppShell/>}>
