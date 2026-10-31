@@ -22,6 +22,9 @@ export function AdminPage() {
   const { profile } = useAuth();
   const today = bangkokDate();
   const monthStart = today.slice(0, 7) + "-01";
+  const trendDate = new Date(today + "T12:00:00+07:00");
+  trendDate.setDate(trendDate.getDate() - 13);
+  const trendStart = bangkokDate(trendDate);
   const users = useQuery({
     queryKey: ["admin", "profiles"],
     enabled: profile?.role === "admin" && !!supabase,
@@ -36,6 +39,11 @@ export function AdminPage() {
     queryKey: ["admin", "entries", monthStart, today],
     enabled: profile?.role === "admin" && !!supabase,
     queryFn: () => getEntriesInRange(monthStart, today, true),
+  });
+  const trend = useQuery({
+    queryKey: ["admin", "trend", trendStart, today],
+    enabled: profile?.role === "admin" && !!supabase,
+    queryFn: () => getEntriesInRange(trendStart, today, true),
   });
   const health = useQuery({
     queryKey: ["admin", "system-health"],
@@ -64,13 +72,13 @@ export function AdminPage() {
       const key = bangkokDate(date);
       return values.get(key) ?? { date: key, income: 0, expense: 0 };
     });
-  }, [summary.byDay, today]);
+  }, [trendSummary.byDay, today]);
   const maxDaily = Math.max(1, ...chartDays.flatMap((day) => [day.income, day.expense]));
   const latestMembers = (users.data ?? []).slice(0, 5);
   const latestEntries = (entries.data ?? []).slice(-6).reverse();
-  const refresh = () => { void users.refetch(); void entries.refetch(); void health.refetch(); };
-  const loading = users.isLoading || entries.isLoading;
-  const error = users.error?.message ?? entries.error?.message;
+  const refresh = () => { void users.refetch(); void entries.refetch(); void trend.refetch(); void health.refetch(); };
+  const loading = users.isLoading || entries.isLoading || trend.isLoading;
+  const error = users.error?.message ?? entries.error?.message ?? trend.error?.message;
   const statuses = [
     { name: "ฐานข้อมูล Supabase", ok: health.data?.database },
     { name: "AI / DeepSeek", ok: health.data?.ai },
@@ -87,7 +95,7 @@ export function AdminPage() {
       <button type="button" onClick={refresh} className="inline-flex min-h-10 items-center gap-2 rounded-xl border border-[#e3eae1] bg-white px-4 text-xs font-semibold text-[#627a68] transition hover:bg-[#f4f8f2]"><RefreshCw size={14}/> รีเฟรชข้อมูล</button>
     </header>
 
-    {(users.isError || entries.isError) && <div role="alert" className="rounded-xl border border-[#f3d6d7] bg-[#fff5f4] px-4 py-3 text-xs text-[#bd6268]">{error || "ไม่สามารถโหลดข้อมูลได้"}</div>}
+    {(users.isError || entries.isError || trend.isError) && <div role="alert" className="rounded-xl border border-[#f3d6d7] bg-[#fff5f4] px-4 py-3 text-xs text-[#bd6268]">{error || "ไม่สามารถโหลดข้อมูลได้"}</div>}
 
     <section className="grid grid-cols-2 gap-3 xl:grid-cols-4">
       {[
