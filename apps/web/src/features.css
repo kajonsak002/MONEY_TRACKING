@@ -89,3 +89,11 @@
 .budget-track i{display:block;height:100%;border-radius:20px;background:var(--color-brand);transition:width .2s ease}
 .budget-track i.over{background:var(--color-expense)}
 .report-balance-card>span{display:flex;align-items:center;gap:6px}
+
+.category-edit-input{width:100%;min-width:0;min-height:38px;flex:1;padding:0 10px;border:1px solid var(--color-brand);border-radius:10px;background:var(--color-surface);color:var(--color-ink);font:inherit;font-size:12px}
+.category-edit-input:focus{outline:3px solid color-mix(in srgb,var(--color-brand) 20%,transparent);outline-offset:1px}
+.category-manage-actions button:disabled{opacity:.5;cursor:not-allowed}
+.budget-overview-card{gap:11px}
+.budget-summary-line{display:flex;justify-content:space-between;align-items:center;gap:10px;color:#6d8776;font-size:11px}
+.budget-summary-line strong{color:#3f765f;font-size:12px}
+.budget-summary-line strong.expense-text{color:var(--color-expense)}
