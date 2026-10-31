@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import { NavLink, Outlet, useLocation } from "react-router-dom";
 import {
   BarChart3,
-  Bell,
   Calendar,
   House,
   LogOut,
@@ -173,15 +172,13 @@ export function AppShell() {
               <span>{todayFormatted}</span>
             </div>
 
-            <div className="w-9 h-9 rounded-full bg-white border border-[#e2ebe0] flex items-center justify-center text-[#557163] shadow-sm hover:bg-[#ebf5ee] cursor-pointer transition">
-              <Bell size={16} />
-            </div>
+
           </div>
         </header>
 
         {/* Mobile Header */}
         <header className="lg:hidden flex items-center justify-between px-4 py-3.5 bg-white border-b border-[#e5ede3] sticky top-0 z-30 shadow-xs">
-          <a href="/app" className="flex items-center gap-2">
+          <NavLink to="/app" className="flex items-center gap-2">
             <div className="w-9 h-9 rounded-xl bg-[#fdf0f2] border border-[#fbdbe1] p-0.5 flex items-center justify-center">
               <img
                 src="/images/mascots/pig-mascot-happy.png"
@@ -193,7 +190,7 @@ export function AppShell() {
               <span className="font-bold text-base text-[#22392f] leading-tight">{appName}</span>
               <span className="text-[9px] text-[#70867a] font-medium leading-none">Finance Mate</span>
             </div>
-          </a>
+          </NavLink>
 
           <div className="flex items-center gap-2">
             <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-[#f4f7f2] border border-[#e2ebe0] text-[11px] font-medium text-[#506c5e]">
