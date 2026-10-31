@@ -172,7 +172,7 @@ export function HomePage() {
           </h1>
 
           <div className="text-[clamp(36px,6vw,52px)] font-extrabold tracking-tight text-[#183024] tabular-nums leading-none my-2">
-            {report.isLoading ? "กำลังคำนวณ..." : report.isError ? "โหลดข้อมูลไม่สำเร็จ" : money(totals.balance)}
+            {!configured ? "ยังไม่เชื่อมต่อ" : report.isLoading ? "กำลังคำนวณ..." : report.isError ? "โหลดข้อมูลไม่สำเร็จ" : money(totals.balance)}
           </div>
 
           <div className="mt-1 inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/80 border border-[#c6e0cc] text-xs font-semibold text-[#2e8a59] shadow-xs">
@@ -493,7 +493,9 @@ export function HomePage() {
           </button>
         </div>
 
-        {recent.isLoading ? (
+        {!configured ? (
+          <p className="py-8 text-center text-xs text-[#71877c]">เชื่อมต่อฐานข้อมูลก่อนเพื่อดูรายการล่าสุด</p>
+        ) : recent.isLoading ? (
           <div className="py-12 flex items-center justify-center gap-2 text-xs text-[#71877c]" role="status"><LoaderCircle size={18} className="animate-spin"/>กำลังโหลดรายการล่าสุด...</div>
         ) : recent.isError ? (
           <p className="rounded-xl bg-[#fff0f2] border border-[#fbdbe1] p-4 text-xs text-[#bd4754]" role="alert">โหลดรายการล่าสุดไม่สำเร็จ: {recent.error.message}</p>
