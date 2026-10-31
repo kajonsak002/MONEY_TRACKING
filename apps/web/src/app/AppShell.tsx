@@ -18,9 +18,10 @@ export function AppShell() {
   const [appName, setAppName] = useState("money");
   const [appTagline, setAppTagline] = useState("mate");
   useEffect(() => {
-    if (!supabase) return;
+    const client = supabase;
+    if (!client) return;
     const load = async () => {
-      const { data } = await supabase.from("app_settings").select("key,value").in("key", ["app_name", "app_tagline"]);
+      const { data } = await client.from("app_settings").select("key,value").in("key", ["app_name", "app_tagline"]);
       for (const row of data ?? []) {
         if (row.key === "app_name" && typeof row.value === "string") setAppName(row.value);
         if (row.key === "app_tagline" && typeof row.value === "string") setAppTagline(row.value);
