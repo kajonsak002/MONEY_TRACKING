@@ -105,7 +105,7 @@ export function CategoriesPage() {
         <div className="absolute -top-8 right-8 w-16 h-16 pointer-events-none filter drop-shadow-[0_8px_16px_rgba(35,70,45,0.16)] group-hover:scale-105 group-hover:rotate-6 transition-all duration-300 z-20">
           <img
             src="/images/mascots/frog-mascot-happy.png"
-            alt="Frog Assistant"
+            alt="" aria-hidden="true"
             className="w-full h-full object-contain"
           />
         </div>
