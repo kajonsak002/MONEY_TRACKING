@@ -64,8 +64,9 @@ export function AdminPage() {
     refetchInterval: 60_000,
   });
   const summary = useMemo(() => summarizeEntries(entries.data ?? []), [entries.data]);
+  const trendSummary = useMemo(() => summarizeEntries(trend.data ?? []), [trend.data]);
   const chartDays = useMemo(() => {
-    const values = new Map(summary.byDay.map((day) => [day.date, day]));
+    const values = new Map(trendSummary.byDay.map((day) => [day.date, day]));
     return Array.from({ length: 14 }, (_, index) => {
       const date = new Date(today + "T12:00:00+07:00");
       date.setDate(date.getDate() - (13 - index));
