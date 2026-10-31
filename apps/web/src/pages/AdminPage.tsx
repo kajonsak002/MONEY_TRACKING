@@ -4,6 +4,7 @@ import {
   Activity,
   ArrowDownLeft,
   CircleCheck,
+  CircleHelp,
   CircleX,
   ExternalLink,
   Layers,
@@ -380,7 +381,9 @@ export function AdminPage() {
           <div className="flex items-center gap-4">
             {statuses.map((s) => (
               <span key={s.name} className="flex items-center gap-1.5 font-medium">
-                {health.isLoading ? (
+                {!configured ? (
+                  <CircleHelp size={14} className="text-[#8fa597]" />
+                ) : health.isLoading ? (
                   <RefreshCw size={14} className="animate-spin text-[#8fa597]" />
                 ) : s.ok ? (
                   <CircleCheck size={14} className="text-[#239667]" />
