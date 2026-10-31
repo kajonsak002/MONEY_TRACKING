@@ -638,3 +638,35 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
   .brand-icon.mascot-brand { width: 39px; height: 36px; }
   .brand-icon.mascot-brand img { width: 42px; height: 36px; }
 }
+
+/* Explicit dark theme remains available for the existing theme switch. */
+[data-theme="dark"] {
+  color-scheme: dark;
+  --color-canvas:#17211b; --color-surface:#202d24; --color-ink:#edf4ec;
+  --color-muted:#a4b3a6; --color-brand:#9bc5a1; --color-brand-soft:#2c4131;
+  --color-income:#7ed2a3; --color-income-soft:#203b2c; --color-expense:#f19aa0;
+  --color-expense-soft:#482d33; --color-border:#35473a;
+  --shadow-card:0 12px 34px rgb(0 0 0 / 18%);
+}
+[data-theme="dark"] body,[data-theme="dark"] .app-frame,[data-theme="dark"] .page-content { background:#17211b; color:#edf4ec; }
+[data-theme="dark"] .topbar,[data-theme="dark"] .bottom-nav { background:rgb(32 45 36 / 96%); border-color:#35473a; }
+[data-theme="dark"] .brand-mark,[data-theme="dark"] .account-copy strong,[data-theme="dark"] .page-title-row h1,
+[data-theme="dark"] .section-heading h2,[data-theme="dark"] .settings-card h2 { color:#edf4ec; }
+[data-theme="dark"] .signout-button,[data-theme="dark"] .entry-form-card,[data-theme="dark"] .entry-list-section,
+[data-theme="dark"] .report-filter-card,[data-theme="dark"] .report-card,[data-theme="dark"] .settings-card,
+[data-theme="dark"] .entry-row,[data-theme="dark"] .report-stats article { background:#202d24; border-color:#35473a; color:#e5eee4; }
+[data-theme="dark"] .entry-field,[data-theme="dark"] .category-manage-row > strong,
+[data-theme="dark"] .entry-main strong,[data-theme="dark"] .settings-account strong { color:#dce9dc; }
+[data-theme="dark"] .entry-field input,[data-theme="dark"] .entry-field select,
+[data-theme="dark"] .category-add-form > input,[data-theme="dark"] .report-date-range input,
+[data-theme="dark"] .settings-account,[data-theme="dark"] .export-actions button,
+[data-theme="dark"] .category-manage-actions button { background:#18251c; border-color:#3b5040; color:#e5eee4; }
+[data-theme="dark"] .entry-type-switch,[data-theme="dark"] .period-switch,[data-theme="dark"] .theme-options { background:#18251c; }
+[data-theme="dark"] .entry-type-switch button,[data-theme="dark"] .period-switch button,[data-theme="dark"] .theme-options button { color:#a9b9aa; }
+[data-theme="dark"] .period-switch button.active,[data-theme="dark"] .theme-options button.chosen { background:#2b4030; border-color:#49634d; color:#c4e0c5; }
+[data-theme="dark"] .nav-item.active { color:#c4e0c5; background:#2b4030; }
+[data-theme="dark"] .report-balance-card { background-image: url("/assets/finance-garden.svg"),linear-gradient(130deg,#2b4330 0%,#273a2d 55%,#463535 100%); }
+[data-theme="dark"] .settings-link { border-color:#3b5040; color:#c4dfc6; }
+[data-theme="dark"] .settings-danger { background:#482d33; border-color:#69434a; color:#f2a4aa; }
+[data-theme="dark"] .entry-error { background:#482d33; border-color:#69434a; color:#f2a4aa; }
+[data-theme="dark"] .category-report-row > div:first-child,[data-theme="dark"] .report-entry { color:#b8c7b9; border-color:#35473a; }
