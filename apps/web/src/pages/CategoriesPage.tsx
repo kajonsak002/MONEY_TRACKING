@@ -216,16 +216,16 @@ export function CategoriesPage() {
                           <input autoFocus value={editingName} maxLength={40} aria-label="ชื่อหมวดหมู่ใหม่"
                             onChange={(event) => setEditingName(event.target.value)}
                             onKeyDown={(event) => { if (event.key === "Enter") saveEdit(item.id); if (event.key === "Escape") { setEditingId(null); setEditingName(""); } }}
-                            className="min-h-[34px] w-32 sm:w-40 rounded-lg border border-[#9fc5a6] bg-white px-2 text-xs text-[#23382e] outline-none focus:ring-2 focus:ring-[#9fc5a6]/30" />
-                          <button type="button" disabled={edit.isPending} onClick={() => saveEdit(item.id)} aria-label="บันทึกชื่อหมวดหมู่" className="p-1.5 rounded-lg text-[#239667] hover:bg-[#eaf7ef] disabled:opacity-50"><Check size={14}/></button>
-                          <button type="button" onClick={() => { setEditingId(null); setEditingName(""); }} aria-label="ยกเลิกแก้ไข" className="p-1.5 rounded-lg text-[#71877c] hover:bg-[#f4f7f3]"><X size={14}/></button>
+                            className="min-h-[44px] w-32 sm:w-40 rounded-lg border border-[#9fc5a6] bg-white px-2 text-xs text-[#23382e] outline-none focus:ring-2 focus:ring-[#9fc5a6]/30" />
+                          <button type="button" disabled={edit.isPending} onClick={() => saveEdit(item.id)} aria-label="บันทึกชื่อหมวดหมู่" className="inline-flex min-h-[44px] min-w-[44px] items-center justify-center p-1.5 rounded-lg text-[#239667] hover:bg-[#eaf7ef] disabled:opacity-50"><Check size={14}/></button>
+                          <button type="button" onClick={() => { setEditingId(null); setEditingName(""); }} aria-label="ยกเลิกแก้ไข" className="inline-flex min-h-[44px] min-w-[44px] items-center justify-center p-1.5 rounded-lg text-[#71877c] hover:bg-[#f4f7f3]"><X size={14}/></button>
                         </>
                       ) : (
                         <>
-                          <button type="button" onClick={() => { setEditingId(item.id); setEditingName(item.name); setError(""); }} className="p-1.5 rounded-lg text-[#71877c] hover:text-[#23382e] hover:bg-[#edf5ee] transition" title="แก้ไข" aria-label={"แก้ไข " + item.name}>
+                          <button type="button" onClick={() => { setEditingId(item.id); setEditingName(item.name); setError(""); }} className="inline-flex min-h-[44px] min-w-[44px] items-center justify-center p-1.5 rounded-lg text-[#71877c] hover:text-[#23382e] hover:bg-[#edf5ee] transition" title="แก้ไข" aria-label={"แก้ไข " + item.name}>
                             <Edit2 size={13} />
                           </button>
-                          <button type="button" disabled={remove.isPending} onClick={() => { if (window.confirm(`คุณแน่ใจหรือไม่ว่าต้องการลบหมวดหมู่ "${item.name}"?`)) remove.mutate(item.id); }} className="p-1.5 rounded-lg text-[#bd4754] hover:bg-[#fff0f2] transition disabled:opacity-50" title="ลบ" aria-label={"ลบ " + item.name}>
+                          <button type="button" disabled={remove.isPending} onClick={() => { if (window.confirm(`คุณแน่ใจหรือไม่ว่าต้องการลบหมวดหมู่ "${item.name}"?`)) remove.mutate(item.id); }} className="inline-flex min-h-[44px] min-w-[44px] items-center justify-center p-1.5 rounded-lg text-[#bd4754] hover:bg-[#fff0f2] transition disabled:opacity-50" title="ลบ" aria-label={"ลบ " + item.name}>
                             <Trash2 size={13} />
                           </button>
                         </>
