@@ -273,3 +273,11 @@
  .admin-panel { border-radius:17px; }
  .admin-mobile-nav { min-height:72px; padding-bottom:calc(8px + env(safe-area-inset-bottom)); }
 }
+
+
+/* Touch target minimums for admin controls */
+.admin-refresh,.admin-outline-button,.admin-logout{min-height:44px}
+.admin-menu-toggle{width:44px;height:44px}
+.admin-sidebar-toggle{right:-22px;width:44px;height:44px}
+.admin-search,.admin-filter-row select,.admin-member-table select{min-height:44px}
+.admin-mobile-nav a{min-height:48px}
