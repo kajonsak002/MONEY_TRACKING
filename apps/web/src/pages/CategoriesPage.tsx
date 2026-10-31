@@ -1,5 +1,6 @@
 import { useState, type FormEvent } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useAuth } from "../auth/AuthProvider";
 import {
   ArrowDownLeft,
   ArrowUpRight,
@@ -21,6 +22,7 @@ import type { EntryType } from "../features/entries/entriesApi";
 import { CardGardenLedge, CardGinghamOverlay } from "../components/common/CardGrounding";
 
 export function CategoriesPage() {
+  const { configured } = useAuth();
   const qc = useQueryClient();
   const [name, setName] = useState("");
   const [type, setType] = useState<EntryType>("expense");
@@ -124,7 +126,7 @@ export function CategoriesPage() {
             <button
               type="button"
               onClick={() => setType("expense")}
-              className={`flex items-center justify-center gap-2 py-2 rounded-xl text-xs font-bold transition-all ${
+              className={`flex items-center justify-center gap-2 min-h-[44px] py-2 rounded-xl text-xs font-bold transition-all ${
                 type === "expense"
                   ? "bg-white text-[#dd5e6d] shadow-sm"
                   : "text-[#71877c] hover:text-[#23382e]"
@@ -160,7 +162,7 @@ export function CategoriesPage() {
             />
             <button
               type="submit"
-              disabled={add.isPending || !name.trim()}
+              disabled={!configured || add.isPending || !name.trim()}
               className="px-5 min-h-[46px] rounded-xl bg-[#234835] hover:bg-[#1a3828] text-white text-xs font-bold flex items-center gap-2 shadow-sm transition active:scale-95 disabled:opacity-50 shrink-0"
             >
               {add.isPending ? <LoaderCircle size={15} className="animate-spin" /> : <Plus size={16} />}
@@ -177,6 +179,7 @@ export function CategoriesPage() {
         </div>
       </section>
 
+      {!configured && <p className="text-xs text-[#bd4754] bg-[#fff0f2] p-3 rounded-xl border border-[#fbdbe1]" role="alert">ยังไม่ได้ตั้งค่า Supabase จึงยังจัดการหมวดหมู่ไม่ได้</p>}
       {query.isError && <p className="text-xs text-[#bd4754] bg-[#fff0f2] p-3 rounded-xl border border-[#fbdbe1]" role="alert">โหลดหมวดหมู่ไม่สำเร็จ: {query.error.message}</p>}
       {edit.isError && <p className="text-xs text-[#bd4754] bg-[#fff0f2] p-3 rounded-xl border border-[#fbdbe1]" role="alert">{edit.error.message}</p>}
 
@@ -272,16 +275,16 @@ export function CategoriesPage() {
                           <input autoFocus value={editingName} maxLength={40} aria-label="ชื่อหมวดหมู่ใหม่"
                             onChange={(event) => setEditingName(event.target.value)}
                             onKeyDown={(event) => { if (event.key === "Enter") saveEdit(item.id); if (event.key === "Escape") { setEditingId(null); setEditingName(""); } }}
-                            className="min-h-[34px] w-32 sm:w-40 rounded-lg border border-[#9fc5a6] bg-white px-2 text-xs text-[#23382e] outline-none focus:ring-2 focus:ring-[#9fc5a6]/30" />
-                          <button type="button" disabled={edit.isPending} onClick={() => saveEdit(item.id)} aria-label="บันทึกชื่อหมวดหมู่" className="p-1.5 rounded-lg text-[#239667] hover:bg-[#eaf7ef] disabled:opacity-50"><Check size={14}/></button>
-                          <button type="button" onClick={() => { setEditingId(null); setEditingName(""); }} aria-label="ยกเลิกแก้ไข" className="p-1.5 rounded-lg text-[#71877c] hover:bg-[#f4f7f3]"><X size={14}/></button>
+                            className="min-h-[44px] w-32 sm:w-40 rounded-lg border border-[#9fc5a6] bg-white px-2 text-xs text-[#23382e] outline-none focus:ring-2 focus:ring-[#9fc5a6]/30" />
+                          <button type="button" disabled={edit.isPending} onClick={() => saveEdit(item.id)} aria-label="บันทึกชื่อหมวดหมู่" className="inline-flex min-h-[44px] min-w-[44px] items-center justify-center p-1.5 rounded-lg text-[#239667] hover:bg-[#eaf7ef] disabled:opacity-50"><Check size={14}/></button>
+                          <button type="button" onClick={() => { setEditingId(null); setEditingName(""); }} aria-label="ยกเลิกแก้ไข" className="inline-flex min-h-[44px] min-w-[44px] items-center justify-center p-1.5 rounded-lg text-[#71877c] hover:bg-[#f4f7f3]"><X size={14}/></button>
                         </>
                       ) : (
                         <>
-                          <button type="button" onClick={() => { setEditingId(item.id); setEditingName(item.name); setError(""); }} className="p-1.5 rounded-lg text-[#71877c] hover:text-[#23382e] hover:bg-[#edf5ee] transition" title="แก้ไข" aria-label={"แก้ไข " + item.name}>
+                          <button type="button" onClick={() => { setEditingId(item.id); setEditingName(item.name); setError(""); }} className="inline-flex min-h-[44px] min-w-[44px] items-center justify-center p-1.5 rounded-lg text-[#71877c] hover:text-[#23382e] hover:bg-[#edf5ee] transition" title="แก้ไข" aria-label={"แก้ไข " + item.name}>
                             <Edit2 size={13} />
                           </button>
-                          <button type="button" disabled={remove.isPending} onClick={() => { if (window.confirm(`คุณแน่ใจหรือไม่ว่าต้องการลบหมวดหมู่ "${item.name}"?`)) remove.mutate(item.id); }} className="p-1.5 rounded-lg text-[#bd4754] hover:bg-[#fff0f2] transition disabled:opacity-50" title="ลบ" aria-label={"ลบ " + item.name}>
+                          <button type="button" disabled={remove.isPending} onClick={() => { if (window.confirm(`คุณแน่ใจหรือไม่ว่าต้องการลบหมวดหมู่ "${item.name}"?`)) remove.mutate(item.id); }} className="inline-flex min-h-[44px] min-w-[44px] items-center justify-center p-1.5 rounded-lg text-[#bd4754] hover:bg-[#fff0f2] transition disabled:opacity-50" title="ลบ" aria-label={"ลบ " + item.name}>
                             <Trash2 size={13} />
                           </button>
                         </>
