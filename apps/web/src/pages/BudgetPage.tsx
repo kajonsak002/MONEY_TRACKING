@@ -161,7 +161,7 @@ export function BudgetPage() {
           <div className="relative z-10 w-44 h-44 mb-1">
             <img
               src="/images/illustrations/mascot-saving-goal.png"
-              alt="Saving Goal Mascot"
+              alt="" aria-hidden="true"
               className="w-full h-full object-contain filter drop-shadow-md"
             />
           </div>
