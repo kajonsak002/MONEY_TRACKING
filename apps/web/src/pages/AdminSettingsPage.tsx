@@ -115,6 +115,6 @@ export function AdminSettingsPage() {
     <section className="admin-panel"><div className="admin-panel-head"><h2>ค่าพื้นฐานและความปลอดภัย</h2><ShieldCheck size={17}/></div><ul className="admin-security-list"><li>สกุลเงินหลักของระบบ: บาทไทย (THB)</li><li>เขตเวลาสำหรับวันที่และรายการ: Asia/Bangkok</li><li>เฉพาะ Admin เท่านั้นที่แก้ไขการตั้งค่าระบบและ API Key ได้</li><li>Partner ใช้งาน AI ผ่าน Edge Function โดยไม่สามารถอ่าน API Key ได้</li><li>DeepSeek Balance แสดงยอดตามสกุลเงินที่ผู้ให้บริการส่งกลับมาโดยตรง ไม่มีการแปลงค่าเงิน</li></ul></section>
     {notice && <p className="admin-notice" role="status"><CheckCircle2 size={15}/> {notice}</p>}
     {error && <p className="entry-error" role="alert">{error}</p>}
-    {saving && <p className="admin-setting-description"><LoaderCircle size={14} className="spin" inline/> กำลังดำเนินการ...</p>}
+    {saving && <p className="admin-setting-description"><LoaderCircle size={14} className="spin"/> กำลังดำเนินการ...</p>}
   </div>;
 }
