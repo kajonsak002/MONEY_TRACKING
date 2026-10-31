@@ -77,7 +77,7 @@ export function EntriesPage() {
     onError: (error: Error) => setFormError(error.message || "บันทึกรายการไม่สำเร็จ"),
   });
 
-  async function handleSubmit(event: FormEvent<HTMLFormElement>) {
+  function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     const parsedAmount = Number(amount);
     if (!Number.isFinite(parsedAmount) || parsedAmount <= 0 || !/^\d+(\.\d{1,2})?$/.test(amount.trim())) {
@@ -89,7 +89,7 @@ export function EntriesPage() {
       return;
     }
     setFormError(null);
-    await createMutation.mutateAsync({
+    createMutation.mutate({
       type,
       amount_satang: Math.round(parsedAmount * 100),
       note: note.trim(),
