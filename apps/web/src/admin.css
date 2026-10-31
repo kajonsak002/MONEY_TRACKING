@@ -273,3 +273,33 @@
  .admin-panel { border-radius:17px; }
  .admin-mobile-nav { min-height:72px; padding-bottom:calc(8px + env(safe-area-inset-bottom)); }
 }
+
+/* Admin console is the wide desktop dashboard; keep its visual hierarchy distinct from member mobile UI. */
+.admin-frame { min-height:100dvh; background:#f4f6fa; color:#202b3c; }
+.admin-sidebar { background:#17243a; color:#e8eef8; }
+.admin-brand { color:#fff; }
+.admin-brand>span:last-child span { color:#91a6c4; }
+.admin-nav-caption { color:#8498b6; }
+.admin-nav-link { color:#b8c6d9; }
+.admin-nav-link:hover,.admin-nav-link.active { background:#263a59; color:#fff; }
+.admin-nav-link.active { box-shadow:inset 3px 0 #82b6a0; }
+.admin-sidebar-bottom { border-color:#31435d; }
+.admin-user { border-color:#31435d; }
+.admin-secure { color:#a8bad2; }
+.admin-logout { border-color:#3a4c66; background:#223650; color:#eaf0f8; }
+.admin-logout:hover { background:#2c4564; }
+.admin-main { min-width:0; background:#f4f6fa; }
+.admin-topbar { background:#fff; border-color:#e7ebf2; }
+.admin-content { width:100%; max-width:1600px; margin-inline:auto; }
+.admin-kpi,.admin-panel { box-shadow:0 5px 20px rgb(31 47 71 / 4%); }
+.admin-status { color:#287b59; background:#eff8f2; border-color:#d8eee0; }
+.admin-status i { background:#2f9a69; }
+.admin-sidebar-toggle { color:#40536d; }
+@media (min-width: 701px) {
+  .admin-frame { grid-template-columns:248px minmax(0,1fr); }
+  .admin-content { padding:32px clamp(24px,3vw,48px) 60px; }
+}
+@media (max-width:700px) {
+  .admin-frame { background:#f4f6fa; }
+  .admin-mobile-nav { background:rgba(255,255,255,.98); }
+}
