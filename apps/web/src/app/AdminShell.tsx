@@ -206,16 +206,14 @@ export function AdminShell() {
             </h1>
           </div>
 
-          {/* Right Status Pill & Bell */}
+          {/* Right Status Pill */}
           <div className="flex items-center gap-3">
             <div className="hidden sm:flex items-center gap-2 px-3 py-1 rounded-full bg-white border border-[#e2ece0] text-xs font-bold text-[#2d5d44] shadow-2xs">
               <span className="w-2 h-2 rounded-full bg-[#239667] animate-pulse" />
               <span>ระบบจัดการ</span>
             </div>
 
-            <div className="w-9 h-9 rounded-full bg-white border border-[#e2ece0] flex items-center justify-center text-[#557163] shadow-2xs cursor-pointer hover:bg-[#ebf5ee] transition">
-              <Bell size={16} />
-            </div>
+
           </div>
         </header>
 
