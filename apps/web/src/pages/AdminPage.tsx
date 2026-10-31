@@ -137,14 +137,14 @@ export function AdminPage() {
         <div className="hidden lg:block absolute -top-12 left-10 w-28 h-28 pointer-events-none filter drop-shadow-[0_10px_20px_rgba(30,65,40,0.14)] z-20 transition-transform hover:scale-105">
           <img
             src="/images/mascots/pig-mascot-sleeping.png"
-            alt="Admin Pig"
+            alt="" aria-hidden="true"
             className="w-full h-full object-contain"
           />
         </div>
         <div className="hidden lg:block absolute -top-11 right-14 w-24 h-24 pointer-events-none filter drop-shadow-[0_10px_20px_rgba(35,70,45,0.16)] z-20 transition-transform hover:scale-105">
           <img
             src="/images/mascots/frog-mascot-happy.png"
-            alt="Admin Frog"
+            alt="" aria-hidden="true"
             className="w-full h-full object-contain"
           />
         </div>
