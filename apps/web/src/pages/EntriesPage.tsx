@@ -361,6 +361,8 @@ export function EntriesPage() {
             <LoaderCircle size={24} className="animate-spin text-[#438765]" />
             <span>กำลังโหลดรายการ...</span>
           </div>
+        ) : !configured ? (
+          <div className="py-12 text-center text-xs text-[#71877c]">เชื่อมต่อฐานข้อมูลก่อนเพื่อดูรายการ</div>
         ) : entriesQuery.isError ? (
           <div className="py-12 text-center text-xs text-[#bd4754]" role="alert">
             โหลดรายการไม่สำเร็จ: {entriesQuery.error.message}
