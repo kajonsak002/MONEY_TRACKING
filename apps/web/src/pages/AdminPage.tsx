@@ -348,7 +348,7 @@ export function AdminPage() {
             <div className="h-[180px] flex items-center justify-center gap-2 text-xs text-[#71877c]" role="status"><RefreshCw size={16} className="animate-spin"/>กำลังโหลดกราฟ...</div>
           ) : trend.isError ? (
             <div className="h-[180px] flex items-center justify-center text-xs text-[#bd4754]" role="alert">โหลดกราฟไม่สำเร็จ: {trend.error.message}</div>
-          ) : chartDays.length === 0 ? (
+          ) : !chartDays.some((day) => day.income > 0 || day.expense > 0) ? (
             <div className="h-[180px] flex items-center justify-center text-xs text-[#71877c]">ยังไม่มีข้อมูลในช่วงนี้</div>
           ) : (
           <div className="h-[180px] flex items-end gap-2 overflow-x-auto pb-2 border-b border-[#edf3ec]">
