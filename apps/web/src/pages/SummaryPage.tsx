@@ -152,7 +152,7 @@ export function SummaryPage() {
           <div className="w-44 h-44 mb-3">
             <img
               src="/images/empty-states/empty-reports.png"
-              alt="No report data"
+              alt="" aria-hidden="true"
               className="w-full h-full object-contain filter drop-shadow-sm"
             />
           </div>
