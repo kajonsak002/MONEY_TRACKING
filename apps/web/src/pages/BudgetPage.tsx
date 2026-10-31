@@ -229,7 +229,7 @@ export function BudgetPage() {
                   key={val}
                   type="button"
                   onClick={() => setAmount(String(val))}
-                  className="px-3 py-1.5 rounded-xl bg-[#f4f8f3] hover:bg-[#eaf4ec] border border-[#dce7dc] text-xs font-semibold text-[#3b664e] transition"
+                  className="min-h-[44px] px-3 py-1.5 rounded-xl bg-[#f4f8f3] hover:bg-[#eaf4ec] border border-[#dce7dc] text-xs font-semibold text-[#3b664e] transition"
                 >
                   ฿{val.toLocaleString("th-TH")}
                 </button>
