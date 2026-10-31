@@ -31,7 +31,7 @@ export function AppShell() {
     return () => window.removeEventListener("app-settings-updated", load);
   }, []);
   if (profile?.role === "admin") return <Navigate to="/admin" replace />;
-  return <div className="app-frame"><header className="topbar">
+  return <div className="app-frame !w-full !max-w-[1120px]"><header className="topbar">
     <a className="brand-mark" href="/app" aria-label="Money Tracking หน้าแรก"><span className="brand-icon mascot-brand"><img src="/assets/mascot-pig.svg" alt="" /></span><span>{appName}<span className="brand-accent">{appTagline}</span></span></a>
     <div className="account-menu"><div className="account-copy"><strong>{displayName}</strong><small>{roleLabel}</small></div><button className="signout-button" type="button" onClick={() => void signOut()} aria-label="ออกจากระบบ" title="ออกจากระบบ"><LogOut size={17}/></button></div>
   </header><main className="page-content"><Outlet/></main><nav className="bottom-nav" aria-label="เมนูหลัก">
