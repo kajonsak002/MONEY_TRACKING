@@ -109,6 +109,7 @@ export function AdminSettingsPage() {
       <div className="admin-deepseek-status">
         <div className="admin-panel-head"><h3><Wallet size={16}/> สถานะและยอดคงเหลือ</h3><span className={connected ? "admin-role admin" : "admin-role partner"}>{connected === null ? "ยังไม่ได้ทดสอบ" : connected ? available ? "เชื่อมต่อแล้ว · พร้อมใช้งาน" : "เชื่อมต่อแล้ว · ยอดไม่พร้อมใช้" : "เชื่อมต่อไม่สำเร็จ"}</span></div>
         {balances.length ? <div className="admin-balance-grid">{balances.map((item) => <article key={item.currency}><small>ยอดคงเหลือรวม</small><strong>{money(item.total_balance,item.currency)}</strong><div><span>เครดิตที่ได้รับ</span><b>{money(item.granted_balance,item.currency)}</b></div><div><span>ยอดเติมเงิน</span><b>{money(item.topped_up_balance,item.currency)}</b></div></article>)}</div> : <p className="admin-setting-description">กด “ทดสอบการเชื่อมต่อ” เพื่ออ่านยอดคงเหลือล่าสุดจาก DeepSeek</p>}
+        {balances.some((item) => Number(item.total_balance) < settings.deepseek_low_balance_threshold) && <p className="admin-balance-warning" role="status">ยอด DeepSeek ต่ำกว่าระดับแจ้งเตือนที่ตั้งไว้ ควรตรวจสอบและเติมเครดิตหากจำเป็น</p>}
         {checkedAt && <small className="admin-balance-updated">ตรวจสอบล่าสุด {new Intl.DateTimeFormat("th-TH",{dateStyle:"medium",timeStyle:"short"}).format(new Date(checkedAt))}</small>}
       </div>
     </section>
