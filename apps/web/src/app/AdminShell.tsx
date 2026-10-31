@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import { NavLink, Navigate, Outlet, useLocation } from "react-router-dom";
 import {
   Activity,
-  Bell,
   ChevronLeft,
   LayoutDashboard,
   LogOut,
