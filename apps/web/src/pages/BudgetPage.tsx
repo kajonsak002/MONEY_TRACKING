@@ -107,7 +107,7 @@ export function BudgetPage() {
       {!configured ? (
         <p className="text-xs text-[#bd4754] bg-[#fff0f2] p-4 rounded-xl border border-[#fbdbe1]" role="alert">ยังไม่ได้ตั้งค่า Supabase กรุณาตรวจสอบการเชื่อมต่อก่อนใช้งาน</p>
       ) : budget.isLoading || entries.isLoading ? (
-        <div className="min-h-48 flex flex-col items-center justify-center gap-3 text-xs text-[#71877c]" role="status"><LoaderCircle size={24} className="animate-spin text-[#438765}"/><span>กำลังโหลดข้อมูลงบประมาณ...</span></div>
+        <div className="min-h-48 flex flex-col items-center justify-center gap-3 text-xs text-[#71877c]" role="status"><LoaderCircle size={24} className="animate-spin text-[#438765]"/><span>กำลังโหลดข้อมูลงบประมาณ...</span></div>
       ) : budget.isError || entries.isError ? (
         <div className="p-4 rounded-xl border border-[#fbdbe1] bg-[#fff0f2] text-xs text-[#bd4754]" role="alert">โหลดข้อมูลงบประมาณไม่สำเร็จ: {budget.error?.message ?? entries.error?.message}</div>
       ) : (
