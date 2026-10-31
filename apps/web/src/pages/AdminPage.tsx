@@ -1,6 +1,6 @@
 import { useMemo } from "react";
 import { useQuery } from "@tanstack/react-query";
-import { Activity, ArrowDownLeft, ArrowUpRight, ArrowUpRightFromSquare, CalendarDays, CircleCheck, CircleX, RefreshCw, ShieldCheck, TrendingUp, Users, Wallet } from "lucide-react";
+import { Activity, ArrowDownLeft, ArrowUpRight, ArrowUpRightFromSquare, CircleCheck, CircleX, RefreshCw, ShieldCheck, TrendingUp, Users, Wallet } from "lucide-react";
 import { supabase } from "../lib/supabase";
 import { useAuth } from "../auth/AuthProvider";
 import { getEntriesInRange, summarizeEntries } from "../features/reports/reportApi";
@@ -163,7 +163,7 @@ export function AdminPage() {
 
     <section className={`${card} p-5 sm:p-6`}>
       <div className="mb-4 flex items-center justify-between"><div><h2 className={title}>สถานะบริการ</h2><p className="mt-1 text-[10px] text-[#9aa59d]">ตรวจสอบอัตโนมัติทุก 60 วินาที</p></div><ShieldCheck size={19} className="text-[#83a18a]"/></div>
-      {health.isLoading ? <p className="text-xs text-[#9aa59d]">กำลังตรวจสอบระบบ...</p> : health.isError ? <p role="alert" className="text-xs text-[#c66c73]">{health.error.message}</p> : <div className="grid gap-2 sm:grid-cols-3">{statuses.map((status) => <div key={status.name} className="flex items-center justify-between gap-2 rounded-xl bg-[#f8faf7] px-3 py-3"><span className="text-[11px] text-[#728076]">{status.name}</span><span className={`inline-flex items-center gap-1 text-[10px] font-semibold ${status.ok ? "text-[#4c9a70]" : "text-[#d47b7b]"}`}>{status.ok ? <CircleCheck size={14}/> : <CircleX size={14}/ >}{status.ok ? "พร้อมใช้งาน" : "ไม่พร้อม"}</span></div>)}</div>}
+      {health.isLoading ? <p className="text-xs text-[#9aa59d]">กำลังตรวจสอบระบบ...</p> : health.isError ? <p role="alert" className="text-xs text-[#c66c73]">{health.error.message}</p> : <div className="grid gap-2 sm:grid-cols-3">{statuses.map((status) => <div key={status.name} className="flex items-center justify-between gap-2 rounded-xl bg-[#f8faf7] px-3 py-3"><span className="text-[11px] text-[#728076]">{status.name}</span><span className={`inline-flex items-center gap-1 text-[10px] font-semibold ${status.ok ? "text-[#4c9a70]" : "text-[#d47b7b]"}`}>{status.ok ? <CircleCheck size={14}/> : <CircleX size={14}/>}{status.ok ? "พร้อมใช้งาน" : "ไม่พร้อม"}</span></div>)}</div>}
     </section>
     <p className="flex items-start gap-2 text-[10px] leading-5 text-[#98a39a]"><ShieldCheck size={14} className="mt-0.5 shrink-0"/> Admin ใช้สำหรับตรวจสอบภาพรวมเท่านั้น การเข้าถึงข้อมูลจริงยังถูกควบคุมด้วย Supabase Row Level Security (RLS) และ Edge Function ตามสิทธิ์ของบัญชี</p>
   </div>;
