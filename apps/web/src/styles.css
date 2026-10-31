@@ -227,3 +227,48 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
   color: #9b6a12;
   background: #fff5dd;
 }
+
+
+/* Dark theme bridge for the Tailwind-based page surfaces */
+[data-theme="dark"] body { background:var(--color-canvas); color:var(--color-ink); }
+[data-theme="dark"] .bg-white,
+[data-theme="dark"] [class~="bg-white"],
+[data-theme="dark"] [class*="bg-white/"] { background-color:var(--color-surface)!important; }
+[data-theme="dark"] [class*="bg-[#f"],
+[data-theme="dark"] [class*="bg-[#e"],
+[data-theme="dark"] [class*="bg-[#d"] { background-color:#223128!important; }
+[data-theme="dark"] [class*="bg-gradient-to"] { background-image:linear-gradient(135deg,#1e2b24 0%,#24372b 100%)!important; }
+[data-theme="dark"] [class*="text-[#22392f"],
+[data-theme="dark"] [class*="text-[#23382e"],
+[data-theme="dark"] [class*="text-[#23382f"],
+[data-theme="dark"] [class*="text-[#24392f"],
+[data-theme="dark"] [class*="text-[#1f3a2d"],
+[data-theme="dark"] [class*="text-[#293b35"],
+[data-theme="dark"] [class*="text-[#2d4034"] { color:#eaf3ec!important; }
+[data-theme="dark"] [class*="text-[#71877c"],
+[data-theme="dark"] [class*="text-[#718a7c"],
+[data-theme="dark"] [class*="text-[#789083"],
+[data-theme="dark"] [class*="text-[#8fa597"],
+[data-theme="dark"] [class*="text-[#506c5e"],
+[data-theme="dark"] [class*="text-[#668072"],
+[data-theme="dark"] [class*="text-[#6d8576"] { color:#a9b9ad!important; }
+[data-theme="dark"] [class*="text-[#438765"] { color:#91c5a1!important; }
+[data-theme="dark"] [class*="border-[#"] { border-color:#34483a!important; }
+[data-theme="dark"] input,
+[data-theme="dark"] select,
+[data-theme="dark"] textarea { background-color:#1b2921!important; color:#edf5ef!important; border-color:#3a5141!important; color-scheme:dark; }
+[data-theme="dark"] input::placeholder,
+[data-theme="dark"] textarea::placeholder { color:#849b8a!important; }
+[data-theme="dark"] .admin-frame,
+[data-theme="dark"] .admin-main { background:#151e19!important; color:#eaf3ec!important; }
+[data-theme="dark"] .admin-sidebar,
+[data-theme="dark"] .admin-panel,
+[data-theme="dark"] .admin-kpi,
+[data-theme="dark"] .admin-topbar { background:#1e2b24!important; color:#eaf3ec!important; border-color:#34483a!important; }
+[data-theme="dark"] .admin-heading h1,
+[data-theme="dark"] .admin-panel h2,
+[data-theme="dark"] .admin-kpi strong,
+[data-theme="dark"] .admin-topbar strong { color:#eaf3ec!important; }
+[data-theme="dark"] .admin-mobile-nav { background:#1e2b24!important; border-color:#34483a!important; }
+[data-theme="dark"] .admin-member-table th,
+[data-theme="dark"] .admin-member-table td { border-color:#34483a!important; color:#c6d5c9!important; }
