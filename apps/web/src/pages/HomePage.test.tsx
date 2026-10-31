@@ -11,7 +11,7 @@ describe("HomePage", () => {
     render(<AuthProvider><QueryClientProvider client={queryClient}><MemoryRouter><HomePage /></MemoryRouter></QueryClientProvider></AuthProvider>);
     expect(screen.getByRole("heading", { name: /สวัสดี, สมาชิก/ })).toBeInTheDocument();
     expect(screen.getByRole("heading", { name: "บันทึกรายการง่าย ๆ" })).toBeInTheDocument();
-    expect(screen.getByRole("alert")).toHaveTextContent("ยังไม่ได้ตั้งค่า Supabase");
+    expect(screen.getByText("ยังไม่ได้ตั้งค่า Supabase ข้อมูลสรุปและการบันทึกรายการจึงยังใช้งานไม่ได้")).toBeInTheDocument();
     expect(screen.getByText("เชื่อมต่อฐานข้อมูลก่อนเพื่อดูรายการล่าสุด")).toBeInTheDocument();
   });
 });
