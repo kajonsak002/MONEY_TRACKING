@@ -40,7 +40,7 @@ export function AdminShell() {
   }
   return <div className={`admin-frame${collapsed ? " sidebar-collapsed" : ""}${mobileOpen ? " sidebar-open" : ""}`}>
     <aside className="admin-sidebar">
-      <a className="admin-brand" href="/admin"><span className="admin-brand-icon"><Wallet size={19}/></span><span>{appName}<span>ADMIN CONSOLE</span></span></a>
+      <a className="admin-brand" href="/admin"><span className="admin-brand-icon mascot-admin-brand"><img src="/assets/mascot-frog.svg" alt="" /></span><span>{appName}<span>ADMIN CONSOLE</span></span></a>
       <p className="admin-nav-caption">WORKSPACE</p>
       <nav className="admin-nav">{items.map(({to,label,icon:Icon,end}) => <NavLink key={to} to={to} end={Boolean(end)} title={collapsed ? label : undefined} className={({isActive})=>isActive?"admin-nav-link active":"admin-nav-link"}><Icon size={18}/><span>{label}</span></NavLink>)}</nav>
       <div className="admin-sidebar-bottom"><span className="admin-secure"><ShieldCheck size={15}/> Admin access</span><div className="admin-user"><span className="admin-avatar">{(profile.display_name || user?.email || "A").slice(0,1).toUpperCase()}</span><span><strong>{profile.display_name || "ผู้ดูแลระบบ"}</strong><small>{user?.email}</small></span></div><button className="admin-logout" onClick={() => void signOut()}><LogOut size={16}/><span>ออกจากระบบ</span></button></div>
