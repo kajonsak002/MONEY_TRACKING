@@ -232,7 +232,7 @@ export function AppShell() {
               }
             >
               <Icon size={19} strokeWidth={2} />
-              <span className="text-[9px] sm:text-[10px] mt-0.5 whitespace-nowrap">{label === "รายรับรายจ่าย" ? "รายการ" : label === "สรุปข้อมูล" ? "สรุป" : label === "งบประมาณ" ? "งบ" : label}</span>
+              <span className="text-[9px] sm:text-[10px] mt-0.5 whitespace-nowrap">{label === "บันทึกรายการ" || label === "รายรับรายจ่าย" ? "รายการ" : label === "สรุปข้อมูล" ? "สรุป" : label === "งบประมาณ" ? "งบ" : label}</span>
             </NavLink>
           ))}
         </nav>
