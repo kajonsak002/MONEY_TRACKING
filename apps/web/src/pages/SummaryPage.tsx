@@ -45,17 +45,17 @@ export function SummaryPage() {
     <section className="report-filter-card">
       <div className="period-switch">
         {([{ key: "month", label: "เดือนนี้" }, { key: "year", label: "ปีนี้" }, { key: "custom", label: "กำหนดเอง" }] as const).map((item) =>
-          <button key={item.key} type="button" className={period === item.key ? "active" : ""} onClick={() => setPeriod(item.key)}>{item.label}</button>)}
+          <button key={item.key} type="button" aria-pressed={period === item.key} className={period === item.key ? "active" : ""} onClick={() => setPeriod(item.key)}>{item.label}</button>)}
       </div>
       {period === "custom" && <div className="report-date-range">
-        <label>ตั้งแต่<input type="date" value={from} onChange={(event) => setFrom(event.target.value)} /></label>
-        <label>ถึงวันที่<input type="date" value={to} min={from} onChange={(event) => setTo(event.target.value)} /></label>
+        <label>ตั้งแต่<input type="date" value={from} max={to} onChange={(event) => setFrom(event.target.value)} /></label>
+        <label>ถึงวันที่<input type="date" value={to} min={from} max={`${today.year}-${today.month}-${today.day}`} onChange={(event) => setTo(event.target.value)} /></label>
       </div>}
       <p className="report-range"><CalendarDays size={14} /> {range.from} ถึง {range.to}</p>
     </section>
     {query.isLoading ? <div className="entry-loading"><LoaderCircle className="spin" /> กำลังคำนวณ...</div> :
     query.isError ? <p className="entry-error">{(query.error as Error).message}</p> : <>
-      <section className="report-balance-card"><span>เงินสุทธิในช่วงเวลานี้</span><strong>{money(summary.balance)}</strong><small>{summary.count} รายการ</small></section>
+      {(query.data ?? []).length === 0 && <div className="ui-empty-state"><strong>ยังไม่มีข้อมูลในช่วงเวลานี้</strong><p>ลองเลือกช่วงวันที่อื่น หรือเพิ่มรายการรายรับรายจ่ายก่อน</p></div>}\n      <section className="report-balance-card"><span>เงินสุทธิในช่วงเวลานี้</span><strong>{money(summary.balance)}</strong><small>{summary.count} รายการ</small></section>
       <section className="report-stats">
         <article><span className="report-stat-icon income-bg"><ArrowDownLeft size={17}/></span><small>รายรับทั้งหมด</small><strong className="income-text">{money(summary.income)}</strong></article>
         <article><span className="report-stat-icon expense-bg"><ArrowUpRight size={17}/></span><small>รายจ่ายทั้งหมด</small><strong className="expense-text">{money(summary.expense)}</strong></article>
