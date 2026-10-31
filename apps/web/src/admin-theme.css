@@ -1,0 +1,54 @@
+/* MoneyMate admin workspace — sage & ivory visual system */
+.admin-frame{background:#f6f8f4;color:#34483d;grid-template-columns:256px minmax(0,1fr)}
+.admin-sidebar{background:#243b30;color:#e6eee7;padding:24px 17px;border-right:1px solid #dce7dc}
+.admin-brand{color:#fff;padding-bottom:34px;letter-spacing:-.3px}
+.admin-brand-icon{background:#6f9b7a;border-radius:13px}
+.admin-brand>span:last-child span{color:#a9c5ae;letter-spacing:1.7px}
+.admin-nav-caption{color:#91ae98;letter-spacing:1.8px}
+.admin-nav{gap:7px}
+.admin-nav-link{min-height:44px;padding:0 13px;border-radius:13px;color:#c1d1c3;font-size:12px;transition:background .18s ease,color .18s ease}
+.admin-nav-link:hover{background:#304d3d;color:#fff}
+.admin-nav-link.active{background:#3b5c47;color:#fff;box-shadow:inset 3px 0 #a9c9a8}
+.admin-secure{color:#a9c5ae}
+.admin-user{border-color:#45614e}
+.admin-avatar{background:#6f9b7a;color:#fff}
+.admin-user small{color:#adc1b0}
+.admin-logout{min-height:40px;background:#30483a;color:#dce9dc;border:1px solid #49634f;border-radius:12px}
+.admin-logout:hover{background:#3a5844}
+.admin-sidebar-toggle{background:#30483a;color:#dce9dc;border-color:#49634f}
+.admin-main{background:#f6f8f4}
+.admin-topbar{height:76px;padding-inline:clamp(20px,3vw,42px);border-bottom:1px solid #e6ece3;background:rgba(255,255,255,.92);backdrop-filter:blur(14px)}
+.admin-topbar-kicker{color:#91a294;font-size:9px;letter-spacing:1.3px}
+.admin-topbar strong{color:#34483d;font-size:14px}
+.admin-status{border-color:#dcebdd;background:#f2f8f0;color:#64876b;border-radius:999px}
+.admin-status i{background:#79a982}
+.admin-content{max-width:1600px;padding:30px clamp(18px,3vw,42px) 56px}
+.admin-heading h1{color:#2d4034}
+.admin-eyebrow{color:#83a18a}
+.admin-refresh{min-height:40px;border-color:#e2eae0;border-radius:12px;color:#627a68}
+.admin-refresh:hover{background:#f4f8f2}
+.admin-panel,.admin-kpi{border-color:#e8eee6;border-radius:20px;box-shadow:0 8px 28px rgba(47,77,55,.045)}
+.admin-panel h2{color:#34483d}
+.admin-member-table th,.admin-member-table td{border-color:#edf2eb}
+.admin-role.admin{background:#edf1fa;color:#7187b2}
+.admin-role.partner{background:#edf6ed;color:#6c9875}
+.admin-mobile-nav{border-color:#e5ece3;background:rgba(255,255,255,.96);backdrop-filter:blur(14px)}
+.admin-mobile-nav a.active{color:#5e8d69}
+.admin-menu-toggle{display:none;place-items:center;width:38px;height:38px;border:1px solid #e3eae1;border-radius:12px;background:#fff;color:#5e7964}
+.admin-sidebar-backdrop{display:none}
+@media(max-width:1100px){.admin-frame{grid-template-columns:228px minmax(0,1fr)}}
+@media(max-width:700px){
+ .admin-frame{background:#f6f8f4}
+ .admin-topbar{height:62px;justify-content:flex-start;gap:11px;padding-inline:14px}
+ .admin-menu-toggle{display:grid;flex:0 0 auto}
+ .admin-topbar>div{flex:1;min-width:0}
+ .admin-status{font-size:0;padding:8px}
+ .admin-status i{width:7px;height:7px}
+ .admin-content{padding:20px 14px calc(26px + env(safe-area-inset-bottom))}
+ .admin-sidebar{position:fixed;z-index:40;inset:0 auto 0 0;display:flex;width:min(290px,84vw);height:100dvh;transform:translateX(-105%);transition:transform .22s ease;box-shadow:none}
+ .admin-frame.sidebar-open .admin-sidebar{transform:translateX(0);box-shadow:16px 0 40px rgba(27,49,34,.18)}
+ .admin-sidebar-backdrop{position:fixed;z-index:35;inset:0;display:block;border:0;background:rgba(22,38,27,.35);backdrop-filter:blur(2px)}
+ .admin-mobile-nav{grid-template-columns:repeat(5,minmax(0,1fr))}
+ .admin-mobile-nav a.active{background:#eff6ed;border-radius:12px}
+}
+@media(prefers-reduced-motion:reduce){.admin-nav-link,.admin-sidebar{transition:none}}
