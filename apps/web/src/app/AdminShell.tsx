@@ -39,7 +39,7 @@ export function AdminShell() {
     });
   }
   return <div className={`admin-frame${collapsed ? " sidebar-collapsed" : ""}${mobileOpen ? " sidebar-open" : ""}`}>
-    <aside className="admin-sidebar">
+    <aside className="admin-sidebar" id="admin-navigation">
       <NavLink className="admin-brand" to="/admin"><span className="admin-brand-icon mascot-admin-brand"><img src="/assets/mascot-frog.svg" alt="" /></span><span>{appName}<span>ADMIN CONSOLE</span></span></NavLink>
       <p className="admin-nav-caption">WORKSPACE</p>
       <nav className="admin-nav">{items.map(({to,label,icon:Icon,end}) => <NavLink key={to} to={to} end={Boolean(end)} title={collapsed ? label : undefined} className={({isActive})=>isActive?"admin-nav-link active":"admin-nav-link"}><Icon size={18}/><span>{label}</span></NavLink>)}</nav>
@@ -47,7 +47,7 @@ export function AdminShell() {
       <button className="admin-sidebar-toggle" type="button" onClick={toggleSidebar} aria-label={collapsed ? "ขยายเมนู" : "ย่อเมนู"} title={collapsed ? "ขยายเมนู" : "ย่อเมนู"}><ChevronLeft size={17}/></button>
     </aside>
     {mobileOpen && <button className="admin-sidebar-backdrop" type="button" aria-label="ปิดเมนู" onClick={() => setMobileOpen(false)}/>}
-    <div className="admin-main"><header className="admin-topbar"><button className="admin-menu-toggle" type="button" onClick={() => setMobileOpen((v) => !v)} aria-label={mobileOpen ? "ปิดเมนู" : "เปิดเมนู"}>{mobileOpen ? <X size={19}/> : <Menu size={19}/>}</button><div><span className="admin-topbar-kicker">{appName} / ADMIN</span><strong>ศูนย์จัดการระบบ</strong></div><span className="admin-status"><i/> ระบบจัดการ</span></header><main className="admin-content"><Outlet/></main></div>
+    <div className="admin-main"><header className="admin-topbar"><button className="admin-menu-toggle" type="button" onClick={() => setMobileOpen((v) => !v)} aria-label={mobileOpen ? "ปิดเมนู" : "เปิดเมนู"} aria-expanded={mobileOpen} aria-controls="admin-navigation">{mobileOpen ? <X size={19}/> : <Menu size={19}/>}</button><div><span className="admin-topbar-kicker">{appName} / ADMIN</span><strong>ศูนย์จัดการระบบ</strong></div><span className="admin-status"><i/> ระบบจัดการ</span></header><main className="admin-content"><Outlet/></main></div>
     <nav className="admin-mobile-nav" aria-label="เมนูผู้ดูแล">{items.map(({to,label,icon:Icon,end})=><NavLink key={to} to={to} end={Boolean(end)} className={({isActive})=>isActive?"active":""}><Icon size={18}/><span>{label}</span></NavLink>)}</nav>
   </div>;
 }
