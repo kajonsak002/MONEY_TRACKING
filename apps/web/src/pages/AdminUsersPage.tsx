@@ -6,13 +6,13 @@ import { useAuth } from "../auth/AuthProvider";
 
 type Member = { id:string; email:string; display_name:string|null; role:"admin"|"partner"; created_at:string };
 export function AdminUsersPage() {
-  const { user } = useAuth();
+  const { user, configured } = useAuth();
   const client=useQueryClient();
   const [search,setSearch]=useState("");
   const [role,setRole]=useState("all");
   const [newEmail,setNewEmail]=useState("");
   const [newRole,setNewRole]=useState<"admin"|"partner">("partner");
-  const query=useQuery({queryKey:["admin","users"],enabled:!!supabase,queryFn:async()=>{
+  const query=useQuery({queryKey:["admin","users"],enabled:configured,queryFn:async()=>{
     if(!supabase) throw new Error("ยังไม่ได้ตั้งค่า Supabase");
     const {data,error}=await supabase.from("profiles").select("id,email,display_name,role,created_at").order("created_at",{ascending:false}).limit(1000);
     if(error) throw error;
@@ -40,14 +40,15 @@ export function AdminUsersPage() {
       <form className="admin-allowlist-form" onSubmit={event=>{event.preventDefault();addAllowed.mutate();}}>
         <input type="email" required maxLength={254} value={newEmail} onChange={event=>setNewEmail(event.target.value)} placeholder="name@example.com" aria-label="อีเมลผู้ใช้ใหม่"/>
         <select value={newRole} onChange={event=>setNewRole(event.target.value as "admin"|"partner")} aria-label="สิทธิ์ผู้ใช้ใหม่"><option value="partner">Partner</option><option value="admin">Admin</option></select>
-        <button className="admin-primary-button" type="submit" disabled={addAllowed.isPending||!newEmail.trim()}>{addAllowed.isPending?"กำลังบันทึก...":"เพิ่มอีเมล"}</button>
+        <button className="admin-primary-button" type="submit" disabled={addAllowed.isPending||!newEmail.trim()||!configured}>{addAllowed.isPending?"กำลังบันทึก...":"เพิ่มอีเมล"}</button>
       </form>
+      {!configured&&<p className="entry-error" role="alert">ยังไม่ได้ตั้งค่า Supabase จึงยังจัดการผู้ใช้ไม่ได้</p>}
       {addAllowed.isError&&<p className="entry-error" role="alert">{addAllowed.error.message}</p>}
       {addAllowed.isSuccess&&<p className="admin-notice" role="status">เพิ่มอีเมลใน Allowlist แล้ว</p>}
     </section>
     <div className="admin-user-stats"><article><small>ผู้ดูแลระบบ</small><strong>{counts.admin}</strong></article><article><small>Partner</small><strong>{counts.partner}</strong></article></div>
     <section className="admin-panel"><div className="admin-filter-row"><label className="admin-search"><Search size={16}/><input value={search} onChange={e=>setSearch(e.target.value)} placeholder="ค้นหาชื่อหรืออีเมล"/></label><select value={role} onChange={e=>setRole(e.target.value)}><option value="all">ทุกสิทธิ์</option><option value="admin">Admin</option><option value="partner">Partner</option></select></div>
-    {query.isLoading?<div className="admin-empty">กำลังโหลดสมาชิก...</div>:query.isError?<div className="admin-empty">{query.error.message}</div>:!filtered.length?<div className="admin-empty">ไม่พบสมาชิก</div>:
+    {query.isLoading?<div className="admin-empty" role="status">กำลังโหลดสมาชิก...</div>:query.isError?<div className="admin-empty" role="alert">{query.error.message}</div>:!filtered.length?<div className="admin-empty">ไม่พบสมาชิก</div>:
     <div className="admin-table-scroll"><table className="admin-member-table"><thead><tr><th>สมาชิก</th><th>สิทธิ์</th><th>วันที่สมัคร</th><th>จัดการ</th></tr></thead><tbody>{filtered.map(m=><tr key={m.id}><td><strong>{m.display_name||"ไม่ระบุชื่อ"}</strong><br/><span>{m.email}</span></td><td><span className={m.role==="admin"?"admin-role admin":"admin-role partner"}>{m.role}</span></td><td>{new Intl.DateTimeFormat("th-TH",{dateStyle:"medium"}).format(new Date(m.created_at))}</td><td>{m.id===user?.id?<span className="admin-self-label">บัญชีปัจจุบัน</span>:<select aria-label={"เปลี่ยนสิทธิ์ "+m.email} value={m.role} disabled={changeRole.isPending} onChange={e=>changeRole.mutate({member:m,nextRole:e.target.value as "admin"|"partner"})}><option value="partner">Partner</option><option value="admin">Admin</option></select>}</td></tr>)}</tbody></table></div>}
     {changeRole.isError&&<p className="entry-error" role="alert">{changeRole.error.message}</p>}
     </section>
