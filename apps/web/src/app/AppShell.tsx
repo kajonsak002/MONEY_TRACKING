@@ -182,7 +182,7 @@ export function AppShell() {
             <div className="w-9 h-9 rounded-xl bg-[#fdf0f2] border border-[#fbdbe1] p-0.5 flex items-center justify-center">
               <img
                 src="/images/mascots/pig-mascot-happy.png"
-                alt="Logo"
+                alt="" aria-hidden="true"
                 className="w-7 h-7 object-contain"
               />
             </div>
@@ -201,7 +201,7 @@ export function AppShell() {
             <div className="w-8 h-8 rounded-full bg-[#ebf5ee] border border-[#c4e3cf] p-0.5 flex items-center justify-center overflow-hidden">
               <img
                 src="/images/mascots/frog-mascot-happy.png"
-                alt={displayName}
+                alt="" aria-hidden="true"
                 className="w-7 h-7 object-contain"
               />
             </div>
