@@ -36,10 +36,10 @@ export function AppShell() {
 
   return <div className="app-frame member-app-frame">
     <header className="topbar member-topbar">
-      <a className="brand-mark" href="/app" aria-label={`${appName} ${appTagline} หน้าแรก`}>
+      <NavLink className="brand-mark" to="/app" aria-label={`${appName} ${appTagline} หน้าแรก`}>
         <span className="brand-icon mascot-brand"><img src="/assets/mascot-pig.svg" alt="" /></span>
         <span>{appName}<span className="brand-accent">{appTagline}</span></span>
-      </a>
+      </NavLink>
       <div className="account-menu">
         <div className="account-copy"><strong>{displayName}</strong><small>บัญชีของฉัน</small></div>
         <button className="signout-button" type="button" onClick={() => void signOut()} aria-label="ออกจากระบบ" title="ออกจากระบบ"><LogOut size={17}/></button>
