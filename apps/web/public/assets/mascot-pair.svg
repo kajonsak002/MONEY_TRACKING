@@ -1,4 +1,17 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 260 130">
-  <image href="/assets/mascot-pig.svg" x="0" y="0" width="145" height="130" preserveAspectRatio="xMidYMid meet"/>
-  <image href="/assets/mascot-frog.svg" x="112" y="15" width="125" height="112" preserveAspectRatio="xMidYMid meet"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 260 130" fill="none">
+<ellipse cx="78" cy="116" rx="61" ry="8" fill="#dcebd9"/>
+<path d="M31 48 25 13c-1-7 7-10 12-5l24 24M123 48l7-35c1-7-7-10-12-5L94 39" fill="#f8b7b4" stroke="#a95e59" stroke-width="4" stroke-linejoin="round"/>
+<path d="M24 69c0-31 24-54 54-54s54 23 54 54v17c0 23-24 35-54 35S24 109 24 86V69Z" fill="#ffc9c5" stroke="#a95e59" stroke-width="4"/>
+<ellipse cx="60" cy="65" rx="4" ry="6" fill="#633d3b"/><ellipse cx="96" cy="65" rx="4" ry="6" fill="#633d3b"/>
+<ellipse cx="78" cy="82" rx="23" ry="16" fill="#f28f91" stroke="#a95e59" stroke-width="3"/><ellipse cx="70" cy="82" rx="3" ry="5" fill="#9b5656"/><ellipse cx="86" cy="82" rx="3" ry="5" fill="#9b5656"/>
+<circle cx="44" cy="83" r="8" fill="#f49a9b" opacity=".7"/><circle cx="112" cy="83" r="8" fill="#f49a9b" opacity=".7"/>
+<path d="M68 101c6 6 14 6 20 0" stroke="#a95e59" stroke-width="3" stroke-linecap="round"/>
+<path d="M166 50c-3-24 11-39 30-39s33 15 30 39" fill="#a6d47e" stroke="#547d4c" stroke-width="4"/>
+<path d="M151 66c0-25 20-42 45-42s45 17 45 42v21c0 23-20 35-45 35s-45-12-45-35V66Z" fill="#b8e18e" stroke="#547d4c" stroke-width="4"/>
+<ellipse cx="177" cy="62" rx="6" ry="8" fill="#fff"/><ellipse cx="215" cy="62" rx="6" ry="8" fill="#fff"/><circle cx="178" cy="64" r="3.5" fill="#405b39"/><circle cx="214" cy="64" r="3.5" fill="#405b39"/>
+<ellipse cx="196" cy="88" rx="17" ry="11" fill="#e5f5bd"/><path d="M187 88c5 6 13 6 18 0" stroke="#547d4c" stroke-width="3" stroke-linecap="round"/>
+<circle cx="164" cy="86" r="7" fill="#f2a5a1" opacity=".55"/><circle cx="228" cy="86" r="7" fill="#f2a5a1" opacity=".55"/>
+<path d="M163 109c-7 7-14 7-19 1m79-1c7 7 14 7 19 1" stroke="#547d4c" stroke-width="4" stroke-linecap="round"/>
+<path d="M128 23c-7-10-19-4-15 5 3 7 15 10 15 10s12-7 10-14c-2-7-10-7-10-1Z" fill="#f39a9a"/>
+<path d="m241 22 4 8 9 4-9 4-4 8-4-8-9-4 9-4 4-8Z" fill="#e6c36f"/>
 </svg>
