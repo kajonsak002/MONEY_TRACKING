@@ -137,7 +137,7 @@ export function HomePage() {
         <div className="hidden md:flex absolute bottom-0 left-6 lg:left-14 items-end pointer-events-none z-10">
           <img
             src="/images/mascots/pig-mascot-happy.png"
-            alt="Pig Mascot"
+            alt="" aria-hidden="true"
             className="w-28 h-28 lg:w-32 lg:h-32 object-contain drop-shadow-[0_10px_20px_rgba(30,65,40,0.20)] transition-transform duration-300 hover:scale-105"
           />
         </div>
@@ -146,7 +146,7 @@ export function HomePage() {
         <div className="hidden md:flex absolute bottom-0 right-8 lg:right-16 items-end pointer-events-none z-10">
           <img
             src="/images/mascots/frog-mascot-happy.png"
-            alt="Frog Mascot"
+            alt="" aria-hidden="true"
             className="w-24 h-24 lg:w-28 lg:h-28 object-contain drop-shadow-[0_10px_20px_rgba(30,65,40,0.18)] transition-transform duration-300 hover:scale-105 hover:-translate-y-1"
           />
         </div>
@@ -316,7 +316,7 @@ export function HomePage() {
                   <span>เค้าช่วยจำได้นะ! 💬</span>
                 </span>
                 <div className="w-11 h-11 shrink-0 filter drop-shadow-sm group-hover:scale-110 group-hover:-rotate-6 transition-transform">
-                  <img src="/images/mascots/frog-mascot-happy.png" alt="Frog" className="w-full h-full object-contain" />
+                  <img src="/images/mascots/frog-mascot-happy.png" alt="" aria-hidden="true" className="w-full h-full object-contain" />
                 </div>
               </div>
             </div>
@@ -503,7 +503,7 @@ export function HomePage() {
             <div className="w-36 h-36 mb-3">
               <img
                 src="/images/empty-states/empty-transactions.png"
-                alt="No transactions"
+                alt="" aria-hidden="true"
                 className="w-full h-full object-contain filter drop-shadow-sm"
               />
             </div>
