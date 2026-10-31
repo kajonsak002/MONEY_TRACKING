@@ -192,3 +192,54 @@ button:disabled, input:disabled { cursor: not-allowed; opacity: .55; }
 @media (max-width: 390px) { .entry-form-grid { grid-template-columns: 1fr; } .entry-row { gap: 7px; } .entry-amount { font-size: 10px; } }
 
 .brand-icon.mascot-brand,.admin-brand-icon.mascot-admin-brand { overflow:hidden; background:#eaf5e8; }.brand-icon.mascot-brand img { width:36px; height:36px; object-fit:contain; }.admin-brand-icon.mascot-admin-brand img { width:38px; height:38px; object-fit:contain; }
+
+
+/* MoneyMate member dashboard — match the approved pig & frog mobile mockup */
+.home-page { gap: 22px; }
+.welcome-row { min-height: 76px; align-items: center; }
+.welcome-row .eyebrow { margin-bottom: 7px; font-size: 12px; letter-spacing: 1.1px; }
+.welcome-row h1 { font-size: clamp(25px, 6.2vw, 31px); font-weight: 500; letter-spacing: -.45px; }
+.welcome-row .muted { font-size: 13px; }
+.avatar { width: 68px; height: 68px; flex: 0 0 auto; border-radius: 22px; }
+.avatar img { width: 64px; height: 64px; }
+.balance-card { min-height: 194px; padding: 22px; border-radius: 26px; }
+.balance-card-top { font-size: 14px; }
+.balance-period { padding: 6px 12px; font-size: 11px; }
+.balance-value { margin: 15px 0 20px; font-size: clamp(32px, 8.5vw, 40px); line-height: 1.15; }
+.balance-stats { padding-top: 17px; gap: 8px; }
+.balance-stats > div { gap: 9px; }
+.stat-icon { width: 31px; height: 31px; border-radius: 11px; }
+.balance-stats small { font-size: 12px; }
+.balance-stats strong { font-size: 14px; }
+.balance-mascots { right: 8px; bottom: 1px; }
+.balance-pig { width: 83px; height: 78px; }
+.balance-frog { width: 57px; height: 65px; margin-left: -8px; }
+.quick-add-card, .recent-section { padding: 21px 20px; border-radius: 25px; }
+.quick-add-card .eyebrow, .recent-section .eyebrow { font-size: 12px; letter-spacing: 1.5px; margin-bottom: 7px; }
+.quick-add-card h2, .recent-section h2 { font-size: 19px; font-weight: 500; }
+.quick-frog { width: 68px; height: 72px; right: 13px; top: 9px; }
+.quick-input-label { margin-top: 21px; margin-bottom: 10px; font-size: 13px; }
+.quick-input-wrap { gap: 9px; }
+.quick-input-wrap input { height: 48px; padding-inline: 14px; border-radius: 16px; font-size: 13px; }
+.add-button { width: 48px; height: 48px; border-radius: 15px; }
+.helper-text { margin-top: 10px; font-size: 11px; line-height: 1.6; }
+.recent-section .section-heading { margin-bottom: 12px; }
+.text-action { font-size: 12px; }
+.entry-row { gap: 11px; padding: 15px 0; }
+.entry-type-icon { width: 39px; height: 39px; border-radius: 14px; }
+.entry-main strong { font-size: 13px; }
+.entry-main small { font-size: 11px; }
+.entry-amount { font-size: 12px; }
+.bottom-nav { min-height: calc(76px + env(safe-area-inset-bottom)); padding: 8px 10px calc(8px + env(safe-area-inset-bottom)); }
+.nav-item { min-height: 54px; gap: 4px; font-size: 11px; border-radius: 17px; }
+.nav-item svg { width: 21px; height: 21px; }
+@media (max-width: 390px) {
+  .page-content { padding: 22px 16px 28px; }
+  .home-page { gap: 18px; }
+  .balance-card { padding: 19px; }
+  .balance-pig { width: 72px; height: 70px; }
+  .balance-frog { width: 49px; height: 57px; }
+  .balance-stats strong { font-size: 12px; }
+  .quick-add-card, .recent-section { padding: 18px 16px; }
+  .quick-frog { width: 58px; height: 62px; }
+}
