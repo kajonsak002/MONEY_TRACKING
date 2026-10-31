@@ -172,7 +172,7 @@ export function HomePage() {
           </h1>
 
           <div className="text-[clamp(36px,6vw,52px)] font-extrabold tracking-tight text-[#183024] tabular-nums leading-none my-2">
-            {report.isLoading ? "กำลังคำนวณ..." : money(totals.balance)}
+            {report.isLoading ? "กำลังคำนวณ..." : report.isError ? "โหลดข้อมูลไม่สำเร็จ" : money(totals.balance)}
           </div>
 
           <div className="mt-1 inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/80 border border-[#c6e0cc] text-xs font-semibold text-[#2e8a59] shadow-xs">
@@ -203,6 +203,8 @@ export function HomePage() {
           </div>
         </div>
       </section>
+
+      {report.isError && <p className="rounded-xl border border-[#fbdbe1] bg-[#fff0f2] p-3 text-xs text-[#bd4754]" role="alert">โหลดสรุปการเงินไม่สำเร็จ: {report.error.message}</p>}
 
       {/* ================= 4 STAT CARDS ================= */}
       <section className="grid grid-cols-2 lg:grid-cols-4 gap-3.5 sm:gap-4">
@@ -469,6 +471,8 @@ export function HomePage() {
         </div>
       </section>
 
+      {categories.isError && <p className="rounded-xl border border-[#fbdbe1] bg-[#fff0f2] p-3 text-xs text-[#bd4754]" role="alert">โหลดหมวดหมู่ไม่สำเร็จ: {categories.error.message}</p>}
+
       {/* ================= RECENT TRANSACTIONS ================= */}
       <section className="relative bg-gradient-to-b from-[#fbfdfb] via-white to-[#f7faf8] rounded-3xl p-6 sm:p-7 border border-[#dce8db] shadow-[0_8px_28px_rgba(42,78,56,0.04)] overflow-hidden">
         <CardGinghamOverlay opacity="opacity-[0.015]" />
@@ -488,7 +492,11 @@ export function HomePage() {
           </button>
         </div>
 
-        {(recent.data ?? []).length === 0 ? (
+        {recent.isLoading ? (
+          <div className="py-12 flex items-center justify-center gap-2 text-xs text-[#71877c]" role="status"><LoaderCircle size={18} className="animate-spin"/>กำลังโหลดรายการล่าสุด...</div>
+        ) : recent.isError ? (
+          <p className="rounded-xl bg-[#fff0f2] border border-[#fbdbe1] p-4 text-xs text-[#bd4754]" role="alert">โหลดรายการล่าสุดไม่สำเร็จ: {recent.error.message}</p>
+        ) : (recent.data ?? []).length === 0 ? (
           /* Empty State featuring newly generated empty-transactions.png */
           <div className="py-10 flex flex-col items-center justify-center text-center">
             <div className="w-36 h-36 mb-3">
