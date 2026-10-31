@@ -227,7 +227,7 @@ export function AppShell() {
               to={to}
               end={Boolean(end)}
               className={({ isActive }) =>
-                `flex flex-1 min-w-0 flex-col items-center justify-center py-1.5 px-1 rounded-2xl transition-all ${
+                `flex flex-1 min-w-0 min-h-[48px] flex-col items-center justify-center py-1.5 px-1 rounded-2xl transition-all ${
                   isActive
                     ? "bg-[#ebf5ee] text-[#2c5a42] font-bold shadow-xs"
                     : "text-[#7a9084] hover:text-[#2c5a42]"
