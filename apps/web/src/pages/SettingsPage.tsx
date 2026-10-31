@@ -21,8 +21,10 @@ function downloadFile(content: string, type: string, name: string) {
   const anchor = document.createElement("a");
   anchor.href = url;
   anchor.download = name;
+  document.body.appendChild(anchor);
   anchor.click();
-  URL.revokeObjectURL(url);
+  anchor.remove();
+  window.setTimeout(() => URL.revokeObjectURL(url), 1_000);
 }
 
 function today() {
@@ -37,12 +39,13 @@ function today() {
 }
 
 export function SettingsPage() {
-  const { user, profile, signOut } = useAuth();
+  const { user, profile, signOut, configured } = useAuth();
   const [theme, setTheme] = useState<Theme>(
     () => (localStorage.getItem("money-theme") === "dark" ? "dark" : "light")
   );
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
+  const [notice, setNotice] = useState("");
 
   useEffect(() => {
     document.documentElement.dataset.theme = theme;
@@ -56,6 +59,7 @@ export function SettingsPage() {
   async function exportData(format: "json" | "csv") {
     setBusy(true);
     setError("");
+    setNotice("");
     try {
       const entries = await getEntriesInRange("2000-01-01", today());
       if (format === "json") {
@@ -65,18 +69,17 @@ export function SettingsPage() {
           "application/json;charset=utf-8",
           "money-tracking-backup.json"
         );
+        setNotice("เตรียมไฟล์สำรอง JSON เรียบร้อยแล้ว");
       } else {
+        const safeCell = (value: string | number) => {
+          const text = String(value);
+          return /^[\\s]*[=+@-]/.test(text) ? "'" + text : text;
+        };
         const rows = [
           ["date", "type", "amount_thb", "category", "note"],
           ...entries.map((entry) => {
             const category = Array.isArray(entry.categories) ? entry.categories[0] : entry.categories;
-            return [
-              entry.occurred_on,
-              entry.type,
-              (entry.amount_satang / 100).toFixed(2),
-              category?.name ?? "",
-              entry.note ?? "",
-            ];
+            return [safeCell(entry.occurred_on), safeCell(entry.type), (entry.amount_satang / 100).toFixed(2), safeCell(category?.name ?? ""), safeCell(entry.note ?? "")];
           }),
         ];
         const csv =
@@ -85,6 +88,7 @@ export function SettingsPage() {
             .map((row) => row.map((cell) => `"${String(cell).replaceAll('"', '""')}"`).join(","))
             .join("\r\n");
         downloadFile(csv, "text/csv;charset=utf-8", "money-tracking-export.csv");
+        setNotice("ส่งออกไฟล์ CSV เรียบร้อยแล้ว");
       }
     } catch (e) {
       setError(e instanceof Error ? e.message : "ส่งออกข้อมูลไม่สำเร็จ");
@@ -233,7 +237,7 @@ export function SettingsPage() {
         <div className="flex flex-wrap gap-3">
           <button
             type="button"
-            disabled={busy}
+            disabled={busy || !configured}
             onClick={() => void exportData("json")}
             className="px-4 py-2.5 rounded-xl border border-[#dce7dc] bg-[#f8faf7] hover:bg-[#edf5ee] text-xs font-bold text-[#2c5840] flex items-center gap-2 transition disabled:opacity-50"
           >
@@ -243,7 +247,7 @@ export function SettingsPage() {
 
           <button
             type="button"
-            disabled={busy}
+            disabled={busy || !configured}
             onClick={() => void exportData("csv")}
             className="px-4 py-2.5 rounded-xl border border-[#dce7dc] bg-[#f8faf7] hover:bg-[#edf5ee] text-xs font-bold text-[#2c5840] flex items-center gap-2 transition disabled:opacity-50"
           >
@@ -252,12 +256,10 @@ export function SettingsPage() {
           </button>
         </div>
 
-        {busy && <p className="text-xs text-[#71877c]">กำลังเตรียมไฟล์ดาวน์โหลด...</p>}
-        {error && (
-          <p className="text-xs text-[#bd4754] bg-[#fff0f2] p-3 rounded-xl border border-[#fbdbe1]">
-            {error}
-          </p>
-        )}
+        {!configured && <p className="text-xs text-[#bd4754]" role="status">ยังไม่ได้ตั้งค่า Supabase จึงยังส่งออกข้อมูลไม่ได้</p>}
+        {busy && <p className="text-xs text-[#71877c]" role="status">กำลังเตรียมไฟล์ดาวน์โหลด...</p>}
+        {notice && <p className="text-xs text-[#28764f] bg-[#eaf7ef] p-3 rounded-xl border border-[#cfe8d6]" role="status">{notice}</p>}
+        {error && <p className="text-xs text-[#bd4754] bg-[#fff0f2] p-3 rounded-xl border border-[#fbdbe1]" role="alert">{error}</p>}
       </section>
     </div>
   );
