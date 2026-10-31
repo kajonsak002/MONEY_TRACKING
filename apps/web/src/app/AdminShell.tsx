@@ -86,7 +86,7 @@ export function AdminShell() {
       >
         <div className="space-y-6">
           {/* Logo */}
-          <a href="/admin" className="flex items-center gap-3 px-2 py-1">
+          <NavLink to="/admin" className="flex items-center gap-3 px-2 py-1">
             <div className="w-10 h-10 rounded-2xl bg-[#ebf5ee] border border-[#cce4d4] flex items-center justify-center p-1 shadow-2xs shrink-0">
               <img
                 src="/images/mascots/pig-mascot-happy.png"
@@ -100,7 +100,7 @@ export function AdminShell() {
                 <span className="text-[9px] text-[#71877c] font-bold tracking-widest uppercase">ADMIN CONSOLE</span>
               </div>
             )}
-          </a>
+          </NavLink>
 
           {/* Section caption */}
           {!collapsed && (
@@ -229,11 +229,13 @@ export function AdminShell() {
       {/* Mobile Drawer */}
       {mobileOpen && (
         <>
-          <div
+          <button
+            type="button"
             className="fixed inset-0 z-40 bg-black/30 backdrop-blur-xs lg:hidden"
             onClick={() => setMobileOpen(false)}
+            aria-label="ปิดเมนูผู้ดูแล"
           />
-          <aside className="fixed inset-y-0 left-0 z-50 w-72 bg-white p-5 flex flex-col justify-between shadow-2xl lg:hidden">
+          <aside role="dialog" aria-modal="true" aria-label="เมนูผู้ดูแล" className="fixed inset-y-0 left-0 z-50 w-72 bg-white p-5 flex flex-col justify-between shadow-2xl lg:hidden">
             <div className="space-y-6">
               <div className="flex items-center justify-between">
                 <span className="font-extrabold text-base text-[#23382e]">{appName} ADMIN</span>
