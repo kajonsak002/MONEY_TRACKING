@@ -281,3 +281,5 @@
 .admin-sidebar-toggle{right:-22px;width:44px;height:44px}
 .admin-search,.admin-filter-row select,.admin-member-table select{min-height:44px}
 .admin-mobile-nav a{min-height:48px}
+
+@media(min-width:701px){.admin-menu-toggle{display:none!important}}
