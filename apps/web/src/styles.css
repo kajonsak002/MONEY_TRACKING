@@ -623,3 +623,18 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { scroll-behavior: auto !important; animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
 }
+
+/* Illustration assets: keep decoration behind content and away from amounts. */
+.brand-icon.mascot-brand { width: 44px; height: 40px; overflow: visible; background: #f1f7ed; }
+.brand-icon.mascot-brand img { width: 48px; height: 40px; }
+.report-balance-card {
+  background-image: url("/assets/finance-garden.svg"), linear-gradient(130deg,#e7f3e4 0%,#f4f7ed 55%,#fff0e9 100%);
+  background-position: right bottom, center; background-repeat: no-repeat; background-size: min(58%,420px) auto, cover;
+  padding-right: min(42%, 260px);
+}
+.report-balance-card > * { position: relative; z-index: 1; }
+@media(max-width:600px) {
+  .report-balance-card { background-size: 66% auto, cover; padding-right: 24px; padding-bottom: 92px; }
+  .brand-icon.mascot-brand { width: 39px; height: 36px; }
+  .brand-icon.mascot-brand img { width: 42px; height: 36px; }
+}
