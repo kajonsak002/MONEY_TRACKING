@@ -180,7 +180,7 @@ export function EntriesPage() {
                 setType("expense");
                 setCategoryId("");
               }}
-              className={`flex items-center justify-center gap-2 py-2.5 rounded-xl text-xs font-bold transition-all ${
+              className={`flex items-center justify-center gap-2 min-h-[44px] py-2.5 rounded-xl text-xs font-bold transition-all ${
                 type === "expense"
                   ? "bg-white text-[#dd5e6d] shadow-sm"
                   : "text-[#71877c] hover:text-[#23382e]"
@@ -335,7 +335,7 @@ export function EntriesPage() {
               type="button"
               onClick={() => setFilterType(item.id)}
               aria-pressed={filterType === item.id}
-              className={`px-3 py-1.5 rounded-xl text-xs font-semibold transition-all ${
+              className={`px-3 min-h-[44px] py-1.5 rounded-xl text-xs font-semibold transition-all ${
                 filterType === item.id
                   ? "bg-[#234835] text-white shadow-xs"
                   : "text-[#6c8678] hover:bg-[#f4f8f3]"
