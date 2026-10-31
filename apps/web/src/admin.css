@@ -196,3 +196,5 @@
 }
 @media(min-width:701px){.admin-menu-toggle{display:grid}}
 @media(max-width:700px){.admin-menu-toggle{display:grid}}
+
+.admin-balance-warning{margin:0;padding:11px 12px;border:1px solid #f3d49a;border-radius:10px;background:#fff8e8;color:#94631a;font-size:11px;line-height:1.6}
