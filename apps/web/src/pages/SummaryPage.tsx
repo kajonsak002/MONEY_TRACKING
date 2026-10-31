@@ -91,8 +91,9 @@ export function SummaryPage() {
             <button
               key={item.key}
               type="button"
+              aria-pressed={period === item.key}
               onClick={() => setPeriod(item.key)}
-              className={`px-3.5 py-1.5 rounded-xl text-xs font-semibold transition-all ${
+              className={`px-3.5 min-h-[44px] py-1.5 rounded-xl text-xs font-semibold transition-all ${
                 period === item.key
                   ? "bg-[#234835] text-white shadow-xs"
                   : "text-[#6c8678] hover:bg-[#f4f8f3]"
@@ -112,8 +113,9 @@ export function SummaryPage() {
             <input
               type="date"
               value={from}
+              max={to}
               onChange={(e) => setFrom(e.target.value)}
-              className="px-3 py-1.5 rounded-xl border border-[#dce7dc] bg-[#f8faf7] text-xs font-medium text-[#23382f]"
+              className="min-h-[44px] px-3 py-1.5 rounded-xl border border-[#dce7dc] bg-[#f8faf7] text-xs font-medium text-[#23382f]"
             />
           </div>
           <div className="flex items-center gap-2">
@@ -122,6 +124,7 @@ export function SummaryPage() {
               type="date"
               value={to}
               min={from}
+              max={`${today.year}-${today.month}-${today.day}`}
               onChange={(e) => setTo(e.target.value)}
               className="px-3 py-1.5 rounded-xl border border-[#dce7dc] bg-[#f8faf7] text-xs font-medium text-[#23382f]"
             />
@@ -130,7 +133,11 @@ export function SummaryPage() {
       )}
 
       {/* Loading & Error States */}
-      {query.isLoading ? (
+      {!configured ? (
+        <div className="p-4 rounded-2xl bg-[#fff0f2] border border-[#fbdbe1] text-xs text-[#bd4754]" role="alert">ยังไม่ได้ตั้งค่า Supabase กรุณาตรวจสอบการเชื่อมต่อก่อนดูรายงาน</div>
+      ) : period === "custom" && from > to ? (
+        <div className="p-4 rounded-2xl bg-[#fff7e8] border border-[#f3dfb5] text-xs text-[#94631a]" role="alert">วันที่เริ่มต้นต้องไม่อยู่หลังวันที่สิ้นสุด</div>
+      ) : query.isLoading ? (
         <div className="py-20 flex flex-col items-center justify-center text-xs text-[#71877c] gap-2">
           <LoaderCircle size={24} className="animate-spin text-[#438765]" />
           <span>กำลังประมวลผลรายงานการเงิน...</span>
@@ -145,7 +152,7 @@ export function SummaryPage() {
           <div className="w-44 h-44 mb-3">
             <img
               src="/images/empty-states/empty-reports.png"
-              alt="No report data"
+              alt="" aria-hidden="true"
               className="w-full h-full object-contain filter drop-shadow-sm"
             />
           </div>

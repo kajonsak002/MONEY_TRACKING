@@ -9,6 +9,7 @@ import {
 import { getMonthlyBudget, saveMonthlyBudget } from "../features/budget/budgetApi";
 import { getEntriesInRange, summarizeEntries } from "../features/reports/reportApi";
 import { CardGardenLedge, CardGinghamOverlay, CardMeadowFooter } from "../components/common/CardGrounding";
+import { useAuth } from "../auth/AuthProvider";
 
 function monthInfo() {
   const parts = new Intl.DateTimeFormat("en-CA", {
@@ -36,6 +37,7 @@ const formatMoney = (satang: number) =>
   }).format(satang / 100);
 
 export function BudgetPage() {
+  const { configured } = useAuth();
   const qc = useQueryClient();
   const month = monthInfo();
   const [amount, setAmount] = useState("");
@@ -44,11 +46,13 @@ export function BudgetPage() {
   const budget = useQuery({
     queryKey: ["budget", month.start],
     queryFn: () => getMonthlyBudget(month.start),
+    enabled: configured,
   });
 
   const entries = useQuery({
     queryKey: ["report", month.start, month.end],
     queryFn: () => getEntriesInRange(month.start, month.end),
+    enabled: configured,
   });
 
   const summary = summarizeEntries(entries.data ?? []);
@@ -100,6 +104,14 @@ export function BudgetPage() {
         </span>
       </header>
 
+      {!configured ? (
+        <p className="text-xs text-[#bd4754] bg-[#fff0f2] p-4 rounded-xl border border-[#fbdbe1]" role="alert">ยังไม่ได้ตั้งค่า Supabase กรุณาตรวจสอบการเชื่อมต่อก่อนใช้งาน</p>
+      ) : budget.isLoading || entries.isLoading ? (
+        <div className="min-h-48 flex flex-col items-center justify-center gap-3 text-xs text-[#71877c]" role="status"><LoaderCircle size={24} className="animate-spin text-[#438765]"/><span>กำลังโหลดข้อมูลงบประมาณ...</span></div>
+      ) : budget.isError || entries.isError ? (
+        <div className="p-4 rounded-xl border border-[#fbdbe1] bg-[#fff0f2] text-xs text-[#bd4754]" role="alert">โหลดข้อมูลงบประมาณไม่สำเร็จ: {budget.error?.message ?? entries.error?.message}</div>
+      ) : (
+        <>
       {/* ================= HERO OVERVIEW CARD ================= */}
       <section className="relative bg-gradient-to-b from-[#f8fcf9] via-white to-[#f3faf5] rounded-3xl p-6 sm:p-8 border border-[#d2ead6] shadow-[0_8px_30px_rgba(42,78,56,0.05)] grid grid-cols-1 md:grid-cols-[1.2fr_1fr] gap-6 items-center overflow-hidden">
         <CardGinghamOverlay opacity="opacity-[0.02]" />
@@ -149,7 +161,7 @@ export function BudgetPage() {
           <div className="relative z-10 w-44 h-44 mb-1">
             <img
               src="/images/illustrations/mascot-saving-goal.png"
-              alt="Saving Goal Mascot"
+              alt="" aria-hidden="true"
               className="w-full h-full object-contain filter drop-shadow-md"
             />
           </div>
@@ -217,7 +229,7 @@ export function BudgetPage() {
                   key={val}
                   type="button"
                   onClick={() => setAmount(String(val))}
-                  className="px-3 py-1.5 rounded-xl bg-[#f4f8f3] hover:bg-[#eaf4ec] border border-[#dce7dc] text-xs font-semibold text-[#3b664e] transition"
+                  className="min-h-[44px] px-3 py-1.5 rounded-xl bg-[#f4f8f3] hover:bg-[#eaf4ec] border border-[#dce7dc] text-xs font-semibold text-[#3b664e] transition"
                 >
                   ฿{val.toLocaleString("th-TH")}
                 </button>
@@ -248,6 +260,8 @@ export function BudgetPage() {
         </form>
         </div>
       </section>
+        </>
+      )}
     </div>
   );
 }

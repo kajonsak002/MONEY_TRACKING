@@ -4,6 +4,7 @@ import {
   Activity,
   ArrowDownLeft,
   CircleCheck,
+  CircleHelp,
   CircleX,
   ExternalLink,
   Layers,
@@ -40,7 +41,7 @@ function thaiDate(value: string) {
 }
 
 export function AdminPage() {
-  const { profile } = useAuth();
+  const { profile, configured } = useAuth();
   const today = bangkokDate();
   const monthStart = today.slice(0, 7) + "-01";
   const trendDate = new Date(today + "T12:00:00+07:00");
@@ -49,7 +50,7 @@ export function AdminPage() {
 
   const users = useQuery({
     queryKey: ["admin", "profiles"],
-    enabled: profile?.role === "admin" && !!supabase,
+    enabled: profile?.role === "admin" && configured,
     queryFn: async () => {
       if (!supabase) throw new Error("ยังไม่ได้ตั้งค่า Supabase");
       const { data, error } = await supabase
@@ -115,7 +116,6 @@ export function AdminPage() {
     void health.refetch();
   };
 
-  const loading = users.isLoading || entries.isLoading;
   const statuses = [
     { name: "ฐานข้อมูล Supabase", ok: health.data?.database },
     { name: "AI / DeepSeek Vault", ok: health.data?.ai },
@@ -138,14 +138,14 @@ export function AdminPage() {
         <div className="hidden lg:block absolute -top-12 left-10 w-28 h-28 pointer-events-none filter drop-shadow-[0_10px_20px_rgba(30,65,40,0.14)] z-20 transition-transform hover:scale-105">
           <img
             src="/images/mascots/pig-mascot-sleeping.png"
-            alt="Admin Pig"
+            alt="" aria-hidden="true"
             className="w-full h-full object-contain"
           />
         </div>
         <div className="hidden lg:block absolute -top-11 right-14 w-24 h-24 pointer-events-none filter drop-shadow-[0_10px_20px_rgba(35,70,45,0.16)] z-20 transition-transform hover:scale-105">
           <img
             src="/images/mascots/frog-mascot-happy.png"
-            alt="Admin Frog"
+            alt="" aria-hidden="true"
             className="w-full h-full object-contain"
           />
         </div>
@@ -174,6 +174,11 @@ export function AdminPage() {
           </button>
         </div>
 
+        {!configured && <div className="rounded-2xl border border-[#fbdbe1] bg-[#fff0f2] p-4 text-xs text-[#bd4754]" role="alert">ยังไม่ได้ตั้งค่า Supabase จึงไม่สามารถโหลดข้อมูลภาพรวมระบบได้</div>}
+        {(users.isError || entries.isError || trend.isError) && (
+          <div className="rounded-2xl border border-[#fbdbe1] bg-[#fff0f2] p-4 text-xs text-[#bd4754]" role="alert">โหลดข้อมูลภาพรวมไม่ครบ: {users.error?.message ?? entries.error?.message ?? trend.error?.message}</div>
+        )}
+
         {/* 4 Stat Cards matching ref-1.png */}
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
           {/* 1. สมาชิกทั้งหมด */}
@@ -189,7 +194,7 @@ export function AdminPage() {
             <div>
               <span className="text-xs font-semibold text-[#6d8576]">สมาชิกทั้งหมด</span>
               <strong className="block text-2xl font-extrabold text-[#23382e] tabular-nums mt-1">
-                {loading ? "0" : userList.length}
+                {!configured || users.isLoading || users.isError ? "—" : userList.length}
               </strong>
               <small className="block text-[10px] text-[#8fa597] mt-1">จัดการยอดผู้ใช้ในระบบ</small>
             </div>
@@ -208,7 +213,7 @@ export function AdminPage() {
             <div>
               <span className="text-xs font-semibold text-[#6d8576]">รายการทั้งหมด</span>
               <strong className="block text-2xl font-extrabold text-[#23382e] tabular-nums mt-1">
-                {loading ? "0" : summary.count}
+                {!configured || entries.isLoading || entries.isError ? "—" : summary.count}
               </strong>
               <small className="block text-[10px] text-[#8fa597] mt-1">ต่อตรงฐานข้อมูลความปลอดภัย</small>
             </div>
@@ -227,7 +232,7 @@ export function AdminPage() {
             <div>
               <span className="text-xs font-semibold text-[#6d8576]">ยอดรายเดือนสะสม</span>
               <strong className="block text-2xl font-extrabold text-[#23382e] tabular-nums mt-1">
-                {loading ? "฿0" : money(summary.expense)}
+                {!configured || entries.isLoading || entries.isError ? "—" : money(summary.expense)}
               </strong>
               <small className="block text-[10px] text-[#8fa597] mt-1">รวมค่าใช้จ่ายเดือนนี้</small>
             </div>
@@ -246,7 +251,7 @@ export function AdminPage() {
             <div>
               <span className="text-xs font-semibold text-[#6d8576]">ยอดรายรับสะสม</span>
               <strong className="block text-2xl font-extrabold text-[#23382e] tabular-nums mt-1">
-                {loading ? "฿0" : money(summary.income)}
+                {!configured || entries.isLoading || entries.isError ? "—" : money(summary.income)}
               </strong>
               <small className="block text-[10px] text-[#8fa597] mt-1">รวมรายรับเดือนนี้</small>
             </div>
@@ -279,7 +284,7 @@ export function AdminPage() {
                 {userList.length === 0 ? (
                   <tr>
                     <td colSpan={3} className="py-8 text-center text-[#71877c]">
-                      {users.isLoading ? "กำลังโหลดข้อมูลสมาชิก..." : "ยังไม่มีสมาชิก"}
+                      {!configured ? "ยังไม่ได้ตั้งค่า Supabase" : users.isLoading ? "กำลังโหลดข้อมูลสมาชิก..." : users.isError ? "โหลดข้อมูลสมาชิกไม่สำเร็จ" : "ยังไม่มีสมาชิก"}
                     </td>
                   </tr>
                 ) : (
@@ -340,6 +345,13 @@ export function AdminPage() {
             </div>
           </div>
 
+          {trend.isLoading ? (
+            <div className="h-[180px] flex items-center justify-center gap-2 text-xs text-[#71877c]" role="status"><RefreshCw size={16} className="animate-spin"/>กำลังโหลดกราฟ...</div>
+          ) : trend.isError ? (
+            <div className="h-[180px] flex items-center justify-center text-xs text-[#bd4754]" role="alert">โหลดกราฟไม่สำเร็จ: {trend.error.message}</div>
+          ) : !chartDays.some((day) => day.income > 0 || day.expense > 0) ? (
+            <div className="h-[180px] flex items-center justify-center text-xs text-[#71877c]">ยังไม่มีข้อมูลในช่วงนี้</div>
+          ) : (
           <div className="h-[180px] flex items-end gap-2 overflow-x-auto pb-2 border-b border-[#edf3ec]">
             {chartDays.map((day) => (
               <div
@@ -361,6 +373,7 @@ export function AdminPage() {
               </div>
             ))}
           </div>
+          )}
         </div>
 
         {/* System Health */}
@@ -368,7 +381,11 @@ export function AdminPage() {
           <div className="flex items-center gap-4">
             {statuses.map((s) => (
               <span key={s.name} className="flex items-center gap-1.5 font-medium">
-                {s.ok ? (
+                {!configured ? (
+                  <CircleHelp size={14} className="text-[#8fa597]" />
+                ) : health.isLoading ? (
+                  <RefreshCw size={14} className="animate-spin text-[#8fa597]" />
+                ) : s.ok ? (
                   <CircleCheck size={14} className="text-[#239667]" />
                 ) : (
                   <CircleX size={14} className="text-[#dd5e6d]" />
@@ -377,7 +394,7 @@ export function AdminPage() {
               </span>
             ))}
           </div>
-          <span className="text-[10px] text-[#8fa597]">ตรวจสอบอัตโนมัติ</span>
+          <span className="text-[10px] text-[#8fa597]">{health.isError ? "ตรวจสอบสถานะไม่สำเร็จ" : "ตรวจสอบอัตโนมัติ"}</span>
         </div>
       </section>
     </div>

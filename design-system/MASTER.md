@@ -12,9 +12,9 @@ Derived using UI UX Pro Max guidance for a personal finance tracker (fintech / p
 - Canvas: #F5F8F2
 - Surface: #FFFFFF
 - Primary ink: #293B35
-- Muted text: #71827A
-- Sage primary: #5B9279; deep: #3F765F; soft: #E9F3E9
-- Income: #21845F; expense: #D65E6C / soft #FFF0F1
+- Muted text: #5F7467 (AA-safe for normal body text on white)
+- Sage primary: #5B9279; action/deep: #3F765F; soft: #E9F3E9
+- Income text: #1D7C54; expense text: #B33E50; soft surfaces: #E6F7EF / #FFF0F2
 - Pig accent: soft rose; frog accent: sage green; gold details: #D6A84E
 - Border: #E4ECE3
 - Cards: 22–30px radius; controls: 13–18px radius
@@ -31,7 +31,7 @@ Derived using UI UX Pro Max guidance for a personal finance tracker (fintech / p
 - Admin keeps distinct navigation hierarchy but shares brand colors, mascot assets, and surface language.
 
 ## UX/accessibility
-- Contrast target >=4.5:1 for body text; visible 2–4px keyboard focus ring.
+- Contrast target >=4.5:1 for body text and button labels; use deep sage for filled actions and darkened semantic text colors; visible 2–4px keyboard focus ring.
 - Labels remain visible; errors shown beside the affected field.
 - Async buttons show progress and disable while pending.
 - Use Lucide SVG icons, not emoji as UI icons.

@@ -213,7 +213,7 @@
 .admin-nav-link.active { box-shadow:inset 3px 0 #a7d4b1; }
 .admin-secure { color:#b5d0bd; }
 .admin-user { border-color:#496254; }
-.admin-avatar { background:#5b9279; }
+.admin-avatar { background:#3f765f; }
 .admin-logout { min-height:42px; border:1px solid #496254; border-radius:12px; background:#304b3d; color:#eaf4ec; }
 .admin-logout:hover { background:#3b5b49; }
 .admin-main { background:#f5f8f3; }
@@ -255,7 +255,7 @@
 .admin-audit-row p { color:#71827a; }
 .admin-setting-security { background:#edf5ed; color:#456c56; }
 .admin-secret-form input,.admin-allowlist-form input,.admin-allowlist-form select { border-color:#dfe9df; border-radius:13px; background:#fbfcfa; color:#293b35; }
-.admin-primary-button { min-height:44px; border-radius:13px; background:#5b9279; }
+.admin-primary-button { min-height:44px; border-radius:13px; background:#3f765f; }
 .admin-primary-button:hover { background:#3f765f; }
 .admin-danger-button { border-radius:13px; }
 .admin-deepseek-status { border-color:#e4ece3; border-radius:16px; background:#f8faf7; }
@@ -273,3 +273,13 @@
  .admin-panel { border-radius:17px; }
  .admin-mobile-nav { min-height:72px; padding-bottom:calc(8px + env(safe-area-inset-bottom)); }
 }
+
+
+/* Touch target minimums for admin controls */
+.admin-refresh,.admin-outline-button,.admin-logout{min-height:44px}
+.admin-menu-toggle{width:44px;height:44px}
+.admin-sidebar-toggle{right:-22px;width:44px;height:44px}
+.admin-search,.admin-filter-row select,.admin-member-table select{min-height:44px}
+.admin-mobile-nav a{min-height:48px}
+
+@media(min-width:701px){.admin-menu-toggle{display:none!important}}

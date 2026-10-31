@@ -117,6 +117,7 @@ export function HomePage() {
 
   return (
     <div className="space-y-6 sm:space-y-8 max-w-6xl mx-auto">
+      {!configured && <div className="rounded-2xl border border-[#fbdbe1] bg-[#fff0f2] p-4 text-xs text-[#bd4754]" role="alert">ยังไม่ได้ตั้งค่า Supabase ข้อมูลสรุปและการบันทึกรายการจึงยังใช้งานไม่ได้</div>}
       {/* ================= HERO BALANCE BANNER ================= */}
       <section className="relative rounded-[32px] border border-[#c8e2cc] bg-gradient-to-br from-[#eaf6ed] via-[#f5fbf5] to-[#e6f5ea] shadow-[0_16px_48px_rgba(40,80,55,0.10)] overflow-hidden" style={{ minHeight: 260 }}>
         {/* Meadow photo background */}
@@ -137,7 +138,7 @@ export function HomePage() {
         <div className="hidden md:flex absolute bottom-0 left-6 lg:left-14 items-end pointer-events-none z-10">
           <img
             src="/images/mascots/pig-mascot-happy.png"
-            alt="Pig Mascot"
+            alt="" aria-hidden="true"
             className="w-28 h-28 lg:w-32 lg:h-32 object-contain drop-shadow-[0_10px_20px_rgba(30,65,40,0.20)] transition-transform duration-300 hover:scale-105"
           />
         </div>
@@ -146,7 +147,7 @@ export function HomePage() {
         <div className="hidden md:flex absolute bottom-0 right-8 lg:right-16 items-end pointer-events-none z-10">
           <img
             src="/images/mascots/frog-mascot-happy.png"
-            alt="Frog Mascot"
+            alt="" aria-hidden="true"
             className="w-24 h-24 lg:w-28 lg:h-28 object-contain drop-shadow-[0_10px_20px_rgba(30,65,40,0.18)] transition-transform duration-300 hover:scale-105 hover:-translate-y-1"
           />
         </div>
@@ -172,7 +173,7 @@ export function HomePage() {
           </h1>
 
           <div className="text-[clamp(36px,6vw,52px)] font-extrabold tracking-tight text-[#183024] tabular-nums leading-none my-2">
-            {report.isLoading ? "กำลังคำนวณ..." : money(totals.balance)}
+            {!configured ? "ยังไม่เชื่อมต่อ" : report.isLoading ? "กำลังคำนวณ..." : report.isError ? "โหลดข้อมูลไม่สำเร็จ" : money(totals.balance)}
           </div>
 
           <div className="mt-1 inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/80 border border-[#c6e0cc] text-xs font-semibold text-[#2e8a59] shadow-xs">
@@ -188,7 +189,7 @@ export function HomePage() {
               </span>
               <div className="text-left min-w-0">
                 <span className="block text-[10px] text-[#71877c] leading-tight">รับเดือนนี้</span>
-                <strong className="block text-xs font-bold text-[#239667] tabular-nums truncate">{money(totals.income)}</strong>
+                <strong className="block text-xs font-bold text-[#239667] tabular-nums truncate">{configured ? money(totals.income) : "—"}</strong>
               </div>
             </div>
             <div className="flex items-center gap-2 bg-white/80 backdrop-blur-xs py-2 px-3 rounded-2xl border border-white/70 shadow-xs">
@@ -197,12 +198,14 @@ export function HomePage() {
               </span>
               <div className="text-left min-w-0">
                 <span className="block text-[10px] text-[#71877c] leading-tight">จ่ายเดือนนี้</span>
-                <strong className="block text-xs font-bold text-[#dd5e6d] tabular-nums truncate">{money(totals.expense)}</strong>
+                <strong className="block text-xs font-bold text-[#dd5e6d] tabular-nums truncate">{configured ? money(totals.expense) : "—"}</strong>
               </div>
             </div>
           </div>
         </div>
       </section>
+
+      {report.isError && <p className="rounded-xl border border-[#fbdbe1] bg-[#fff0f2] p-3 text-xs text-[#bd4754]" role="alert">โหลดสรุปการเงินไม่สำเร็จ: {report.error.message}</p>}
 
       {/* ================= 4 STAT CARDS ================= */}
       <section className="grid grid-cols-2 lg:grid-cols-4 gap-3.5 sm:gap-4">
@@ -223,8 +226,8 @@ export function HomePage() {
               <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-white/90 border border-[#d2ead7] text-[#4f7860]">วันนี้</span>
             </div>
             <p className="text-xs font-semibold text-[#62806e]">รายรับวันนี้</p>
-            <strong className="block text-base sm:text-lg font-extrabold text-[#239667] tabular-nums mt-1 truncate">{money(todayIncome)}</strong>
-            <span className="block text-[11px] text-[#7d9b87] mt-0.5">{todayIncomeCount} รายการ</span>
+            <strong className="block text-base sm:text-lg font-extrabold text-[#239667] tabular-nums mt-1 truncate">{configured ? money(todayIncome) : "—"}</strong>
+            <span className="block text-[11px] text-[#7d9b87] mt-0.5">{configured ? `${todayIncomeCount} รายการ` : "—"}</span>
           </div>
         </article>
 
@@ -243,8 +246,8 @@ export function HomePage() {
               <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-white/90 border border-[#fbdbe0] text-[#a4535e]">วันนี้</span>
             </div>
             <p className="text-xs font-semibold text-[#8b656b]">รายจ่ายวันนี้</p>
-            <strong className="block text-base sm:text-lg font-extrabold text-[#dd5e6d] tabular-nums mt-1 truncate">{money(todayExpense)}</strong>
-            <span className="block text-[11px] text-[#9f7980] mt-0.5">{todayExpenseCount} รายการ</span>
+            <strong className="block text-base sm:text-lg font-extrabold text-[#dd5e6d] tabular-nums mt-1 truncate">{configured ? money(todayExpense) : "—"}</strong>
+            <span className="block text-[11px] text-[#9f7980] mt-0.5">{configured ? `${todayExpenseCount} รายการ` : "—"}</span>
           </div>
         </article>
 
@@ -264,7 +267,7 @@ export function HomePage() {
             </div>
             <p className="text-xs font-semibold text-[#736a88]">รายรับเดือนนี้</p>
             <strong className="block text-base sm:text-lg font-extrabold text-[#785ad6] tabular-nums mt-1 truncate">{money(totals.income)}</strong>
-            <span className="block text-[11px] text-[#8e85a5] mt-0.5">{monthIncomeCount} รายการ</span>
+            <span className="block text-[11px] text-[#8e85a5] mt-0.5">{configured ? `${monthIncomeCount} รายการ` : "—"}</span>
           </div>
         </article>
 
@@ -284,7 +287,7 @@ export function HomePage() {
             </div>
             <p className="text-xs font-semibold text-[#8b755e]">รายจ่ายเดือนนี้</p>
             <strong className="block text-base sm:text-lg font-extrabold text-[#dd5e6d] tabular-nums mt-1 truncate">{money(totals.expense)}</strong>
-            <span className="block text-[11px] text-[#a48e78] mt-0.5">{monthExpenseCount} รายการ</span>
+            <span className="block text-[11px] text-[#a48e78] mt-0.5">{configured ? `${monthExpenseCount} รายการ` : "—"}</span>
           </div>
         </article>
       </section>
@@ -314,11 +317,12 @@ export function HomePage() {
                   <span>เค้าช่วยจำได้นะ! 💬</span>
                 </span>
                 <div className="w-11 h-11 shrink-0 filter drop-shadow-sm group-hover:scale-110 group-hover:-rotate-6 transition-transform">
-                  <img src="/images/mascots/frog-mascot-happy.png" alt="Frog" className="w-full h-full object-contain" />
+                  <img src="/images/mascots/frog-mascot-happy.png" alt="" aria-hidden="true" className="w-full h-full object-contain" />
                 </div>
               </div>
             </div>
 
+            {!configured && <p className="mb-3 rounded-xl border border-[#fbdbe1] bg-[#fff0f2] p-3 text-xs text-[#bd4754]" role="alert">ยังไม่ได้ตั้งค่า Supabase จึงยังบันทึกข้อมูลไม่ได้</p>}
             <form onSubmit={handleQuickSubmit} className="space-y-3 mt-4">
               <div className="flex gap-2.5">
                 <input
@@ -330,7 +334,7 @@ export function HomePage() {
                 />
                 <button
                   type="submit"
-                  disabled={parseMutation.isPending || !quickText.trim()}
+                  disabled={!configured || parseMutation.isPending || !quickText.trim()}
                   className="px-5 min-h-[48px] rounded-2xl bg-[#234835] hover:bg-[#1b3a2a] text-white text-xs font-semibold flex items-center justify-center gap-2 transition disabled:opacity-50 shrink-0 shadow-sm active:scale-95"
                 >
                   {parseMutation.isPending ? (
@@ -399,7 +403,7 @@ export function HomePage() {
                 </button>
                 <button
                   type="button"
-                  disabled={saveMutation.isPending}
+                  disabled={!configured || saveMutation.isPending}
                   onClick={() => saveMutation.mutate(draft)}
                   className="px-4 py-1.5 rounded-xl bg-[#234835] hover:bg-[#1a3828] text-white text-xs font-semibold flex items-center gap-1.5 transition shadow-xs"
                 >
@@ -469,6 +473,8 @@ export function HomePage() {
         </div>
       </section>
 
+      {categories.isError && <p className="rounded-xl border border-[#fbdbe1] bg-[#fff0f2] p-3 text-xs text-[#bd4754]" role="alert">โหลดหมวดหมู่ไม่สำเร็จ: {categories.error.message}</p>}
+
       {/* ================= RECENT TRANSACTIONS ================= */}
       <section className="relative bg-gradient-to-b from-[#fbfdfb] via-white to-[#f7faf8] rounded-3xl p-6 sm:p-7 border border-[#dce8db] shadow-[0_8px_28px_rgba(42,78,56,0.04)] overflow-hidden">
         <CardGinghamOverlay opacity="opacity-[0.015]" />
@@ -488,13 +494,19 @@ export function HomePage() {
           </button>
         </div>
 
-        {(recent.data ?? []).length === 0 ? (
+        {!configured ? (
+          <p className="py-8 text-center text-xs text-[#71877c]">เชื่อมต่อฐานข้อมูลก่อนเพื่อดูรายการล่าสุด</p>
+        ) : recent.isLoading ? (
+          <div className="py-12 flex items-center justify-center gap-2 text-xs text-[#71877c]" role="status"><LoaderCircle size={18} className="animate-spin"/>กำลังโหลดรายการล่าสุด...</div>
+        ) : recent.isError ? (
+          <p className="rounded-xl bg-[#fff0f2] border border-[#fbdbe1] p-4 text-xs text-[#bd4754]" role="alert">โหลดรายการล่าสุดไม่สำเร็จ: {recent.error.message}</p>
+        ) : (recent.data ?? []).length === 0 ? (
           /* Empty State featuring newly generated empty-transactions.png */
           <div className="py-10 flex flex-col items-center justify-center text-center">
             <div className="w-36 h-36 mb-3">
               <img
                 src="/images/empty-states/empty-transactions.png"
-                alt="No transactions"
+                alt="" aria-hidden="true"
                 className="w-full h-full object-contain filter drop-shadow-sm"
               />
             </div>

@@ -69,8 +69,9 @@ export function AdminSettingsPage() {
       const result = await invoke("test");
       setConnected(Boolean(result.connected)); setAvailable(Boolean(result.is_available));
       setBalances(result.balances ?? []); setCheckedAt(result.checked_at ?? new Date().toISOString());
-      setNotice("เชื่อมต่อ DeepSeek API สำเร็จ และอ่านยอดคงเหลือได้");
-    } catch (cause) { setConnected(false); setBalances([]); setError(cause instanceof Error ? cause.message : "ทดสอบ DeepSeek ไม่สำเร็จ"); }
+      if (result.connected) setNotice(result.is_available ? "เชื่อมต่อ DeepSeek API สำเร็จและอ่านยอดคงเหลือได้" : "เชื่อมต่อ DeepSeek API ได้ แต่ผู้ให้บริการยังไม่ส่งยอดคงเหลือกลับมา");
+      else setError("DeepSeek API ยังเชื่อมต่อไม่สำเร็จ");
+    } catch (cause) { setConnected(false); setAvailable(false); setBalances([]); setError(cause instanceof Error ? cause.message : "ทดสอบ DeepSeek ไม่สำเร็จ"); }
     finally { setSaving(false); }
   }
   async function saveSettings(event: React.FormEvent<HTMLFormElement>) {
@@ -105,7 +106,7 @@ export function AdminSettingsPage() {
       <form className="admin-secret-form" onSubmit={(event) => void saveKey(event)}>
         <label htmlFor="deepseek-key">DeepSeek API Key</label>
         <input id="deepseek-key" type="password" autoComplete="new-password" spellCheck={false} value={apiKey} onChange={(event) => setApiKey(event.target.value)} placeholder={configured ? "กรอก Key ใหม่เพื่อแทนที่ค่าเดิม" : "วาง DeepSeek API Key"} minLength={20} maxLength={500}/>
-        <div className="admin-secret-actions"><button className="admin-primary-button" type="submit" disabled={saving || !apiKey.trim()}>{saving ? "กำลังบันทึก..." : configured ? "อัปเดต API Key" : "บันทึก API Key"}</button>{configured && <button className="admin-danger-button" type="button" onClick={() => void removeKey()} disabled={saving}><Trash2 size={15}/> ลบ Key</button>}<button className="admin-outline-button" type="button" onClick={() => void testConnection()} disabled={!configured || saving}><Activity size={15}/> ทดสอบการเชื่อมต่อ</button></div>
+        <div className="admin-secret-actions"><button className="admin-primary-button" type="submit" disabled={saving || loading || !apiKey.trim()}>{saving ? "กำลังบันทึก..." : configured ? "อัปเดต API Key" : "บันทึก API Key"}</button>{configured && <button className="admin-danger-button" type="button" onClick={() => void removeKey()} disabled={saving || loading}><Trash2 size={15}/> ลบ Key</button>}<button className="admin-outline-button" type="button" onClick={() => void testConnection()} disabled={!configured || saving || loading}><Activity size={15}/> ทดสอบการเชื่อมต่อ</button></div>
       </form>
       <div className="admin-deepseek-status">
         <div className="admin-panel-head"><h3><Wallet size={16}/> สถานะและยอดคงเหลือ</h3><span className={connected ? "admin-role admin" : "admin-role partner"}>{connected === null ? "ยังไม่ได้ทดสอบ" : connected ? available ? "เชื่อมต่อแล้ว · พร้อมใช้งาน" : "เชื่อมต่อแล้ว · ยอดไม่พร้อมใช้" : "เชื่อมต่อไม่สำเร็จ"}</span></div>
