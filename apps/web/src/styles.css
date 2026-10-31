@@ -190,3 +190,5 @@ button:disabled, input:disabled { cursor: not-allowed; opacity: .55; }
 .spin { animation: spin .9s linear infinite; }
 @keyframes spin { to { transform: rotate(360deg); } }
 @media (max-width: 390px) { .entry-form-grid { grid-template-columns: 1fr; } .entry-row { gap: 7px; } .entry-amount { font-size: 10px; } }
+
+.brand-icon.mascot-brand,.admin-brand-icon.mascot-admin-brand { overflow:hidden; background:#eaf5e8; }.brand-icon.mascot-brand img { width:36px; height:36px; object-fit:contain; }.admin-brand-icon.mascot-admin-brand img { width:38px; height:38px; object-fit:contain; }
