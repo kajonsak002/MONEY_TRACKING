@@ -69,7 +69,8 @@ export function AdminSettingsPage() {
       const result = await invoke("test");
       setConnected(Boolean(result.connected)); setAvailable(Boolean(result.is_available));
       setBalances(result.balances ?? []); setCheckedAt(result.checked_at ?? new Date().toISOString());
-      setNotice(result.connected ? result.is_available ? "เชื่อมต่อ DeepSeek API สำเร็จและอ่านยอดคงเหลือได้" : "เชื่อมต่อ DeepSeek API ได้ แต่ผู้ให้บริการยังไม่ส่งยอดคงเหลือกลับมา" : "DeepSeek API ยังเชื่อมต่อไม่สำเร็จ");
+      if (result.connected) setNotice(result.is_available ? "เชื่อมต่อ DeepSeek API สำเร็จและอ่านยอดคงเหลือได้" : "เชื่อมต่อ DeepSeek API ได้ แต่ผู้ให้บริการยังไม่ส่งยอดคงเหลือกลับมา");
+      else setError("DeepSeek API ยังเชื่อมต่อไม่สำเร็จ");
     } catch (cause) { setConnected(false); setAvailable(false); setBalances([]); setError(cause instanceof Error ? cause.message : "ทดสอบ DeepSeek ไม่สำเร็จ"); }
     finally { setSaving(false); }
   }
