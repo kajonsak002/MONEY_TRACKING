@@ -1,13 +1,14 @@
 import { useEffect, useState } from "react";
 import { NavLink, Navigate, Outlet } from "react-router-dom";
-import { ChartNoAxesCombined, House, LogOut, Settings, Wallet } from "lucide-react";
+import { ChartNoAxesCombined, House, LogOut, Settings, Wallet, Target } from "lucide-react";
 import { useAuth } from "../auth/AuthProvider";
 import { supabase } from "../lib/supabase";
 
 const navigation = [
   { to: "/app", label: "ภาพรวม", icon: House },
   { to: "/app/entries", label: "รายการ", icon: Wallet },
-  { to: "/app/summary", label: "สรุป", icon: ChartNoAxesCombined },
+  { to: "/app/summary", label: "รายงาน", icon: ChartNoAxesCombined },
+  { to: "/app/budget", label: "งบประมาณ", icon: Target },
   { to: "/app/settings", label: "ตั้งค่า", icon: Settings },
 ];
 export function AppShell() {
