@@ -125,6 +125,7 @@ export function CategoriesPage() {
           <div className="grid grid-cols-2 gap-2 p-1 bg-[#f4f7f2] rounded-2xl border border-[#e2ebe0] max-w-xs">
             <button
               type="button"
+              aria-pressed={type === "expense"}
               onClick={() => setType("expense")}
               className={`flex items-center justify-center gap-2 min-h-[44px] py-2 rounded-xl text-xs font-bold transition-all ${
                 type === "expense"
@@ -138,8 +139,9 @@ export function CategoriesPage() {
 
             <button
               type="button"
+              aria-pressed={type === "income"}
               onClick={() => setType("income")}
-              className={`flex items-center justify-center gap-2 py-2 rounded-xl text-xs font-bold transition-all ${
+              className={`flex items-center justify-center gap-2 min-h-[44px] py-2 rounded-xl text-xs font-bold transition-all ${
                 type === "income"
                   ? "bg-white text-[#239667] shadow-sm"
                   : "text-[#71877c] hover:text-[#23382e]"
