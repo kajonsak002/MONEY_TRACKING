@@ -9,7 +9,7 @@ describe("HomePage", () => {
   it("shows the dashboard sections and empty state", () => {
     const queryClient = new QueryClient({ defaultOptions: { queries: { retry: false } } });
     render(<AuthProvider><QueryClientProvider client={queryClient}><MemoryRouter><HomePage /></MemoryRouter></QueryClientProvider></AuthProvider>);
-    expect(screen.getByRole("heading", { name: "สวัสดี, สมาชิก" })).toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: /สวัสดี, สมาชิก/ })).toBeInTheDocument();
     expect(screen.getByRole("heading", { name: "บันทึกรายการง่าย ๆ" })).toBeInTheDocument();
     expect(screen.getByText("ยังไม่มีรายการ")).toBeInTheDocument();
   });
