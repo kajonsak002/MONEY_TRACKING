@@ -253,7 +253,9 @@ export function CategoriesPage() {
             </div>
           </div>
 
-          {query.isLoading ? (
+          {!configured || query.isError ? (
+            <p className="text-xs text-[#71877c] py-4 text-center">ยังไม่สามารถโหลดหมวดหมู่ได้</p>
+          ) : query.isLoading ? (
             <div className="py-8 flex justify-center"><LoaderCircle className="animate-spin text-[#438765]" size={20} /></div>
           ) : incomeCategories.length === 0 ? (
             <p className="text-xs text-[#71877c] py-4 text-center">ยังไม่มีหมวดหมู่รายรับ</p>
