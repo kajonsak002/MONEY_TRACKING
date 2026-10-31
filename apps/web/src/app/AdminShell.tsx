@@ -3,6 +3,7 @@ import { NavLink, Navigate, Outlet, useLocation } from "react-router-dom";
 import { Activity, ChevronLeft, LayoutDashboard, LogOut, Menu, Settings, ShieldCheck, Users, Wallet, X } from "lucide-react";
 import { useAuth } from "../auth/AuthProvider";
 import { supabase } from "../lib/supabase";
+import "../admin-theme.css";
 
 const items = [
   { to: "/admin", label: "ภาพรวมระบบ", icon: LayoutDashboard, end: true },
