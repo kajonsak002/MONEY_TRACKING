@@ -1,6 +1,6 @@
 import { useMemo } from "react";
 import { useQuery } from "@tanstack/react-query";
-import { Activity, ArrowDownLeft, ArrowUpRight, ArrowUpRightFromSquare, CircleCheck, CircleX, RefreshCw, ShieldCheck, TrendingUp, Users, Wallet } from "lucide-react";
+import { Activity, ArrowDownLeft, ArrowUpRight, ExternalLink, CircleCheck, CircleX, RefreshCw, ShieldCheck, TrendingUp, Users, Wallet } from "lucide-react";
 import { supabase } from "../lib/supabase";
 import { useAuth } from "../auth/AuthProvider";
 import { getEntriesInRange, summarizeEntries } from "../features/reports/reportApi";
