@@ -12,7 +12,6 @@ const navigation = [
 ];
 export function AppShell() {
   const { profile, user, signOut } = useAuth();
-  if (profile?.role === "admin") return <Navigate to="/admin" replace />;
   const displayName = profile?.display_name || user?.email?.split("@")[0] || "สมาชิก";
   const roleLabel = "สมาชิก";
   const [appName, setAppName] = useState("money");
@@ -31,6 +30,7 @@ export function AppShell() {
     window.addEventListener("app-settings-updated", load);
     return () => window.removeEventListener("app-settings-updated", load);
   }, []);
+  if (profile?.role === "admin") return <Navigate to="/admin" replace />;
   return <div className="app-frame"><header className="topbar">
     <a className="brand-mark" href="/app" aria-label="Money Tracking หน้าแรก"><span className="brand-icon"><Wallet size={19}/></span><span>{appName}<span className="brand-accent">{appTagline}</span></span></a>
     <div className="account-menu"><div className="account-copy"><strong>{displayName}</strong><small>{roleLabel}</small></div><button className="signout-button" type="button" onClick={() => void signOut()} aria-label="ออกจากระบบ" title="ออกจากระบบ"><LogOut size={17}/></button></div>
