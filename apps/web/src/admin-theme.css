@@ -110,3 +110,18 @@
 .admin-audit-icon{background:#edf5e9!important;color:#5b9279!important}
 .admin-list-count{border-color:#e3ece1!important;background:#fff!important;color:#6b876f!important;border-radius:99px!important}
 @media(max-width:700px){.admin-content{padding:20px 14px calc(28px + env(safe-area-inset-bottom))!important}.admin-panel{padding:15px!important;border-radius:19px!important}.admin-kpis{gap:10px!important}.admin-kpi{padding:14px!important}.admin-kpi strong{font-size:21px!important}.admin-mobile-nav{grid-template-columns:repeat(5,minmax(0,1fr))!important}}
+
+/* Admin overview hero uses the shared illustration set */
+.admin-content > div > header:first-child {
+  position: relative; isolation: isolate; overflow: hidden;
+  min-height: 112px; padding: 20px 22px; border: 1px solid #e3ecdf;
+  border-radius: 24px; background-color: #edf5e9;
+  background-image: url("/assets/mascot-pair.svg"),url("/assets/finance-garden.svg"),linear-gradient(115deg,#e8f3e5 0%,#f6f7ed 58%,#fff0e9 100%);
+  background-position: right 18px bottom -4px,right bottom,center;
+  background-repeat: no-repeat; background-size: 142px auto,48% auto,cover;
+}
+.admin-content > div > header:first-child > div { position: relative; z-index: 1; max-width: 72%; }
+@media(max-width:700px) {
+ .admin-content > div > header:first-child { min-height: 106px; padding: 17px; background-size: 105px auto,60% auto,cover; background-position: right 5px bottom -2px,right bottom,center; }
+ .admin-content > div > header:first-child > div { max-width: 74%; }
+}
