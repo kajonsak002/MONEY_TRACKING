@@ -321,6 +321,7 @@ export function HomePage() {
               </div>
             </div>
 
+            {!configured && <p className="mb-3 rounded-xl border border-[#fbdbe1] bg-[#fff0f2] p-3 text-xs text-[#bd4754]" role="alert">ยังไม่ได้ตั้งค่า Supabase จึงยังบันทึกข้อมูลไม่ได้</p>}
             <form onSubmit={handleQuickSubmit} className="space-y-3 mt-4">
               <div className="flex gap-2.5">
                 <input
@@ -332,7 +333,7 @@ export function HomePage() {
                 />
                 <button
                   type="submit"
-                  disabled={parseMutation.isPending || !quickText.trim()}
+                  disabled={!configured || parseMutation.isPending || !quickText.trim()}
                   className="px-5 min-h-[48px] rounded-2xl bg-[#234835] hover:bg-[#1b3a2a] text-white text-xs font-semibold flex items-center justify-center gap-2 transition disabled:opacity-50 shrink-0 shadow-sm active:scale-95"
                 >
                   {parseMutation.isPending ? (
@@ -401,7 +402,7 @@ export function HomePage() {
                 </button>
                 <button
                   type="button"
-                  disabled={saveMutation.isPending}
+                  disabled={!configured || saveMutation.isPending}
                   onClick={() => saveMutation.mutate(draft)}
                   className="px-4 py-1.5 rounded-xl bg-[#234835] hover:bg-[#1a3828] text-white text-xs font-semibold flex items-center gap-1.5 transition shadow-xs"
                 >
