@@ -3,11 +3,13 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import {
   ArrowDownLeft,
   ArrowUpRight,
+  Check,
   Edit2,
   FolderPlus,
   LoaderCircle,
   Plus,
   Trash2,
+  X,
 } from "lucide-react";
 import {
   createCategory,
@@ -23,6 +25,8 @@ export function CategoriesPage() {
   const [name, setName] = useState("");
   const [type, setType] = useState<EntryType>("expense");
   const [error, setError] = useState("");
+  const [editingId, setEditingId] = useState<string | null>(null);
+  const [editingName, setEditingName] = useState("");
 
   const query = useQuery({ queryKey: ["categories"], queryFn: getManagedCategories });
   const refresh = () => qc.invalidateQueries({ queryKey: ["categories"] });
@@ -42,6 +46,19 @@ export function CategoriesPage() {
     onSuccess: refresh,
     onError: (e: Error) => setError(e.message),
   });
+
+  const edit = useMutation({
+    mutationFn: ({ id, value }: { id: string; value: string }) => updateCategory(id, value),
+    onSuccess: async () => { setEditingId(null); setEditingName(""); setError(""); await refresh(); },
+    onError: (e: Error) => setError(e.message),
+  });
+
+  function saveEdit(id: string) {
+    const value = editingName.trim();
+    if (!value || value.length > 40) { setError("ชื่อหมวดหมู่ต้องมี 1–40 ตัวอักษร"); return; }
+    setError("");
+    edit.mutate({ id, value });
+  }
 
   async function submit(event: FormEvent) {
     event.preventDefault();
@@ -160,6 +177,9 @@ export function CategoriesPage() {
         </div>
       </section>
 
+      {query.isError && <p className="text-xs text-[#bd4754] bg-[#fff0f2] p-3 rounded-xl border border-[#fbdbe1]" role="alert">โหลดหมวดหมู่ไม่สำเร็จ: {query.error.message}</p>}
+      {edit.isError && <p className="text-xs text-[#bd4754] bg-[#fff0f2] p-3 rounded-xl border border-[#fbdbe1]" role="alert">{edit.error.message}</p>}
+
       {/* ================= CATEGORIES LIST ================= */}
       <section className="grid grid-cols-1 md:grid-cols-2 gap-6">
         {/* Expense Categories */}
@@ -191,29 +211,25 @@ export function CategoriesPage() {
 
                   {!item.is_default && (
                     <div className="flex items-center gap-1">
-                      <button
-                        type="button"
-                        onClick={() => {
-                          const next = window.prompt("แก้ไขชื่อหมวดหมู่", item.name);
-                          if (next?.trim()) void updateCategory(item.id, next.trim()).then(refresh).catch((e: Error) => setError(e.message));
-                        }}
-                        className="p-1.5 rounded-lg text-[#71877c] hover:text-[#23382e] hover:bg-[#edf5ee] transition"
-                        title="แก้ไข"
-                      >
-                        <Edit2 size={13} />
-                      </button>
-                      <button
-                        type="button"
-                        onClick={() => {
-                          if (window.confirm(`คุณแน่ใจหรือไม่ว่าต้องการลบหมวดหมู่ "${item.name}"?`)) {
-                            remove.mutate(item.id);
-                          }
-                        }}
-                        className="p-1.5 rounded-lg text-[#bd4754] hover:bg-[#fff0f2] transition"
-                        title="ลบ"
-                      >
-                        <Trash2 size={13} />
-                      </button>
+                      {editingId === item.id ? (
+                        <>
+                          <input autoFocus value={editingName} maxLength={40} aria-label="ชื่อหมวดหมู่ใหม่"
+                            onChange={(event) => setEditingName(event.target.value)}
+                            onKeyDown={(event) => { if (event.key === "Enter") saveEdit(item.id); if (event.key === "Escape") { setEditingId(null); setEditingName(""); } }}
+                            className="min-h-[34px] w-32 sm:w-40 rounded-lg border border-[#9fc5a6] bg-white px-2 text-xs text-[#23382e] outline-none focus:ring-2 focus:ring-[#9fc5a6]/30" />
+                          <button type="button" disabled={edit.isPending} onClick={() => saveEdit(item.id)} aria-label="บันทึกชื่อหมวดหมู่" className="p-1.5 rounded-lg text-[#239667] hover:bg-[#eaf7ef] disabled:opacity-50"><Check size={14}/></button>
+                          <button type="button" onClick={() => { setEditingId(null); setEditingName(""); }} aria-label="ยกเลิกแก้ไข" className="p-1.5 rounded-lg text-[#71877c] hover:bg-[#f4f7f3]"><X size={14}/></button>
+                        </>
+                      ) : (
+                        <>
+                          <button type="button" onClick={() => { setEditingId(item.id); setEditingName(item.name); setError(""); }} className="p-1.5 rounded-lg text-[#71877c] hover:text-[#23382e] hover:bg-[#edf5ee] transition" title="แก้ไข" aria-label={"แก้ไข " + item.name}>
+                            <Edit2 size={13} />
+                          </button>
+                          <button type="button" disabled={remove.isPending} onClick={() => { if (window.confirm(`คุณแน่ใจหรือไม่ว่าต้องการลบหมวดหมู่ "${item.name}"?`)) remove.mutate(item.id); }} className="p-1.5 rounded-lg text-[#bd4754] hover:bg-[#fff0f2] transition disabled:opacity-50" title="ลบ" aria-label={"ลบ " + item.name}>
+                            <Trash2 size={13} />
+                          </button>
+                        </>
+                      )}
                     </div>
                   )}
                 </div>
@@ -251,29 +267,25 @@ export function CategoriesPage() {
 
                   {!item.is_default && (
                     <div className="flex items-center gap-1">
-                      <button
-                        type="button"
-                        onClick={() => {
-                          const next = window.prompt("แก้ไขชื่อหมวดหมู่", item.name);
-                          if (next?.trim()) void updateCategory(item.id, next.trim()).then(refresh).catch((e: Error) => setError(e.message));
-                        }}
-                        className="p-1.5 rounded-lg text-[#71877c] hover:text-[#23382e] hover:bg-[#edf5ee] transition"
-                        title="แก้ไข"
-                      >
-                        <Edit2 size={13} />
-                      </button>
-                      <button
-                        type="button"
-                        onClick={() => {
-                          if (window.confirm(`คุณแน่ใจหรือไม่ว่าต้องการลบหมวดหมู่ "${item.name}"?`)) {
-                            remove.mutate(item.id);
-                          }
-                        }}
-                        className="p-1.5 rounded-lg text-[#bd4754] hover:bg-[#fff0f2] transition"
-                        title="ลบ"
-                      >
-                        <Trash2 size={13} />
-                      </button>
+                      {editingId === item.id ? (
+                        <>
+                          <input autoFocus value={editingName} maxLength={40} aria-label="ชื่อหมวดหมู่ใหม่"
+                            onChange={(event) => setEditingName(event.target.value)}
+                            onKeyDown={(event) => { if (event.key === "Enter") saveEdit(item.id); if (event.key === "Escape") { setEditingId(null); setEditingName(""); } }}
+                            className="min-h-[34px] w-32 sm:w-40 rounded-lg border border-[#9fc5a6] bg-white px-2 text-xs text-[#23382e] outline-none focus:ring-2 focus:ring-[#9fc5a6]/30" />
+                          <button type="button" disabled={edit.isPending} onClick={() => saveEdit(item.id)} aria-label="บันทึกชื่อหมวดหมู่" className="p-1.5 rounded-lg text-[#239667] hover:bg-[#eaf7ef] disabled:opacity-50"><Check size={14}/></button>
+                          <button type="button" onClick={() => { setEditingId(null); setEditingName(""); }} aria-label="ยกเลิกแก้ไข" className="p-1.5 rounded-lg text-[#71877c] hover:bg-[#f4f7f3]"><X size={14}/></button>
+                        </>
+                      ) : (
+                        <>
+                          <button type="button" onClick={() => { setEditingId(item.id); setEditingName(item.name); setError(""); }} className="p-1.5 rounded-lg text-[#71877c] hover:text-[#23382e] hover:bg-[#edf5ee] transition" title="แก้ไข" aria-label={"แก้ไข " + item.name}>
+                            <Edit2 size={13} />
+                          </button>
+                          <button type="button" disabled={remove.isPending} onClick={() => { if (window.confirm(`คุณแน่ใจหรือไม่ว่าต้องการลบหมวดหมู่ "${item.name}"?`)) remove.mutate(item.id); }} className="p-1.5 rounded-lg text-[#bd4754] hover:bg-[#fff0f2] transition disabled:opacity-50" title="ลบ" aria-label={"ลบ " + item.name}>
+                            <Trash2 size={13} />
+                          </button>
+                        </>
+                      )}
                     </div>
                   )}
                 </div>
