@@ -148,7 +148,7 @@ export function AdminPage() {
 
     <section className="grid gap-4 xl:grid-cols-[minmax(0,1.2fr)_minmax(0,.8fr)]">
       <article className={`${card} min-w-0 p-5 sm:p-6`}>
-        <div className="mb-4 flex items-center justify-between gap-3"><div><h2 className={title}>รายการล่าสุด</h2><p className="mt-1 text-[10px] text-[#9aa59d]">รายการที่บันทึกในเดือนนี้</p></div><a href="/admin/transactions" className="inline-flex items-center gap-1 text-[11px] font-semibold text-[#70967a] hover:text-[#456d50]">ดูทั้งหมด <ArrowUpRightFromSquare size={13}/></a></div>
+        <div className="mb-4 flex items-center justify-between gap-3"><div><h2 className={title}>รายการล่าสุด</h2><p className="mt-1 text-[10px] text-[#9aa59d]">รายการที่บันทึกในเดือนนี้</p></div><a href="/admin/transactions" className="inline-flex items-center gap-1 text-[11px] font-semibold text-[#70967a] hover:text-[#456d50]">ดูทั้งหมด <ExternalLink size={13}/></a></div>
         {entries.isLoading ? <p className="py-8 text-center text-xs text-[#9aa59d]">กำลังโหลดรายการ...</p> : latestEntries.length === 0 ? <p className="py-8 text-center text-xs text-[#9aa59d]">ยังไม่มีรายการในเดือนนี้</p> : <div className="divide-y divide-[#eff2ed]">
           {latestEntries.map((entry) => <div key={entry.id} className="flex items-center gap-3 py-3 first:pt-0 last:pb-0">
             <span className={`grid h-9 w-9 shrink-0 place-items-center rounded-xl ${entry.type === "income" ? "bg-[#eaf6ef] text-[#42936c]" : "bg-[#fff0ef] text-[#d77b7f]"}`}>{entry.type === "income" ? <ArrowDownLeft size={17}/> : <ArrowUpRight size={17}/>}</span>
