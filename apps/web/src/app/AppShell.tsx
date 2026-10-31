@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { NavLink, Navigate, Outlet } from "react-router-dom";
-import { ChartNoAxesCombined, House, LogOut, Settings } from "lucide-react";
+import { ChartNoAxesCombined, House, LogOut, Settings, Wallet } from "lucide-react";
 import { useAuth } from "../auth/AuthProvider";
 import { supabase } from "../lib/supabase";
 
