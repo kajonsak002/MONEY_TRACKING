@@ -20,6 +20,8 @@ interface AuthContextValue {
   error: string | null;
   signInWithGoogle: () => Promise<void>;
   signOut: () => Promise<void>;
+  // eslint-disable-next-line no-unused-vars
+  setDevPreviewRole?: (role: AppRole | null) => void;
 }
 
 const AuthContext = createContext<AuthContextValue | null>(null);
@@ -37,9 +39,46 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
+  // Dev preview support for local UI testing
+  const [devRole, setDevRole] = useState<AppRole | null>(() => {
+    if (!import.meta.env.DEV) return null;
+    const urlRole = typeof window !== "undefined" ? (new URLSearchParams(window.location.search).get("role") as AppRole | null) : null;
+    if (urlRole) {
+      sessionStorage.setItem("money_dev_role", urlRole);
+      return urlRole;
+    }
+    return (sessionStorage.getItem("money_dev_role") as AppRole) || null;
+  });
+
+  const setDevPreviewRole = useCallback((role: AppRole | null) => {
+    if (!import.meta.env.DEV) return;
+    setDevRole(role);
+    if (role) {
+      sessionStorage.setItem("money_dev_role", role);
+      setProfile({
+        id: "dev-preview-user",
+        email: "kajonsak.dev@gmail.com",
+        display_name: "kajonsak",
+        role,
+      });
+    } else {
+      sessionStorage.removeItem("money_dev_role");
+      setProfile(null);
+    }
+  }, []);
+
   const loadProfile = useCallback(async (user: User | null) => {
     if (!user || !supabase) {
-      setProfile(null);
+      if (import.meta.env.DEV && devRole) {
+        setProfile({
+          id: "dev-preview-user",
+          email: "kajonsak.dev@gmail.com",
+          display_name: "kajonsak",
+          role: devRole,
+        });
+      } else {
+        setProfile(null);
+      }
       return;
     }
 
@@ -55,7 +94,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       return;
     }
     setProfile(data as UserProfile | null);
-  }, []);
+  }, [devRole]);
 
   useEffect(() => {
     if (!supabase) {
@@ -75,11 +114,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     const { data: listener } = supabase.auth.onAuthStateChange((_event, nextSession) => {
       setSession(nextSession);
       if (!nextSession) {
-        setProfile(null);
+        if (!devRole) setProfile(null);
         setLoading(false);
         return;
       }
-      // Defer the profile request so it does not run inside the auth event callback.
       window.setTimeout(() => {
         if (active) {
           void loadProfile(nextSession.user).finally(() => setLoading(false));
@@ -91,7 +129,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       active = false;
       listener.subscription.unsubscribe();
     };
-  }, [loadProfile]);
+  }, [loadProfile, devRole]);
 
   const signInWithGoogle = useCallback(async () => {
     if (!supabase) {
@@ -107,21 +145,53 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, []);
 
   const signOut = useCallback(async () => {
+    if (import.meta.env.DEV) {
+      setDevPreviewRole(null);
+    }
     if (!supabase) return;
     const { error: signOutError } = await supabase.auth.signOut();
     if (signOutError) setError(signOutError.message);
-  }, []);
+  }, [setDevPreviewRole]);
+
+  const activeUser = useMemo(() => {
+    if (session?.user) return session.user;
+    if (import.meta.env.DEV && devRole) {
+      return {
+        id: "dev-preview-user",
+        email: "kajonsak.dev@gmail.com",
+        user_metadata: { name: "kajonsak" },
+        app_metadata: {},
+        aud: "authenticated",
+        created_at: new Date().toISOString(),
+      } as unknown as User;
+    }
+    return null;
+  }, [session?.user, devRole]);
+
+  const activeProfile = useMemo(() => {
+    if (profile) return profile;
+    if (import.meta.env.DEV && devRole) {
+      return {
+        id: "dev-preview-user",
+        email: "kajonsak.dev@gmail.com",
+        display_name: "kajonsak",
+        role: devRole,
+      };
+    }
+    return null;
+  }, [profile, devRole]);
 
   const value = useMemo<AuthContextValue>(() => ({
-    user: session?.user ?? null,
+    user: activeUser,
     session,
-    profile,
+    profile: activeProfile,
     loading,
     configured: isSupabaseConfigured,
     error,
     signInWithGoogle,
     signOut,
-  }), [session, profile, loading, error, signInWithGoogle, signOut]);
+    setDevPreviewRole,
+  }), [activeUser, session, activeProfile, loading, error, signInWithGoogle, signOut, setDevPreviewRole]);
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }

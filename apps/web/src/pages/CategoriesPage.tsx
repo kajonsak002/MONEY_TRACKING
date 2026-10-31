@@ -1,30 +1,287 @@
 import { useState, type FormEvent } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { Plus, Trash2, LoaderCircle } from "lucide-react";
-import { createCategory, deleteCategory, getManagedCategories, updateCategory } from "../features/categories/categoriesApi";
+import {
+  ArrowDownLeft,
+  ArrowUpRight,
+  Edit2,
+  FolderPlus,
+  LoaderCircle,
+  Plus,
+  Trash2,
+} from "lucide-react";
+import {
+  createCategory,
+  deleteCategory,
+  getManagedCategories,
+  updateCategory,
+} from "../features/categories/categoriesApi";
 import type { EntryType } from "../features/entries/entriesApi";
+import { CardGardenLedge, CardGinghamOverlay } from "../components/common/CardGrounding";
 
 export function CategoriesPage() {
   const qc = useQueryClient();
   const [name, setName] = useState("");
   const [type, setType] = useState<EntryType>("expense");
   const [error, setError] = useState("");
+
   const query = useQuery({ queryKey: ["categories"], queryFn: getManagedCategories });
   const refresh = () => qc.invalidateQueries({ queryKey: ["categories"] });
-  const add = useMutation({ mutationFn: createCategory, onSuccess: async () => { setName(""); setError(""); await refresh(); }, onError: (e: Error) => setError(e.message) });
-  const remove = useMutation({ mutationFn: deleteCategory, onSuccess: refresh, onError: (e: Error) => setError(e.message) });
+
+  const add = useMutation({
+    mutationFn: createCategory,
+    onSuccess: async () => {
+      setName("");
+      setError("");
+      await refresh();
+    },
+    onError: (e: Error) => setError(e.message),
+  });
+
+  const remove = useMutation({
+    mutationFn: deleteCategory,
+    onSuccess: refresh,
+    onError: (e: Error) => setError(e.message),
+  });
+
   async function submit(event: FormEvent) {
     event.preventDefault();
-    if (!name.trim() || name.trim().length > 40) { setError("ชื่อหมวดหมู่ต้องมี 1–40 ตัวอักษร"); return; }
-    add.mutate({ name, type });
+    if (!name.trim() || name.trim().length > 40) {
+      setError("ชื่อหมวดหมู่ต้องมี 1–40 ตัวอักษร");
+      return;
+    }
+    add.mutate({ name: name.trim(), type });
   }
-  return <div className="settings-page"><header className="page-title-row"><div><p className="eyebrow">CUSTOMIZE</p><h1>จัดการหมวดหมู่</h1><p className="muted">เพิ่ม แก้ไข หรือลบหมวดหมู่ของคุณ</p></div></header>
-    <section className="settings-card"><h2>เพิ่มหมวดหมู่ใหม่</h2><form className="category-add-form" onSubmit={(event) => void submit(event)}>
-      <div className="entry-type-switch"><button type="button" className={type === "expense" ? "selected expense-selected" : ""} onClick={() => setType("expense")}>รายจ่าย</button><button type="button" className={type === "income" ? "selected income-selected" : ""} onClick={() => setType("income")}>รายรับ</button></div>
-      <input aria-label="ชื่อหมวดหมู่" maxLength={40} placeholder="เช่น ค่าเดินทาง" value={name} onChange={(event) => setName(event.target.value)}/>
-      <button className="settings-primary" type="submit" disabled={add.isPending}><Plus size={16}/> เพิ่มหมวดหมู่</button>
-    </form>{error && <p className="entry-error" role="alert">{error}</p>}</section>
-    <section className="settings-card"><h2>หมวดหมู่ทั้งหมด</h2>{query.isLoading ? <LoaderCircle className="spin"/> : query.isError ? <p className="entry-error">{(query.error as Error).message}</p> : (query.data ?? []).map((item) =>
-      <div className="category-manage-row" key={item.id}><span className={item.type === "income" ? "income-text" : "expense-text"}>{item.type === "income" ? "รายรับ" : "รายจ่าย"}</span><strong>{item.name}</strong>{item.is_default ? <small>ค่าเริ่มต้น</small> : <div className="category-manage-actions"><button type="button" onClick={() => { const next = window.prompt("แก้ไขชื่อหมวดหมู่", item.name); if (next?.trim()) void updateCategory(item.id, next).then(refresh).catch((e: Error) => setError(e.message)); }}>แก้ไข</button><button type="button" aria-label={`ลบ ${item.name}`} onClick={() => { if (window.confirm(`ลบหมวดหมู่ ${item.name} ?`)) remove.mutate(item.id); }}><Trash2 size={15}/></button></div>}</div>)}</section>
-  </div>;
+
+  const allCategories = query.data ?? [];
+  const expenseCategories = allCategories.filter((c) => c.type === "expense");
+  const incomeCategories = allCategories.filter((c) => c.type === "income");
+
+  return (
+    <div className="space-y-6 sm:space-y-8 max-w-4xl mx-auto">
+      {/* Header */}
+      <header className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+        <div>
+          <span className="text-[10px] font-bold tracking-widest text-[#438765] uppercase">
+            Classification
+          </span>
+          <h1 className="text-2xl font-bold text-[#22392f] mt-0.5">
+            จัดการหมวดหมู่
+          </h1>
+          <p className="text-xs text-[#71877c]">
+            สร้างและปรับแต่งหมวดหมู่รายรับรายจ่ายให้ตรงกับการใช้งานของคุณ
+          </p>
+        </div>
+
+        <span className="text-xs font-semibold px-3 py-1.5 rounded-full bg-white border border-[#e2ede0] text-[#4d6e5c] shadow-2xs self-start sm:self-auto">
+          ทั้งหมด {allCategories.length} หมวดหมู่
+        </span>
+      </header>
+
+      {/* ================= ADD CATEGORY ================= */}
+      <section className="relative bg-gradient-to-b from-[#f6faf7] via-white to-[#eff7f2] rounded-3xl p-6 sm:p-7 border border-[#d2ead7] shadow-[0_8px_30px_rgba(42,78,56,0.05)] group transition-shadow hover:shadow-md overflow-visible">
+        <CardGinghamOverlay opacity="opacity-[0.02]" />
+        <CardGardenLedge className="right-6 w-24" />
+
+        {/* Playful Frog Peeking Over Form Card */}
+        <div className="absolute -top-8 right-8 w-16 h-16 pointer-events-none filter drop-shadow-[0_8px_16px_rgba(35,70,45,0.16)] group-hover:scale-105 group-hover:rotate-6 transition-all duration-300 z-20">
+          <img
+            src="/images/mascots/frog-mascot-happy.png"
+            alt="Frog Assistant"
+            className="w-full h-full object-contain"
+          />
+        </div>
+        {/* Speech Bubble Tag */}
+        <span className="hidden sm:inline-flex absolute -top-8 right-26 items-center gap-1 px-3 py-1 rounded-full bg-white/95 border border-[#c4e3cb] text-[10px] font-bold text-[#286b46] shadow-xs backdrop-blur-xs z-20">
+          จัดหมวดหมู่ให้เป็นระเบียบนะ! 🏷️
+        </span>
+
+        <div className="relative z-10">
+        <div className="flex items-center gap-2 mb-4">
+          <FolderPlus size={18} className="text-[#438765]" />
+          <h2 className="text-base font-bold text-[#23382e]">เพิ่มหมวดหมู่ใหม่</h2>
+        </div>
+
+        <form onSubmit={submit} className="space-y-4">
+          {/* Segmented Type Toggle */}
+          <div className="grid grid-cols-2 gap-2 p-1 bg-[#f4f7f2] rounded-2xl border border-[#e2ebe0] max-w-xs">
+            <button
+              type="button"
+              onClick={() => setType("expense")}
+              className={`flex items-center justify-center gap-2 py-2 rounded-xl text-xs font-bold transition-all ${
+                type === "expense"
+                  ? "bg-white text-[#dd5e6d] shadow-sm"
+                  : "text-[#71877c] hover:text-[#23382e]"
+              }`}
+            >
+              <ArrowUpRight size={15} strokeWidth={2.5} />
+              <span>หมวดรายจ่าย</span>
+            </button>
+
+            <button
+              type="button"
+              onClick={() => setType("income")}
+              className={`flex items-center justify-center gap-2 py-2 rounded-xl text-xs font-bold transition-all ${
+                type === "income"
+                  ? "bg-white text-[#239667] shadow-sm"
+                  : "text-[#71877c] hover:text-[#23382e]"
+              }`}
+            >
+              <ArrowDownLeft size={15} strokeWidth={2.5} />
+              <span>หมวดรายรับ</span>
+            </button>
+          </div>
+
+          <div className="flex gap-2.5">
+            <input
+              required
+              aria-label="ชื่อหมวดหมู่"
+              maxLength={40}
+              placeholder="ระบุชื่อหมวดหมู่ เช่น ค่าเดินทาง, โบนัส, อาหาร..."
+              value={name}
+              onChange={(event) => setName(event.target.value)}
+              className="flex-1 min-h-[46px] px-4 rounded-xl border border-[#dce7dc] bg-[#f8faf7] text-xs text-[#23382e] placeholder-[#a4b8ab] focus:border-[#438765] focus:bg-white focus:outline-none transition"
+            />
+            <button
+              type="submit"
+              disabled={add.isPending || !name.trim()}
+              className="px-5 min-h-[46px] rounded-xl bg-[#234835] hover:bg-[#1a3828] text-white text-xs font-bold flex items-center gap-2 shadow-sm transition active:scale-95 disabled:opacity-50 shrink-0"
+            >
+              {add.isPending ? <LoaderCircle size={15} className="animate-spin" /> : <Plus size={16} />}
+              <span>เพิ่มหมวดหมู่</span>
+            </button>
+          </div>
+
+          {error && (
+            <p className="text-xs text-[#bd4754] bg-[#fff0f2] p-3 rounded-xl border border-[#fbdbe1]" role="alert">
+              {error}
+            </p>
+          )}
+        </form>
+        </div>
+      </section>
+
+      {/* ================= CATEGORIES LIST ================= */}
+      <section className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        {/* Expense Categories */}
+        <div className="bg-white rounded-3xl p-6 border border-[#e2ece0] shadow-[0_8px_30px_rgba(42,78,56,0.04)]">
+          <div className="flex items-center justify-between mb-4 pb-3 border-b border-[#edf3ec]">
+            <div className="flex items-center gap-2 text-xs font-bold text-[#dd5e6d]">
+              <ArrowUpRight size={16} strokeWidth={2.5} />
+              <span>หมวดหมู่รายจ่าย ({expenseCategories.length})</span>
+            </div>
+          </div>
+
+          {query.isLoading ? (
+            <div className="py-8 flex justify-center"><LoaderCircle className="animate-spin text-[#438765]" size={20} /></div>
+          ) : expenseCategories.length === 0 ? (
+            <p className="text-xs text-[#71877c] py-4 text-center">ยังไม่มีหมวดหมู่รายจ่าย</p>
+          ) : (
+            <div className="divide-y divide-[#edf3eb]">
+              {expenseCategories.map((item) => (
+                <div key={item.id} className="py-2.5 flex items-center justify-between gap-3 text-xs">
+                  <div className="flex items-center gap-2 min-w-0">
+                    <span className="w-2.5 h-2.5 rounded-full bg-[#dd5e6d] shrink-0" />
+                    <strong className="text-[#23382e] truncate">{item.name}</strong>
+                    {item.is_default && (
+                      <span className="text-[10px] px-2 py-0.5 rounded-md bg-[#f4f7f3] text-[#71877c]">
+                        ค่าเริ่มต้น
+                      </span>
+                    )}
+                  </div>
+
+                  {!item.is_default && (
+                    <div className="flex items-center gap-1">
+                      <button
+                        type="button"
+                        onClick={() => {
+                          const next = window.prompt("แก้ไขชื่อหมวดหมู่", item.name);
+                          if (next?.trim()) void updateCategory(item.id, next.trim()).then(refresh).catch((e: Error) => setError(e.message));
+                        }}
+                        className="p-1.5 rounded-lg text-[#71877c] hover:text-[#23382e] hover:bg-[#edf5ee] transition"
+                        title="แก้ไข"
+                      >
+                        <Edit2 size={13} />
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => {
+                          if (window.confirm(`คุณแน่ใจหรือไม่ว่าต้องการลบหมวดหมู่ "${item.name}"?`)) {
+                            remove.mutate(item.id);
+                          }
+                        }}
+                        className="p-1.5 rounded-lg text-[#bd4754] hover:bg-[#fff0f2] transition"
+                        title="ลบ"
+                      >
+                        <Trash2 size={13} />
+                      </button>
+                    </div>
+                  )}
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+
+        {/* Income Categories */}
+        <div className="bg-white rounded-3xl p-6 border border-[#e2ece0] shadow-[0_8px_30px_rgba(42,78,56,0.04)]">
+          <div className="flex items-center justify-between mb-4 pb-3 border-b border-[#edf3ec]">
+            <div className="flex items-center gap-2 text-xs font-bold text-[#239667]">
+              <ArrowDownLeft size={16} strokeWidth={2.5} />
+              <span>หมวดหมู่รายรับ ({incomeCategories.length})</span>
+            </div>
+          </div>
+
+          {query.isLoading ? (
+            <div className="py-8 flex justify-center"><LoaderCircle className="animate-spin text-[#438765]" size={20} /></div>
+          ) : incomeCategories.length === 0 ? (
+            <p className="text-xs text-[#71877c] py-4 text-center">ยังไม่มีหมวดหมู่รายรับ</p>
+          ) : (
+            <div className="divide-y divide-[#edf3eb]">
+              {incomeCategories.map((item) => (
+                <div key={item.id} className="py-2.5 flex items-center justify-between gap-3 text-xs">
+                  <div className="flex items-center gap-2 min-w-0">
+                    <span className="w-2.5 h-2.5 rounded-full bg-[#239667] shrink-0" />
+                    <strong className="text-[#23382e] truncate">{item.name}</strong>
+                    {item.is_default && (
+                      <span className="text-[10px] px-2 py-0.5 rounded-md bg-[#f4f7f3] text-[#71877c]">
+                        ค่าเริ่มต้น
+                      </span>
+                    )}
+                  </div>
+
+                  {!item.is_default && (
+                    <div className="flex items-center gap-1">
+                      <button
+                        type="button"
+                        onClick={() => {
+                          const next = window.prompt("แก้ไขชื่อหมวดหมู่", item.name);
+                          if (next?.trim()) void updateCategory(item.id, next.trim()).then(refresh).catch((e: Error) => setError(e.message));
+                        }}
+                        className="p-1.5 rounded-lg text-[#71877c] hover:text-[#23382e] hover:bg-[#edf5ee] transition"
+                        title="แก้ไข"
+                      >
+                        <Edit2 size={13} />
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => {
+                          if (window.confirm(`คุณแน่ใจหรือไม่ว่าต้องการลบหมวดหมู่ "${item.name}"?`)) {
+                            remove.mutate(item.id);
+                          }
+                        }}
+                        className="p-1.5 rounded-lg text-[#bd4754] hover:bg-[#fff0f2] transition"
+                        title="ลบ"
+                      >
+                        <Trash2 size={13} />
+                      </button>
+                    </div>
+                  )}
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+      </section>
+    </div>
+  );
 }
