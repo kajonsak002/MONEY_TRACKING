@@ -174,6 +174,10 @@ export function AdminPage() {
           </button>
         </div>
 
+        {(users.isError || entries.isError || trend.isError) && (
+          <div className="rounded-2xl border border-[#fbdbe1] bg-[#fff0f2] p-4 text-xs text-[#bd4754]" role="alert">โหลดข้อมูลภาพรวมไม่ครบ: {users.error?.message ?? entries.error?.message ?? trend.error?.message}</div>
+        )}
+
         {/* 4 Stat Cards matching ref-1.png */}
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
           {/* 1. สมาชิกทั้งหมด */}
@@ -189,7 +193,7 @@ export function AdminPage() {
             <div>
               <span className="text-xs font-semibold text-[#6d8576]">สมาชิกทั้งหมด</span>
               <strong className="block text-2xl font-extrabold text-[#23382e] tabular-nums mt-1">
-                {loading ? "0" : userList.length}
+                {users.isLoading ? "—" : users.isError ? "—" : userList.length}
               </strong>
               <small className="block text-[10px] text-[#8fa597] mt-1">จัดการยอดผู้ใช้ในระบบ</small>
             </div>
@@ -208,7 +212,7 @@ export function AdminPage() {
             <div>
               <span className="text-xs font-semibold text-[#6d8576]">รายการทั้งหมด</span>
               <strong className="block text-2xl font-extrabold text-[#23382e] tabular-nums mt-1">
-                {loading ? "0" : summary.count}
+                {entries.isLoading ? "—" : entries.isError ? "—" : summary.count}
               </strong>
               <small className="block text-[10px] text-[#8fa597] mt-1">ต่อตรงฐานข้อมูลความปลอดภัย</small>
             </div>
@@ -227,7 +231,7 @@ export function AdminPage() {
             <div>
               <span className="text-xs font-semibold text-[#6d8576]">ยอดรายเดือนสะสม</span>
               <strong className="block text-2xl font-extrabold text-[#23382e] tabular-nums mt-1">
-                {loading ? "฿0" : money(summary.expense)}
+                {entries.isLoading ? "—" : entries.isError ? "—" : money(summary.expense)}
               </strong>
               <small className="block text-[10px] text-[#8fa597] mt-1">รวมค่าใช้จ่ายเดือนนี้</small>
             </div>
@@ -246,7 +250,7 @@ export function AdminPage() {
             <div>
               <span className="text-xs font-semibold text-[#6d8576]">ยอดรายรับสะสม</span>
               <strong className="block text-2xl font-extrabold text-[#23382e] tabular-nums mt-1">
-                {loading ? "฿0" : money(summary.income)}
+                {entries.isLoading ? "—" : entries.isError ? "—" : money(summary.income)}
               </strong>
               <small className="block text-[10px] text-[#8fa597] mt-1">รวมรายรับเดือนนี้</small>
             </div>
@@ -279,7 +283,7 @@ export function AdminPage() {
                 {userList.length === 0 ? (
                   <tr>
                     <td colSpan={3} className="py-8 text-center text-[#71877c]">
-                      {users.isLoading ? "กำลังโหลดข้อมูลสมาชิก..." : "ยังไม่มีสมาชิก"}
+                      {users.isLoading ? "กำลังโหลดข้อมูลสมาชิก..." : users.isError ? "โหลดข้อมูลสมาชิกไม่สำเร็จ" : "ยังไม่มีสมาชิก"}
                     </td>
                   </tr>
                 ) : (
@@ -368,7 +372,9 @@ export function AdminPage() {
           <div className="flex items-center gap-4">
             {statuses.map((s) => (
               <span key={s.name} className="flex items-center gap-1.5 font-medium">
-                {s.ok ? (
+                {health.isLoading ? (
+                  <RefreshCw size={14} className="animate-spin text-[#8fa597]" />
+                ) : s.ok ? (
                   <CircleCheck size={14} className="text-[#239667]" />
                 ) : (
                   <CircleX size={14} className="text-[#dd5e6d]" />
@@ -377,7 +383,7 @@ export function AdminPage() {
               </span>
             ))}
           </div>
-          <span className="text-[10px] text-[#8fa597]">ตรวจสอบอัตโนมัติ</span>
+          <span className="text-[10px] text-[#8fa597]">{health.isError ? "ตรวจสอบสถานะไม่สำเร็จ" : "ตรวจสอบอัตโนมัติ"}</span>
         </div>
       </section>
     </div>
