@@ -73,7 +73,7 @@ export function SettingsPage() {
       } else {
         const safeCell = (value: string | number) => {
           const text = String(value);
-          return /^[\\s]*[=+@-]/.test(text) ? "'" + text : text;
+          return /^\s*[=+@-]/.test(text) ? "'" + text : text;
         };
         const rows = [
           ["date", "type", "amount_thb", "category", "note"],
