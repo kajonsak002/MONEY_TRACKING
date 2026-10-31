@@ -167,8 +167,9 @@ export function SettingsPage() {
         <div className="grid grid-cols-2 gap-3 max-w-sm">
           <button
             type="button"
+            aria-pressed={theme === "light"}
             onClick={() => changeTheme("light")}
-            className={`p-3.5 rounded-2xl border flex items-center justify-center gap-2.5 text-xs font-bold transition-all ${
+            className={`min-h-[44px] p-3.5 rounded-2xl border flex items-center justify-center gap-2.5 text-xs font-bold transition-all ${
               theme === "light"
                 ? "border-[#438765] bg-[#ebf5ee] text-[#2c5a42] shadow-xs"
                 : "border-[#dce7dc] bg-white text-[#71877c] hover:bg-[#f8faf7]"
@@ -180,8 +181,9 @@ export function SettingsPage() {
 
           <button
             type="button"
+            aria-pressed={theme === "dark"}
             onClick={() => changeTheme("dark")}
-            className={`p-3.5 rounded-2xl border flex items-center justify-center gap-2.5 text-xs font-bold transition-all ${
+            className={`min-h-[44px] p-3.5 rounded-2xl border flex items-center justify-center gap-2.5 text-xs font-bold transition-all ${
               theme === "dark"
                 ? "border-[#438765] bg-[#1a2b22] text-[#e8f5ec] shadow-xs"
                 : "border-[#dce7dc] bg-white text-[#71877c] hover:bg-[#f8faf7]"
