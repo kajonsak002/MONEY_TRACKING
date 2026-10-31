@@ -73,7 +73,7 @@ export function HomePage() {
         </div>
         <div className="relative z-10 max-w-[70%] sm:max-w-[72%]">
           <div className="flex items-center gap-2 text-[12px] font-semibold text-[#698575]"><Wallet size={15}/> ยอดสุทธิเดือนนี้</div>
-          <div className="mt-3 text-[clamp(28px,6vw,42px)] font-bold leading-tight tracking-[-1.3px] text-[#2f4d3c] tabular-nums">{report.isLoading ? "กำลังโหลด..." : money(totals.balance)}</div>
+          <div className="mt-3 text-[clamp(28px,6vw,42px)] font-bold leading-tight tracking-[-1.3px] text-[#2f4d3c] tabular-nums">{report.isLoading ? "กำลังโหลด..." : report.isError ? "โหลดข้อมูลไม่สำเร็จ" : money(totals.balance)}</div>
           <span className="mt-2 inline-flex rounded-full border border-[#c8dcca] bg-white/55 px-3 py-1 text-[11px] text-[#6f8c78]">อัปเดตข้อมูลล่าสุด</span>
         </div>
         <div className="relative z-10 mt-7 grid max-w-[78%] grid-cols-2 gap-3 border-t border-[#bcd3bd]/70 pt-4 sm:mt-9">
@@ -88,7 +88,7 @@ export function HomePage() {
         </div>
       </div>
 
-      <div className={`${card} flex flex-col justify-between p-5 sm:p-6`}>
+      {report.isError && <p className="rounded-xl border border-[#f1c9cc] bg-[#fff0f1] p-3 text-xs text-[#b94f5a]" role="alert">โหลดสรุปการเงินไม่สำเร็จ: {(report.error as Error).message}</p>}\n      <div className={`${card} flex flex-col justify-between p-5 sm:p-6`}>
         <div>
           <div className="flex items-center gap-2 text-xs font-bold tracking-[1.3px] text-[#81a18a]"><span className="h-2 w-2 rounded-full bg-[#e9b968]"/> THIS MONTH</div>
           <h2 className="mt-2 text-lg font-bold text-[#34483d]">สรุปการใช้เงิน</h2>
@@ -126,7 +126,7 @@ export function HomePage() {
 
       <div className={`${card} p-5 sm:p-6`}>
         <div className="mb-4 flex items-center justify-between"><div><p className="text-[10px] font-bold tracking-[1.5px] text-[#86a38c]">RECENT ACTIVITY</p><h2 className="mt-1 text-lg font-bold text-[#34483d]">รายการล่าสุด</h2></div><button type="button" onClick={() => navigate("/app/entries")} className="text-xs font-semibold text-[#6e9878] hover:text-[#456e50]">ดูทั้งหมด</button></div>
-        {recent.isLoading ? <div className="flex items-center gap-2 py-8 text-sm text-[#8b988f]"><LoaderCircle className="animate-spin" size={17}/>กำลังโหลด...</div> : (recent.data ?? []).length === 0 ? <div className="flex flex-col items-center py-7 text-center"><img className="mb-2 h-[78px] w-[88px] object-contain" src="/assets/mascot-pig.svg" alt=""/><strong className="text-sm text-[#596d5e]">ยังไม่มีรายการ</strong><p className="mt-1 text-xs text-[#9aa49c]">เริ่มบันทึกรายรับรายจ่ายได้เลย</p></div> : <div className="divide-y divide-[#eff2ed]">{(recent.data ?? []).slice(0,5).map((entry) => <div className="flex items-center gap-3 py-3 first:pt-0 last:pb-0" key={entry.id}><span className={`grid h-10 w-10 shrink-0 place-items-center rounded-[14px] ${entry.type === "income" ? "bg-[#e9f6ee] text-[#39936c]" : "bg-[#fff0ef] text-[#d8757c]"}`}>{entry.type === "income" ? <ArrowDownLeft size={18}/> : <ArrowUpRight size={18}/>}</span><div className="min-w-0 flex-1"><strong className="block truncate text-[13px] font-semibold text-[#46594b]">{entry.note || "รายการ"}</strong><small className="text-[11px] text-[#9aa49c]">{entry.occurred_on}</small></div><strong className={`whitespace-nowrap text-[13px] font-bold tabular-nums ${entry.type === "income" ? "text-[#328765]" : "text-[#d86c76]"}`}>{entry.type === "income" ? "+" : "−"}{money(entry.amount_satang)}</strong></div>)}</div>}
+        {recent.isLoading ? <div className="flex items-center gap-2 py-8 text-sm text-[#8b988f]"><LoaderCircle className="animate-spin" size={17}/>กำลังโหลด...</div> : recent.isError ? <p className="rounded-xl bg-[#fff0f1] p-3 text-xs text-[#b94f5a]" role="alert">โหลดรายการล่าสุดไม่สำเร็จ: {(recent.error as Error).message}</p> : (recent.data ?? []).length === 0 ? <div className="flex flex-col items-center py-7 text-center"><img className="mb-2 h-[78px] w-[88px] object-contain" src="/assets/mascot-pig.svg" alt=""/><strong className="text-sm text-[#596d5e]">ยังไม่มีรายการ</strong><p className="mt-1 text-xs text-[#9aa49c]">เริ่มบันทึกรายรับรายจ่ายได้เลย</p></div> : <div className="divide-y divide-[#eff2ed]">{(recent.data ?? []).slice(0,5).map((entry) => <div className="flex items-center gap-3 py-3 first:pt-0 last:pb-0" key={entry.id}><span className={`grid h-10 w-10 shrink-0 place-items-center rounded-[14px] ${entry.type === "income" ? "bg-[#e9f6ee] text-[#39936c]" : "bg-[#fff0ef] text-[#d8757c]"}`}>{entry.type === "income" ? <ArrowDownLeft size={18}/> : <ArrowUpRight size={18}/>}</span><div className="min-w-0 flex-1"><strong className="block truncate text-[13px] font-semibold text-[#46594b]">{entry.note || "รายการ"}</strong><small className="text-[11px] text-[#9aa49c]">{entry.occurred_on}</small></div><strong className={`whitespace-nowrap text-[13px] font-bold tabular-nums ${entry.type === "income" ? "text-[#328765]" : "text-[#d86c76]"}`}>{entry.type === "income" ? "+" : "−"}{money(entry.amount_satang)}</strong></div>)}</div>}
       </div>
     </section>
   </div>;
