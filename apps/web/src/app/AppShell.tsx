@@ -75,7 +75,7 @@ export function AppShell() {
       <aside className="hidden lg:flex flex-col w-64 bg-[#234835] text-white shrink-0 p-5 min-h-screen border-r border-[#1e3e2d] justify-between">
         <div className="space-y-6">
           {/* Brand */}
-          <a href="/app" className="flex items-center gap-3 px-2 py-2 group">
+          <NavLink to="/app" className="flex items-center gap-3 px-2 py-2 group">
             <div className="w-11 h-11 rounded-2xl bg-[#fdf0f2] border border-[#fbdbe1] p-1 shrink-0 flex items-center justify-center shadow-sm">
               <img
                 src="/images/mascots/pig-mascot-happy.png"
@@ -87,7 +87,7 @@ export function AppShell() {
               <span className="font-bold text-lg text-white tracking-tight">{appName}</span>
               <span className="text-[10px] text-[#8cbda1] font-semibold tracking-wider uppercase">Finance Mate</span>
             </div>
-          </a>
+          </NavLink>
 
           {/* Nav Links */}
           <nav className="space-y-1.5" aria-label="เมนูหลัก">
@@ -218,16 +218,16 @@ export function AppShell() {
 
         {/* Mobile Floating Bottom Navigation */}
         <nav
-          className="lg:hidden fixed bottom-3 left-4 right-4 z-40 max-w-md mx-auto bg-white/95 backdrop-blur-lg border border-[#e2ece0] rounded-3xl p-1.5 shadow-[0_12px_36px_rgba(35,65,45,0.12)] flex items-center justify-around"
+          className="lg:hidden fixed bottom-[calc(env(safe-area-inset-bottom)+8px)] left-2 right-2 z-40 max-w-xl mx-auto bg-white/95 backdrop-blur-lg border border-[#e2ece0] rounded-3xl p-1.5 shadow-[0_12px_36px_rgba(35,65,45,0.12)] flex items-center gap-1"
           aria-label="เมนูมือถือ"
         >
-          {navItems.slice(0, 5).map(({ to, label, icon: Icon, end }) => (
+          {navItems.filter(({ to }) => to !== "/app/categories").map(({ to, label, icon: Icon, end }) => (
             <NavLink
               key={to}
               to={to}
               end={Boolean(end)}
               className={({ isActive }) =>
-                `flex flex-col items-center justify-center py-1.5 px-3 rounded-2xl min-w-[58px] transition-all ${
+                `flex flex-1 min-w-0 flex-col items-center justify-center py-1.5 px-1 rounded-2xl transition-all ${
                   isActive
                     ? "bg-[#ebf5ee] text-[#2c5a42] font-bold shadow-xs"
                     : "text-[#7a9084] hover:text-[#2c5a42]"
@@ -235,7 +235,7 @@ export function AppShell() {
               }
             >
               <Icon size={19} strokeWidth={2} />
-              <span className="text-[10px] mt-0.5">{label}</span>
+              <span className="text-[9px] sm:text-[10px] mt-0.5 whitespace-nowrap">{label === "รายรับรายจ่าย" ? "รายการ" : label === "สรุปข้อมูล" ? "สรุป" : label === "งบประมาณ" ? "งบ" : label}</span>
             </NavLink>
           ))}
         </nav>
