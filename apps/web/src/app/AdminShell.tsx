@@ -239,7 +239,7 @@ export function AdminShell() {
             <div className="space-y-6">
               <div className="flex items-center justify-between">
                 <span className="font-extrabold text-base text-[#23382e]">{appName} ADMIN</span>
-                <button type="button" onClick={() => setMobileOpen(false)} className="p-1 text-[#71877c]">
+                <button type="button" onClick={() => setMobileOpen(false)} className="w-11 h-11 flex items-center justify-center rounded-xl text-[#71877c]">
                   <X size={20} />
                 </button>
               </div>
@@ -250,7 +250,7 @@ export function AdminShell() {
                     to={to}
                     end={Boolean(end)}
                     className={({ isActive }) =>
-                      `flex items-center gap-3 px-3.5 py-3 rounded-2xl text-xs font-bold transition-all ${
+                      `flex min-h-[48px] items-center gap-3 px-3.5 py-3 rounded-2xl text-xs font-bold transition-all ${
                         isActive
                           ? "bg-[#fdf0f2] text-[#d65e6c] border border-[#fbdbe1]"
                           : "text-[#6b8577] hover:bg-[#f4f8f3]"
