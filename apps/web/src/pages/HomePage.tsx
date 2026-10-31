@@ -117,6 +117,7 @@ export function HomePage() {
 
   return (
     <div className="space-y-6 sm:space-y-8 max-w-6xl mx-auto">
+      {!configured && <div className="rounded-2xl border border-[#fbdbe1] bg-[#fff0f2] p-4 text-xs text-[#bd4754]" role="alert">ยังไม่ได้ตั้งค่า Supabase ข้อมูลสรุปและการบันทึกรายการจึงยังใช้งานไม่ได้</div>}
       {/* ================= HERO BALANCE BANNER ================= */}
       <section className="relative rounded-[32px] border border-[#c8e2cc] bg-gradient-to-br from-[#eaf6ed] via-[#f5fbf5] to-[#e6f5ea] shadow-[0_16px_48px_rgba(40,80,55,0.10)] overflow-hidden" style={{ minHeight: 260 }}>
         {/* Meadow photo background */}
@@ -188,7 +189,7 @@ export function HomePage() {
               </span>
               <div className="text-left min-w-0">
                 <span className="block text-[10px] text-[#71877c] leading-tight">รับเดือนนี้</span>
-                <strong className="block text-xs font-bold text-[#239667] tabular-nums truncate">{money(totals.income)}</strong>
+                <strong className="block text-xs font-bold text-[#239667] tabular-nums truncate">{configured ? money(totals.income) : "—"}</strong>
               </div>
             </div>
             <div className="flex items-center gap-2 bg-white/80 backdrop-blur-xs py-2 px-3 rounded-2xl border border-white/70 shadow-xs">
@@ -197,7 +198,7 @@ export function HomePage() {
               </span>
               <div className="text-left min-w-0">
                 <span className="block text-[10px] text-[#71877c] leading-tight">จ่ายเดือนนี้</span>
-                <strong className="block text-xs font-bold text-[#dd5e6d] tabular-nums truncate">{money(totals.expense)}</strong>
+                <strong className="block text-xs font-bold text-[#dd5e6d] tabular-nums truncate">{configured ? money(totals.expense) : "—"}</strong>
               </div>
             </div>
           </div>
@@ -225,8 +226,8 @@ export function HomePage() {
               <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-white/90 border border-[#d2ead7] text-[#4f7860]">วันนี้</span>
             </div>
             <p className="text-xs font-semibold text-[#62806e]">รายรับวันนี้</p>
-            <strong className="block text-base sm:text-lg font-extrabold text-[#239667] tabular-nums mt-1 truncate">{money(todayIncome)}</strong>
-            <span className="block text-[11px] text-[#7d9b87] mt-0.5">{todayIncomeCount} รายการ</span>
+            <strong className="block text-base sm:text-lg font-extrabold text-[#239667] tabular-nums mt-1 truncate">{configured ? money(todayIncome) : "—"}</strong>
+            <span className="block text-[11px] text-[#7d9b87] mt-0.5">{configured ? `${todayIncomeCount} รายการ` : "—"}</span>
           </div>
         </article>
 
@@ -245,8 +246,8 @@ export function HomePage() {
               <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-white/90 border border-[#fbdbe0] text-[#a4535e]">วันนี้</span>
             </div>
             <p className="text-xs font-semibold text-[#8b656b]">รายจ่ายวันนี้</p>
-            <strong className="block text-base sm:text-lg font-extrabold text-[#dd5e6d] tabular-nums mt-1 truncate">{money(todayExpense)}</strong>
-            <span className="block text-[11px] text-[#9f7980] mt-0.5">{todayExpenseCount} รายการ</span>
+            <strong className="block text-base sm:text-lg font-extrabold text-[#dd5e6d] tabular-nums mt-1 truncate">{configured ? money(todayExpense) : "—"}</strong>
+            <span className="block text-[11px] text-[#9f7980] mt-0.5">{configured ? `${todayExpenseCount} รายการ` : "—"}</span>
           </div>
         </article>
 
@@ -266,7 +267,7 @@ export function HomePage() {
             </div>
             <p className="text-xs font-semibold text-[#736a88]">รายรับเดือนนี้</p>
             <strong className="block text-base sm:text-lg font-extrabold text-[#785ad6] tabular-nums mt-1 truncate">{money(totals.income)}</strong>
-            <span className="block text-[11px] text-[#8e85a5] mt-0.5">{monthIncomeCount} รายการ</span>
+            <span className="block text-[11px] text-[#8e85a5] mt-0.5">{configured ? `${monthIncomeCount} รายการ` : "—"}</span>
           </div>
         </article>
 
@@ -286,7 +287,7 @@ export function HomePage() {
             </div>
             <p className="text-xs font-semibold text-[#8b755e]">รายจ่ายเดือนนี้</p>
             <strong className="block text-base sm:text-lg font-extrabold text-[#dd5e6d] tabular-nums mt-1 truncate">{money(totals.expense)}</strong>
-            <span className="block text-[11px] text-[#a48e78] mt-0.5">{monthExpenseCount} รายการ</span>
+            <span className="block text-[11px] text-[#a48e78] mt-0.5">{configured ? `${monthExpenseCount} รายการ` : "—"}</span>
           </div>
         </article>
       </section>
