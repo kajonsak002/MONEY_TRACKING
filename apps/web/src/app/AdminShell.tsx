@@ -19,9 +19,10 @@ export function AdminShell() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [appName, setAppName] = useState("MONEY TRACKING");
   useEffect(() => {
-    if (!supabase) return;
+    const client = supabase;
+    if (!client) return;
     const load = async () => {
-      const { data } = await supabase.from("app_settings").select("key,value").eq("key","app_name").maybeSingle();
+      const { data } = await client.from("app_settings").select("key,value").eq("key","app_name").maybeSingle();
       if (typeof data?.value === "string" && data.value.trim()) setAppName(data.value);
     };
     void load();
