@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { NavLink, Navigate, Outlet, useLocation } from "react-router-dom";
+import { NavLink, Navigate, Outlet } from "react-router-dom";
 import { ChartNoAxesCombined, House, LogOut, Plus, Settings, Wallet } from "lucide-react";
 import { useAuth } from "../auth/AuthProvider";
 import { supabase } from "../lib/supabase";
@@ -13,7 +13,6 @@ const navigation = [
 
 export function AppShell() {
   const { profile, user, signOut } = useAuth();
-  const location = useLocation();
   const displayName = profile?.display_name || user?.email?.split("@")[0] || "สมาชิก";
   const [appName, setAppName] = useState("Money");
   const [appTagline, setAppTagline] = useState("Mate");
