@@ -151,7 +151,7 @@ export function SettingsPage() {
         <button
           type="button"
           onClick={() => void signOut()}
-          className="self-start sm:self-auto px-4 py-2 rounded-xl border border-rose-200 bg-rose-50 hover:bg-rose-100 text-xs font-bold text-rose-700 transition"
+          className="self-start sm:self-auto min-h-[44px] px-4 py-2 rounded-xl border border-rose-200 bg-rose-50 hover:bg-rose-100 text-xs font-bold text-rose-700 transition"
         >
           ออกจากระบบ
         </button>
@@ -239,7 +239,7 @@ export function SettingsPage() {
             type="button"
             disabled={busy || !configured}
             onClick={() => void exportData("json")}
-            className="px-4 py-2.5 rounded-xl border border-[#dce7dc] bg-[#f8faf7] hover:bg-[#edf5ee] text-xs font-bold text-[#2c5840] flex items-center gap-2 transition disabled:opacity-50"
+            className="min-h-[44px] px-4 py-2.5 rounded-xl border border-[#dce7dc] bg-[#f8faf7] hover:bg-[#edf5ee] text-xs font-bold text-[#2c5840] flex items-center gap-2 transition disabled:opacity-50"
           >
             <FileJson size={16} />
             <span>สำรองข้อมูล JSON</span>
