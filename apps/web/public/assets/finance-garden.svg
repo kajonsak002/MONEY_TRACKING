@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 260" fill="none">
+  <defs>
+    <linearGradient id="hillA" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#d9ebd4"/><stop offset="1" stop-color="#c3dfc0"/></linearGradient>
+    <linearGradient id="hillB" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#edf4df"/><stop offset="1" stop-color="#dcebd4"/></linearGradient>
+  </defs>
+  <path d="M0 184c76-54 138-59 215-18 72 38 125 26 194-13 93-52 165-41 236 2 43 26 78 28 115 6v99H0v-76Z" fill="url(#hillA)" opacity=".72"/>
+  <path d="M0 218c91-44 153-33 228-5 70 26 130 12 198-18 94-42 176-22 243 12 35 18 64 19 91 9v44H0v-42Z" fill="url(#hillB)"/>
+  <g fill="#fff" opacity=".8"><path d="M89 73c-1-13 10-23 23-23 7-17 34-19 44-2 15-3 27 7 27 21 13 3 17 21 4 28H104c-16-1-23-14-15-24Z"/><path d="M535 47c0-11 9-19 20-19 7-14 28-16 36-2 12-2 22 6 22 17 11 2 14 17 3 23h-66c-13-1-19-11-15-19Z"/></g>
+  <g fill="#d6a84e"><circle cx="641" cy="115" r="23"/><circle cx="682" cy="153" r="13"/></g>
+  <g stroke="#b87924" stroke-width="3" stroke-linecap="round"><path d="M641 101v28m-8-21c0-7 16-7 16 0 0 7-16 7-16 14 0 7 16 7 16 0"/><path d="M682 145v16"/></g>
+  <g stroke="#83a982" stroke-width="5" stroke-linecap="round"><path d="M71 213c0-22-4-35-15-48m15 37c4-18 15-27 27-34m-27 49c-10-14-20-19-33-20"/><path d="M720 215c0-20 5-34 17-47m-17 38c-4-16-13-25-25-32"/></g>
+  <g fill="#9fc69c"><ellipse cx="52" cy="165" rx="12" ry="6" transform="rotate(42 52 165)"/><ellipse cx="98" cy="168" rx="13" ry="6" transform="rotate(-34 98 168)"/><ellipse cx="32" cy="211" rx="13" ry="6" transform="rotate(15 32 211)"/><ellipse cx="738" cy="167" rx="13" ry="6" transform="rotate(-42 738 167)"/><ellipse cx="696" cy="169" rx="13" ry="6" transform="rotate(35 696 169)"/></g>
+  <g fill="#f2c8bd" opacity=".9"><circle cx="260" cy="74" r="4"/><circle cx="283" cy="91" r="3"/><circle cx="458" cy="54" r="4"/></g>
+  <g fill="#d6a84e"><path d="m331 41 5 11 11 5-11 5-5 11-5-11-11-5 11-5 5-11Z"/><path d="m405 100 4 8 8 4-8 4-4 8-4-8-8-4 8-4 4-8Z"/></g>
+</svg>
