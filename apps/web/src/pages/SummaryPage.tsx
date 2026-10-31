@@ -93,7 +93,7 @@ export function SummaryPage() {
               type="button"
               aria-pressed={period === item.key}
               onClick={() => setPeriod(item.key)}
-              className={`px-3.5 py-1.5 rounded-xl text-xs font-semibold transition-all ${
+              className={`px-3.5 min-h-[44px] py-1.5 rounded-xl text-xs font-semibold transition-all ${
                 period === item.key
                   ? "bg-[#234835] text-white shadow-xs"
                   : "text-[#6c8678] hover:bg-[#f4f8f3]"
@@ -115,7 +115,7 @@ export function SummaryPage() {
               value={from}
               max={to}
               onChange={(e) => setFrom(e.target.value)}
-              className="px-3 py-1.5 rounded-xl border border-[#dce7dc] bg-[#f8faf7] text-xs font-medium text-[#23382f]"
+              className="min-h-[44px] px-3 py-1.5 rounded-xl border border-[#dce7dc] bg-[#f8faf7] text-xs font-medium text-[#23382f]"
             />
           </div>
           <div className="flex items-center gap-2">
