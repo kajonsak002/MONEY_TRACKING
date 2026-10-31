@@ -44,7 +44,8 @@ export function AdminSettingsPage() {
     } catch (cause) { setError(cause instanceof Error ? cause.message : "โหลดการตั้งค่าไม่สำเร็จ"); }
     finally { setLoading(false); }
   }
-  useEffect(() => { void refreshAll(); // eslint-disable-next-line react-hooks/exhaustive-deps\n  }, []);
+  useEffect(() => { void refreshAll(); // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   async function saveKey(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault(); if (!apiKey.trim()) return;
