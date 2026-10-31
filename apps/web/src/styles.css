@@ -272,3 +272,25 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
 [data-theme="dark"] .admin-mobile-nav { background:#1e2b24!important; border-color:#34483a!important; }
 [data-theme="dark"] .admin-member-table th,
 [data-theme="dark"] .admin-member-table td { border-color:#34483a!important; color:#c6d5c9!important; }
+
+
+/* Contrast-safe text tones for pastel surfaces (WCAG AA body text target) */
+html:not([data-theme="dark"]) [class*="text-[#71877c"],
+html:not([data-theme="dark"]) [class*="text-[#718a7c"],
+html:not([data-theme="dark"]) [class*="text-[#8fa597"],
+html:not([data-theme="dark"]) [class*="text-[#8ca194"] { color:#5f7467!important; }
+html:not([data-theme="dark"]) [class*="text-[#668072"],
+html:not([data-theme="dark"]) [class*="text-[#789083"],
+html:not([data-theme="dark"]) [class*="text-[#7d9b87"],
+html:not([data-theme="dark"]) [class*="text-[#819e8a"] { color:#526b5c!important; }
+html:not([data-theme="dark"]) [class*="text-[#dd5e6d"],
+html:not([data-theme="dark"]) [class*="text-[#bd4754"] { color:#b33e50!important; }
+html:not([data-theme="dark"]) [class*="text-[#239667"],
+html:not([data-theme="dark"]) [class*="text-[#229667"] { color:#1d7c54!important; }
+html:not([data-theme="dark"]) [class*="text-[#438765"] { color:#3c7958!important; }
+html:not([data-theme="dark"]) [class*="text-[#d18428"],
+html:not([data-theme="dark"]) [class*="text-[#cf7822"] { color:#94601c!important; }
+html:not([data-theme="dark"]) [class*="text-[#9f7980"] { color:#79565e!important; }
+html:not([data-theme="dark"]) [class*="text-[#8e85a5"] { color:#655d78!important; }
+html:not([data-theme="dark"]) [class*="text-[#a4b8ab"],
+html:not([data-theme="dark"]) [class*="text-[#9fb3a6"] { color:#71877c!important; }
