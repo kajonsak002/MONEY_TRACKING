@@ -33,7 +33,7 @@ export function AppShell() {
   }, []);
   if (profile?.role === "admin") return <Navigate to="/admin" replace />;
   return <div className="app-frame !w-full !max-w-[1120px]"><header className="topbar">
-    <a className="brand-mark" href="/app" aria-label="Money Tracking หน้าแรก"><span className="brand-icon mascot-brand"><img src="/assets/mascot-pig.svg" alt="" /></span><span>{appName}<span className="brand-accent">{appTagline}</span></span></a>
+    <a className="brand-mark" href="/app" aria-label="Money Tracking หน้าแรก"><span className="brand-icon mascot-brand"><img src="/assets/mascot-pair.svg" alt="" /></span><span>{appName}<span className="brand-accent">{appTagline}</span></span></a>
     <div className="account-menu"><div className="account-copy"><strong>{displayName}</strong><small>{roleLabel}</small></div><button className="signout-button" type="button" onClick={() => void signOut()} aria-label="ออกจากระบบ" title="ออกจากระบบ"><LogOut size={17}/></button></div>
   </header><main className="page-content"><Outlet/></main><nav className="bottom-nav" aria-label="เมนูหลัก">
     {navigation.map(({to,label,icon:Icon}) => <NavLink key={to} to={to} end={to === "/app"} className={({isActive}) => isActive ? "nav-item active" : "nav-item"}><Icon size={19} strokeWidth={1.8}/><span>{label}</span></NavLink>)}
