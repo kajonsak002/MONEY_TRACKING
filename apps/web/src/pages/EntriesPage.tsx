@@ -1,9 +1,63 @@
 import { useMemo, useState, type FormEvent } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { ArrowDownLeft, ArrowUpRight, LoaderCircle, Plus, Trash2 } from "lucide-react";
+import { ArrowDownLeft, ArrowUpRight, LoaderCircle, Plus } from "lucide-react";
 import { Button } from "../design-system/primitives/Button";
 import { useAuth } from "../auth/AuthProvider";
-import { createEntry, getCategories, getEntries, softDeleteEntry, type EntryType } from "../features/entries/entriesApi";
+import { createEntry, getCategories, getEntries, type EntryType } from "../features/entries/entriesApi";
+
+function bangkokToday() {
+  const parts = new Intl.DateTimeFormat("en-CA", {
+    timeZone: "Asia/Bangkok", year: "numeric", month: "2-digit", day: "2-digit",
+  }).formatToParts(new Date());
+  const values = Object.fromEntries(parts.map((part) => [part.type, part.value]));
+  return `${values.year}-${values.month}-${values.day}`;
+}
+
+function formatMoney(satang: number) {
+  return new Intl.NumberFormat("th-TH", { style: "currency", currency: "THB", minimumFractionDigits: 2 }).format(satang / 100);
+}
+
+function categoryFor(entry: { categories: { name: string } | { name: string }[] | null }) {
+  return Array.isArray(entry.categories) ? entry.categories[0] ?? null : entry.categories;
+}
+
+function formatDate(value: string) {
+  return new Intl.DateTimeFormat("th-TH", { day: "numeric", month: "short", year: "numeric", timeZone: "Asia/Bangkok" }).format(new Date(`${value}T12:00:00+07:00`));
+}
+
+export function EntriesPage() {
+  const { configured } = useAuth();
+  const queryClient = useQueryClient();
+  const [type, setType] = useState<EntryType>("expense");
+  const [amount, setAmount] = useState("");
+  const [categoryId, setCategoryId] = useState("");
+  const [note, setNote] = useState("");
+  const [occurredOn, setOccurredOn] = useState(bangkokToday());
+  const [formError, setFormError] = useState<string | null>(null);
+
+  const categoriesQuery = useQuery({ queryKey: ["categories"], queryFn: getCategories, enabled: configured });
+  const entriesQuery = useQuery({ queryKey: ["entries"], queryFn: getEntries, enabled: configured });
+
+  const categories = useMemo(
+    () => (categoriesQuery.data ?? []).filter((category) => category.type === type),
+    [categoriesQuery.data, type],
+  );
+
+  const createMutation = useMutation({
+    mutationFn: createEntry,
+    onSuccess: async () => {
+      setAmount(""); setNote(""); setFormError(null);
+      await queryClient.invalidateQueries({ queryKey: ["entries"] });
+    },
+    onError: (error: Error) => setFormError(error.message || "บันทึกรายการไม่สำเร็จ"),
+  });
+
+mport { useMemo, useState, type FormEvent } from "react";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { ArrowDownLeft, ArrowUpRight, LoaderCircle, Plus } from "lucide-react";
+import { Button } from "../design-system/primitives/Button";
+import { useAuth } from "../auth/AuthProvider";
+import { createEntry, getCategories, getEntries, type EntryType } from "../features/entries/entriesApi";
 
 function bangkokToday() {
   const parts = new Intl.DateTimeFormat("en-CA", {
@@ -111,7 +165,7 @@ export function EntriesPage() {
       </section>
 
       <section className="entry-list-section">
-        <div className="section-heading"><div><p className="eyebrow">ACTIVITY</p><h2>ประวัติรายการ</h2></div><span className="entry-count">{entries.length} รายการล่าสุด</span></div>
+        <div className="section-heading"><div><p className="eyebrow">ACTIVITY</p><h2>ประวัติรายการ</h2></div><span className="entry-count">{entries.length} รายการล่าสุด · ประวัติไม่สามารถลบได้</span></div>
         {entriesQuery.isLoading ? <div className="entry-loading"><LoaderCircle className="spin" size={20} /> กำลังโหลดรายการ...</div> :
           entriesQuery.isError ? <div className="entry-error" role="alert">{(entriesQuery.error as Error).message}</div> :
           entries.length === 0 ? <div className="empty-state"><div className="empty-icon">฿</div><strong>ยังไม่มีรายการ</strong><p>เพิ่มรายรับหรือรายจ่ายรายการแรกของคุณได้เลย</p></div> :
@@ -120,7 +174,7 @@ export function EntriesPage() {
               <span className={entry.type === "income" ? "entry-type-icon income-bg" : "entry-type-icon expense-bg"}>{entry.type === "income" ? <ArrowDownLeft size={18} /> : <ArrowUpRight size={18} />}</span>
               <div className="entry-main"><strong>{entry.note || categoryFor(entry)?.name || (entry.type === "income" ? "รายรับ" : "รายจ่าย")}</strong><small>{categoryFor(entry)?.name ? `${categoryFor(entry)?.name} · ` : ""}{formatDate(entry.occurred_on)}</small></div>
               <strong className={entry.type === "income" ? "entry-amount income-text" : "entry-amount expense-text"}>{entry.type === "income" ? "+" : "−"}{formatMoney(entry.amount_satang)}</strong>
-              <button className="entry-delete" type="button" aria-label="ลบรายการ" title="ลบรายการ" disabled={deleteMutation.isPending} onClick={() => { if (window.confirm("ต้องการลบรายการนี้ใช่หรือไม่?")) deleteMutation.mutate(entry.id); }}><Trash2 size={16} /></button>
+
             </article>
           ))}</div>
         }
