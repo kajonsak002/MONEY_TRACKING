@@ -40,7 +40,7 @@ function thaiDate(value: string) {
 }
 
 export function AdminPage() {
-  const { profile } = useAuth();
+  const { profile, configured } = useAuth();
   const today = bangkokDate();
   const monthStart = today.slice(0, 7) + "-01";
   const trendDate = new Date(today + "T12:00:00+07:00");
@@ -49,7 +49,7 @@ export function AdminPage() {
 
   const users = useQuery({
     queryKey: ["admin", "profiles"],
-    enabled: profile?.role === "admin" && !!supabase,
+    enabled: profile?.role === "admin" && configured,
     queryFn: async () => {
       if (!supabase) throw new Error("ยังไม่ได้ตั้งค่า Supabase");
       const { data, error } = await supabase
@@ -173,6 +173,7 @@ export function AdminPage() {
           </button>
         </div>
 
+        {!configured && <div className="rounded-2xl border border-[#fbdbe1] bg-[#fff0f2] p-4 text-xs text-[#bd4754]" role="alert">ยังไม่ได้ตั้งค่า Supabase จึงไม่สามารถโหลดข้อมูลภาพรวมระบบได้</div>}
         {(users.isError || entries.isError || trend.isError) && (
           <div className="rounded-2xl border border-[#fbdbe1] bg-[#fff0f2] p-4 text-xs text-[#bd4754]" role="alert">โหลดข้อมูลภาพรวมไม่ครบ: {users.error?.message ?? entries.error?.message ?? trend.error?.message}</div>
         )}
@@ -192,7 +193,7 @@ export function AdminPage() {
             <div>
               <span className="text-xs font-semibold text-[#6d8576]">สมาชิกทั้งหมด</span>
               <strong className="block text-2xl font-extrabold text-[#23382e] tabular-nums mt-1">
-                {users.isLoading ? "—" : users.isError ? "—" : userList.length}
+                {!configured || users.isLoading || users.isError ? "—" : userList.length}
               </strong>
               <small className="block text-[10px] text-[#8fa597] mt-1">จัดการยอดผู้ใช้ในระบบ</small>
             </div>
@@ -211,7 +212,7 @@ export function AdminPage() {
             <div>
               <span className="text-xs font-semibold text-[#6d8576]">รายการทั้งหมด</span>
               <strong className="block text-2xl font-extrabold text-[#23382e] tabular-nums mt-1">
-                {entries.isLoading ? "—" : entries.isError ? "—" : summary.count}
+                {!configured || entries.isLoading || entries.isError ? "—" : summary.count}
               </strong>
               <small className="block text-[10px] text-[#8fa597] mt-1">ต่อตรงฐานข้อมูลความปลอดภัย</small>
             </div>
@@ -230,7 +231,7 @@ export function AdminPage() {
             <div>
               <span className="text-xs font-semibold text-[#6d8576]">ยอดรายเดือนสะสม</span>
               <strong className="block text-2xl font-extrabold text-[#23382e] tabular-nums mt-1">
-                {entries.isLoading ? "—" : entries.isError ? "—" : money(summary.expense)}
+                {!configured || entries.isLoading || entries.isError ? "—" : money(summary.expense)}
               </strong>
               <small className="block text-[10px] text-[#8fa597] mt-1">รวมค่าใช้จ่ายเดือนนี้</small>
             </div>
@@ -249,7 +250,7 @@ export function AdminPage() {
             <div>
               <span className="text-xs font-semibold text-[#6d8576]">ยอดรายรับสะสม</span>
               <strong className="block text-2xl font-extrabold text-[#23382e] tabular-nums mt-1">
-                {entries.isLoading ? "—" : entries.isError ? "—" : money(summary.income)}
+                {!configured || entries.isLoading || entries.isError ? "—" : money(summary.income)}
               </strong>
               <small className="block text-[10px] text-[#8fa597] mt-1">รวมรายรับเดือนนี้</small>
             </div>
@@ -282,7 +283,7 @@ export function AdminPage() {
                 {userList.length === 0 ? (
                   <tr>
                     <td colSpan={3} className="py-8 text-center text-[#71877c]">
-                      {users.isLoading ? "กำลังโหลดข้อมูลสมาชิก..." : users.isError ? "โหลดข้อมูลสมาชิกไม่สำเร็จ" : "ยังไม่มีสมาชิก"}
+                      {!configured ? "ยังไม่ได้ตั้งค่า Supabase" : users.isLoading ? "กำลังโหลดข้อมูลสมาชิก..." : users.isError ? "โหลดข้อมูลสมาชิกไม่สำเร็จ" : "ยังไม่มีสมาชิก"}
                     </td>
                   </tr>
                 ) : (
