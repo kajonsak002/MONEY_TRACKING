@@ -115,7 +115,6 @@ export function AdminPage() {
     void health.refetch();
   };
 
-  const loading = users.isLoading || entries.isLoading;
   const statuses = [
     { name: "ฐานข้อมูล Supabase", ok: health.data?.database },
     { name: "AI / DeepSeek Vault", ok: health.data?.ai },
