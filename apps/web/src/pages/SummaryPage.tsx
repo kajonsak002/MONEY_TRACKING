@@ -183,6 +183,9 @@ export function SummaryPage() {
 
             {/* Total Income Card */}
             <div className="relative bg-gradient-to-b from-[#f3faf5] via-white to-[#fafdfb] rounded-3xl p-6 border border-[#cce7d3] shadow-[0_8px_24px_rgba(42,78,56,0.04)] flex flex-col justify-between overflow-hidden">
+              <div className="absolute inset-0 pointer-events-none opacity-20 mix-blend-multiply">
+                <img src="/images/illustrations/card-bg-gingham-mint.png" alt="" className="w-full h-full object-cover" />
+              </div>
               <CardGinghamOverlay opacity="opacity-[0.02]" />
               <div className="relative z-10">
                 <span className="w-9 h-9 rounded-2xl bg-[#e6f7ef] text-[#229667] flex items-center justify-center mb-3 shadow-xs">
@@ -198,6 +201,9 @@ export function SummaryPage() {
 
             {/* Total Expense Card */}
             <div className="relative bg-gradient-to-b from-[#fef5f6] via-white to-[#fcf8f9] rounded-3xl p-6 border border-[#fbdae0] shadow-[0_8px_24px_rgba(42,78,56,0.04)] flex flex-col justify-between overflow-hidden">
+              <div className="absolute inset-0 pointer-events-none opacity-20 mix-blend-multiply">
+                <img src="/images/illustrations/card-bg-gingham-pink.png" alt="" className="w-full h-full object-cover" />
+              </div>
               <CardGinghamOverlay opacity="opacity-[0.02]" />
               <div className="relative z-10">
                 <span className="w-9 h-9 rounded-2xl bg-[#fff0f2] text-[#dd5e6d] flex items-center justify-center mb-3 shadow-xs">

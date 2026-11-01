@@ -208,7 +208,11 @@ export function HomePage() {
       <section className="grid grid-cols-2 lg:grid-cols-4 gap-3.5 sm:gap-4">
         {/* Card 1: รายรับวันนี้ (Emerald) */}
         <article className="relative rounded-3xl overflow-hidden border border-[#cce7d3] shadow-[0_6px_20px_rgba(42,78,56,0.06)] transition-all duration-300 hover:-translate-y-1 hover:shadow-lg group bg-gradient-to-b from-[#f0faf3] to-[#e4f5e9]" style={{ minHeight: 154 }}>
-          <CardGinghamOverlay opacity="opacity-[0.025]" />
+          {/* Subtle 3D clay mint gingham background overlay */}
+          <div className="absolute inset-0 pointer-events-none opacity-20 mix-blend-multiply">
+            <img src="/images/illustrations/card-bg-gingham-mint.png" alt="" className="w-full h-full object-cover" />
+          </div>
+          <CardGinghamOverlay opacity="opacity-[0.02]" />
           <HillScene color="emerald" />
           {/* Mascot grounded on the hill */}
           <div className="absolute bottom-2 right-2 w-14 h-14 pointer-events-none z-10 group-hover:scale-110 group-hover:-rotate-3 transition-transform duration-300">
@@ -230,7 +234,11 @@ export function HomePage() {
 
         {/* Card 2: รายจ่ายวันนี้ (Rose) */}
         <article className="relative rounded-3xl overflow-hidden border border-[#fbdae0] shadow-[0_6px_20px_rgba(42,78,56,0.06)] transition-all duration-300 hover:-translate-y-1 hover:shadow-lg group bg-gradient-to-b from-[#fff5f6] to-[#fde8ec]" style={{ minHeight: 154 }}>
-          <CardGinghamOverlay opacity="opacity-[0.025]" />
+          {/* Subtle 3D clay pink gingham background overlay */}
+          <div className="absolute inset-0 pointer-events-none opacity-20 mix-blend-multiply">
+            <img src="/images/illustrations/card-bg-gingham-pink.png" alt="" className="w-full h-full object-cover" />
+          </div>
+          <CardGinghamOverlay opacity="opacity-[0.02]" />
           <HillScene color="rose" />
           <div className="absolute bottom-2 right-2 w-14 h-14 pointer-events-none z-10 group-hover:scale-110 group-hover:-translate-y-1 transition-all duration-300">
             <img src="/images/mascots/frog-mascot-happy.png" alt="" className="w-full h-full object-contain drop-shadow-[0_6px_10px_rgba(100,30,50,0.15)]" />
@@ -250,7 +258,11 @@ export function HomePage() {
 
         {/* Card 3: รายรับเดือนนี้ (Lavender) */}
         <article className="relative rounded-3xl overflow-hidden border border-[#e4dcfb] shadow-[0_6px_20px_rgba(42,78,56,0.06)] transition-all duration-300 hover:-translate-y-1 hover:shadow-lg group bg-gradient-to-b from-[#f8f4ff] to-[#ede6ff]" style={{ minHeight: 154 }}>
-          <CardGinghamOverlay opacity="opacity-[0.025]" />
+          {/* Subtle 3D clay mint/lavender gingham background overlay */}
+          <div className="absolute inset-0 pointer-events-none opacity-15 mix-blend-multiply">
+            <img src="/images/illustrations/card-bg-gingham-mint.png" alt="" className="w-full h-full object-cover hue-rotate-60" />
+          </div>
+          <CardGinghamOverlay opacity="opacity-[0.02]" />
           <HillScene color="lavender" />
           <div className="absolute bottom-2 right-2 w-14 h-14 pointer-events-none z-10 group-hover:scale-110 group-hover:rotate-3 transition-transform duration-300">
             <img src="/images/mascots/pig-mascot-coin.png" alt="" className="w-full h-full object-contain drop-shadow-[0_6px_10px_rgba(60,40,90,0.18)]" />
@@ -270,7 +282,11 @@ export function HomePage() {
 
         {/* Card 4: รายจ่ายเดือนนี้ (Amber) */}
         <article className="relative rounded-3xl overflow-hidden border border-[#fde5ce] shadow-[0_6px_20px_rgba(42,78,56,0.06)] transition-all duration-300 hover:-translate-y-1 hover:shadow-lg group bg-gradient-to-b from-[#fffaf2] to-[#fdefd8]" style={{ minHeight: 154 }}>
-          <CardGinghamOverlay opacity="opacity-[0.025]" />
+          {/* Subtle 3D clay pink/amber gingham background overlay */}
+          <div className="absolute inset-0 pointer-events-none opacity-15 mix-blend-multiply">
+            <img src="/images/illustrations/card-bg-gingham-pink.png" alt="" className="w-full h-full object-cover hue-rotate-[320deg]" />
+          </div>
+          <CardGinghamOverlay opacity="opacity-[0.02]" />
           <HillScene color="amber" />
           <div className="absolute bottom-2 right-2 w-14 h-14 pointer-events-none z-10 group-hover:scale-110 group-hover:-translate-y-1 transition-all duration-300">
             <img src="/images/mascots/frog-mascot-happy.png" alt="" className="w-full h-full object-contain drop-shadow-[0_6px_10px_rgba(100,60,20,0.15)]" />
@@ -412,18 +428,32 @@ export function HomePage() {
         </div>
 
         {/* Right Column: Expense Proportion & Quick Actions */}
-        <div className="relative bg-gradient-to-b from-[#fdfcf7] via-white to-[#faf9f4] rounded-3xl p-6 sm:p-7 border border-[#e5ebe0] shadow-[0_8px_28px_rgba(42,78,56,0.04)] flex flex-col justify-between overflow-hidden">
+        <div className="relative bg-gradient-to-b from-[#fdfcf7] via-white to-[#faf9f4] rounded-3xl p-6 sm:p-7 border border-[#e5ebe0] shadow-[0_8px_28px_rgba(42,78,56,0.04)] flex flex-col justify-between overflow-hidden group">
           <CardGinghamOverlay opacity="opacity-[0.015]" />
+          <HillScene color="amber" className="opacity-30" />
           <div className="relative z-10">
             <div className="flex items-center justify-between mb-3">
-              <h2 className="text-base font-bold text-[#23382e]">สัดส่วนการเงิน</h2>
-              <span className="text-[10px] font-bold tracking-wider text-[#d18428] uppercase bg-white/90 border border-[#fddbb8] px-2.5 py-1 rounded-full shadow-2xs">
-                This Month
-              </span>
+              <div>
+                <div className="flex items-center gap-2">
+                  <h2 className="text-base font-bold text-[#23382e]">สัดส่วนการเงิน</h2>
+                  <span className="text-[10px] font-bold tracking-wider text-[#d18428] uppercase bg-white/90 border border-[#fddbb8] px-2.5 py-0.5 rounded-full shadow-2xs">
+                    This Month
+                  </span>
+                </div>
+                <p className="text-xs text-[#71877c] mt-0.5">
+                  เปรียบเทียบการใช้จ่ายเทียบกับรายรับที่เข้ามา
+                </p>
+              </div>
+
+              {/* Cute 3D Mascot Generated via Google Flow */}
+              <div className="w-16 h-16 shrink-0 filter drop-shadow-sm group-hover:scale-110 group-hover:rotate-3 transition-transform">
+                <img
+                  src="/images/illustrations/mascot-financial-proportion.png"
+                  alt="Financial Proportion"
+                  className="w-full h-full object-contain"
+                />
+              </div>
             </div>
-            <p className="text-xs text-[#71877c] mb-5">
-              เปรียบเทียบการใช้จ่ายเทียบกับรายรับที่เข้ามา
-            </p>
 
             <div className="space-y-4">
               <div>

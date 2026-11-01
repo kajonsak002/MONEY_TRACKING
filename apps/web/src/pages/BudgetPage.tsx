@@ -150,8 +150,12 @@ export function BudgetPage() {
             <img
               src="/images/illustrations/mascot-saving-goal.png"
               alt="Saving Goal Mascot"
-              className="w-full h-full object-contain filter drop-shadow-md"
+              className="w-full h-full object-contain filter drop-shadow-md relative z-10"
             />
+            {/* 3D Clay grassy mound under mascot */}
+            <div className="absolute -bottom-2 inset-x-0 h-10 pointer-events-none z-0">
+              <img src="/images/decorations/clay-grassy-mound.png" alt="" className="w-full h-full object-contain" />
+            </div>
           </div>
           <span className="relative z-10 text-xs font-bold text-[#2d5d44]">เก็บเล็กผสมน้อย เป็นเงินก้อนโต</span>
           <p className="relative z-10 text-[11px] text-[#71877c] mt-0.5">
