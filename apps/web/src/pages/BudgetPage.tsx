@@ -161,13 +161,8 @@ export function BudgetPage() {
           <div className="relative z-10 w-44 h-44 mb-1">
             <img
               src="/images/illustrations/mascot-saving-goal.png"
-<<<<<<< HEAD
-              alt="Saving Goal Mascot"
-              className="w-full h-full object-contain filter drop-shadow-md relative z-10"
-=======
               alt="" aria-hidden="true"
               className="w-full h-full object-contain filter drop-shadow-md"
->>>>>>> 0961f7c09872281403be84f44883903e26264631
             />
             {/* 3D Clay grassy mound under mascot */}
             <div className="absolute -bottom-2 inset-x-0 h-10 pointer-events-none z-0">
