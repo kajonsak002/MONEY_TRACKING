@@ -2,12 +2,16 @@ name: CI
 
 on:
   push:
-    branches: ["main", "feature/**", "completion/**"]
+    branches: ["main", "feature/**", "feat/**", "fix/**", "completion/**"]
   pull_request:
     branches: ["main"]
 
 permissions:
   contents: read
+
+concurrency:
+  group: money-tracking-ci-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
   verify:
