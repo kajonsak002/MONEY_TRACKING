@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import { NavLink, Navigate, Outlet, useLocation } from "react-router-dom";
 import {
   Activity,
-  Bell,
   ChevronLeft,
   LayoutDashboard,
   LogOut,
@@ -86,7 +85,7 @@ export function AdminShell() {
       >
         <div className="space-y-6">
           {/* Logo */}
-          <a href="/admin" className="flex items-center gap-3 px-2 py-1">
+          <NavLink to="/admin" className="flex items-center gap-3 px-2 py-1">
             <div className="w-10 h-10 rounded-2xl bg-[#ebf5ee] border border-[#cce4d4] flex items-center justify-center p-1 shadow-2xs shrink-0">
               <img
                 src="/images/mascots/pig-mascot-happy.png"
@@ -100,7 +99,7 @@ export function AdminShell() {
                 <span className="text-[9px] text-[#71877c] font-bold tracking-widest uppercase">ADMIN CONSOLE</span>
               </div>
             )}
-          </a>
+          </NavLink>
 
           {/* Section caption */}
           {!collapsed && (
@@ -207,16 +206,14 @@ export function AdminShell() {
             </h1>
           </div>
 
-          {/* Right Status Pill & Bell */}
+          {/* Right Status Pill */}
           <div className="flex items-center gap-3">
             <div className="hidden sm:flex items-center gap-2 px-3 py-1 rounded-full bg-white border border-[#e2ece0] text-xs font-bold text-[#2d5d44] shadow-2xs">
               <span className="w-2 h-2 rounded-full bg-[#239667] animate-pulse" />
               <span>ระบบจัดการ</span>
             </div>
 
-            <div className="w-9 h-9 rounded-full bg-white border border-[#e2ece0] flex items-center justify-center text-[#557163] shadow-2xs cursor-pointer hover:bg-[#ebf5ee] transition">
-              <Bell size={16} />
-            </div>
+
           </div>
         </header>
 
@@ -229,15 +226,17 @@ export function AdminShell() {
       {/* Mobile Drawer */}
       {mobileOpen && (
         <>
-          <div
+          <button
+            type="button"
             className="fixed inset-0 z-40 bg-black/30 backdrop-blur-xs lg:hidden"
             onClick={() => setMobileOpen(false)}
+            aria-label="ปิดเมนูผู้ดูแล"
           />
-          <aside className="fixed inset-y-0 left-0 z-50 w-72 bg-white p-5 flex flex-col justify-between shadow-2xl lg:hidden">
+          <aside role="dialog" aria-modal="true" aria-label="เมนูผู้ดูแล" className="fixed inset-y-0 left-0 z-50 w-72 bg-white p-5 flex flex-col justify-between shadow-2xl lg:hidden">
             <div className="space-y-6">
               <div className="flex items-center justify-between">
                 <span className="font-extrabold text-base text-[#23382e]">{appName} ADMIN</span>
-                <button type="button" onClick={() => setMobileOpen(false)} className="p-1 text-[#71877c]">
+                <button type="button" onClick={() => setMobileOpen(false)} className="w-11 h-11 flex items-center justify-center rounded-xl text-[#71877c]">
                   <X size={20} />
                 </button>
               </div>
@@ -248,7 +247,7 @@ export function AdminShell() {
                     to={to}
                     end={Boolean(end)}
                     className={({ isActive }) =>
-                      `flex items-center gap-3 px-3.5 py-3 rounded-2xl text-xs font-bold transition-all ${
+                      `flex min-h-[48px] items-center gap-3 px-3.5 py-3 rounded-2xl text-xs font-bold transition-all ${
                         isActive
                           ? "bg-[#fdf0f2] text-[#d65e6c] border border-[#fbdbe1]"
                           : "text-[#6b8577] hover:bg-[#f4f8f3]"

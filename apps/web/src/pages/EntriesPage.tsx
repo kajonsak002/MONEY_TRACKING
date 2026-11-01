@@ -77,7 +77,7 @@ export function EntriesPage() {
     onError: (error: Error) => setFormError(error.message || "บันทึกรายการไม่สำเร็จ"),
   });
 
-  async function handleSubmit(event: FormEvent<HTMLFormElement>) {
+  function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     const parsedAmount = Number(amount);
     if (!Number.isFinite(parsedAmount) || parsedAmount <= 0 || !/^\d+(\.\d{1,2})?$/.test(amount.trim())) {
@@ -89,7 +89,7 @@ export function EntriesPage() {
       return;
     }
     setFormError(null);
-    await createMutation.mutateAsync({
+    createMutation.mutate({
       type,
       amount_satang: Math.round(parsedAmount * 100),
       note: note.trim(),
@@ -137,6 +137,9 @@ export function EntriesPage() {
         </div>
       </header>
 
+      {!configured && <p className="text-xs text-[#bd4754] bg-[#fff0f2] p-4 rounded-xl border border-[#fbdbe1]" role="alert">ยังไม่ได้ตั้งค่า Supabase กรุณาตรวจสอบการเชื่อมต่อก่อนใช้งาน</p>}
+      {categoriesQuery.isError && <p className="text-xs text-[#bd4754] bg-[#fff0f2] p-3 rounded-xl border border-[#fbdbe1]" role="alert">โหลดหมวดหมู่ไม่สำเร็จ: {categoriesQuery.error.message}</p>}
+
       {/* ================= ADD TRANSACTION FORM ================= */}
       <section className="relative bg-gradient-to-b from-[#fdf6f7] via-white to-[#fbf5f6] rounded-3xl p-6 sm:p-7 border border-[#f9d7de] shadow-[0_8px_30px_rgba(42,78,56,0.05)] group transition-shadow hover:shadow-md overflow-visible">
         <CardGinghamOverlay opacity="opacity-[0.02]" />
@@ -172,11 +175,12 @@ export function EntriesPage() {
           <div className="grid grid-cols-2 gap-2 p-1 bg-[#f4f7f2] rounded-2xl border border-[#e2ebe0] max-w-md">
             <button
               type="button"
+              aria-pressed={type === "expense"}
               onClick={() => {
                 setType("expense");
                 setCategoryId("");
               }}
-              className={`flex items-center justify-center gap-2 py-2.5 rounded-xl text-xs font-bold transition-all ${
+              className={`flex items-center justify-center gap-2 min-h-[44px] py-2.5 rounded-xl text-xs font-bold transition-all ${
                 type === "expense"
                   ? "bg-white text-[#dd5e6d] shadow-sm"
                   : "text-[#71877c] hover:text-[#23382e]"
@@ -188,6 +192,7 @@ export function EntriesPage() {
 
             <button
               type="button"
+              aria-pressed={type === "income"}
               onClick={() => {
                 setType("income");
                 setCategoryId("");
@@ -235,6 +240,7 @@ export function EntriesPage() {
               </label>
               <select
                 value={categoryId}
+                disabled={!configured || categoriesQuery.isLoading || categoriesQuery.isError}
                 onChange={(e) => setCategoryId(e.target.value)}
                 className="w-full min-h-[46px] px-3.5 rounded-xl border border-[#dce7dc] bg-[#f8faf7] text-xs font-medium text-[#23382e] focus:border-[#438765] focus:bg-white focus:outline-none transition"
               >
@@ -286,7 +292,7 @@ export function EntriesPage() {
           <div className="flex justify-end pt-2">
             <button
               type="submit"
-              disabled={createMutation.isPending}
+              disabled={!configured || createMutation.isPending}
               className="px-6 py-3 rounded-2xl bg-[#234835] hover:bg-[#1a3828] text-white text-xs font-bold flex items-center gap-2 shadow-sm transition active:scale-95 disabled:opacity-50"
             >
               {createMutation.isPending ? (
@@ -328,7 +334,8 @@ export function EntriesPage() {
               key={item.id}
               type="button"
               onClick={() => setFilterType(item.id)}
-              className={`px-3 py-1.5 rounded-xl text-xs font-semibold transition-all ${
+              aria-pressed={filterType === item.id}
+              className={`px-3 min-h-[44px] py-1.5 rounded-xl text-xs font-semibold transition-all ${
                 filterType === item.id
                   ? "bg-[#234835] text-white shadow-xs"
                   : "text-[#6c8678] hover:bg-[#f4f8f3]"
@@ -353,6 +360,12 @@ export function EntriesPage() {
           <div className="py-16 flex flex-col items-center justify-center text-xs text-[#71877c] gap-2">
             <LoaderCircle size={24} className="animate-spin text-[#438765]" />
             <span>กำลังโหลดรายการ...</span>
+          </div>
+        ) : !configured ? (
+          <div className="py-12 text-center text-xs text-[#71877c]">เชื่อมต่อฐานข้อมูลก่อนเพื่อดูรายการ</div>
+        ) : entriesQuery.isError ? (
+          <div className="py-12 text-center text-xs text-[#bd4754]" role="alert">
+            โหลดรายการไม่สำเร็จ: {entriesQuery.error.message}
           </div>
         ) : filteredEntries.length === 0 ? (
           /* Empty State */
